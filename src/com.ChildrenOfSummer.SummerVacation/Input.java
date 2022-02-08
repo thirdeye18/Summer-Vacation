@@ -1,6 +1,7 @@
 package com.ChildrenOfSummer.SummerVacation;
 
 import com.ChildrenOfSummer.SummerVacation.Util.Directions;
+import com.ChildrenOfSummer.SummerVacation.Util.TextParser;
 import org.json.simple.JSONObject;
 
 import javax.sound.sampled.Clip;
@@ -26,9 +27,9 @@ public class Input {
 
         boolean newGame = false;
 
-        while (!newGame) {  //loop until new game option selected, error msg for invalid input -JH
+        while (!newGame) {  //loop until new game option selected, fix error msg for invalid input -JH
             FileManager.menuFiles();    //display menu text
-            String startMenuChoice = scanner.nextLine().strip().toLowerCase();
+            String startMenuChoice = TextParser.getVerb(scanner.nextLine());    //.strip().toLowerCase();
             switch (startMenuChoice) {
                 case "new game":
                     player1.setPlayerInventory(empty);
@@ -55,7 +56,7 @@ public class Input {
                     System.exit(0);
 
                 default:
-                    System.out.println("invalid!\n Please type 'new game' for new game, 'load game' to load your save or 'quit' to quit.\n");
+                    System.out.println("invalid!\n Please enter a valid menu option.\n");
             }
 
         }

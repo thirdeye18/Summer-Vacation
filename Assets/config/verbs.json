@@ -2,15 +2,25 @@
   "start": [
     "run",
     "execute",
-    "play"
+    "play",
+    "new game"
+  ],
+  "load": [
+    "continue",
+    "load game"
   ],
   "quit": [
     "exit",
-    "leave"
+    "leave",
+    "quit game"
   ],
+
   "go": [
     "move",
     "turn"
+  ],
+  "open": [
+
   ],
   "get": [
     "pick up",
@@ -19,6 +29,19 @@
     "grab",
     "take",
     "add"
+  ],
+  "drop": [
+    "discard",
+    "leave"
+  ],
+  "use": [
+    "enter",
+    "interact",
+    "open"
+  ],
+  "talk": [
+    "hello",
+    "speak"
   ],
   "inspect": [
     "look at",
@@ -35,19 +58,13 @@
     "view",
     "check"
   ],
-  "use": [
-    "enter",
-    "interact",
-    "open"
-  ],
+
   "help": [
     "instructions",
     "menu"
   ],
-  "drop": [
-    "discard"
-  ],
-  "save": [],
-  "commands": ["command"]
 
+  "commands": [
+    "command"
+  ]
 }
