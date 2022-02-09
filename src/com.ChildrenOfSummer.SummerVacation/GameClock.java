@@ -3,7 +3,7 @@ package com.ChildrenOfSummer.SummerVacation;
 import java.util.Calendar;
 import java.util.Date;
 
-class Clock {
+class GameClock {
     //planned feature class that did not make it into production
 
     private static int NEXTDAYCOUNTER;
