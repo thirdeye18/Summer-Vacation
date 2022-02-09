@@ -8,15 +8,19 @@ import java.awt.event.ActionListener;
 public class GameGUI {
     JFrame window;
     Container con;
-    JPanel titleNamePanel, newGameButtonPanel, mainTextPanel, playerPageFooterPanel;
+    JPanel titleNamePanel, newGameButtonPanel, askForNamePanel, playerPageFooterPanel, enterGameButtonPanel,mainTextPanel;
     JLabel titleNameLabel; // JLable display text
     Font titleFont = new Font("Times New Roman", Font.PLAIN, 40);    // customized font
     Font buttonFont = new Font("Times New Roman", Font.PLAIN, 20);
-    JButton newGameButton,loadButton,quitButton,playerPageNextButton;
+    JButton newGameButton,loadButton,quitButton, playerPageEnterGameButton, task1ScreenNextButton;
+    JToggleButton musicButton;
     JTextField userName = new JTextField();
-    JTextArea askUserName = new JTextArea();
+    JTextArea askUserName,mainTextArea;
+
 
     TitleScreenHandler tsHandler = new TitleScreenHandler();
+    playerPageEnterGameHandler enterHandler = new playerPageEnterGameHandler();
+    //musicOnOffToggleButton musicHandler = new musicOnOffToggleButton();
 
     public static void main(String[] args) {
         new GameGUI();
@@ -72,10 +76,11 @@ public class GameGUI {
 
         titleNamePanel.setVisible(false);   // if we want to display new screen, we need to disable the previous screen first
         newGameButtonPanel.setVisible(false);
-        mainTextPanel = new JPanel();
-        mainTextPanel.setBounds(100,100,600, 250);
-        mainTextPanel.setBackground(Color.black);
-        con.add(mainTextPanel);
+        askForNamePanel = new JPanel();
+        askForNamePanel.setBounds(100,100,600, 250);
+        askForNamePanel.setBackground(Color.black);
+        askForNamePanel.setLayout(new GridLayout(2,1));
+        con.add(askForNamePanel);
 
 
         askUserName = new JTextArea("Please enter your name: ");
@@ -89,23 +94,82 @@ public class GameGUI {
         userName.setForeground(Color.white);
         userName.setFont(buttonFont);
 
-        mainTextPanel.add(askUserName);
-        mainTextPanel.add(userName);
+        askForNamePanel.add(askUserName);
+        askForNamePanel.add(userName);
 
         playerPageFooterPanel = new JPanel();
-        playerPageFooterPanel.setBounds(600,600,200,150);
-        playerPageFooterPanel.setBackground(Color.blue);
+        playerPageFooterPanel.setBounds(500,500,100,30);
+        playerPageFooterPanel.setBackground(Color.black);
+        con.add(playerPageFooterPanel);
+
+        musicButton = new JToggleButton("music on/off");
+        playerPageFooterPanel.add(musicButton);
 
 
-        playerPageNextButton= new JButton("ENTER GAME");
+
+        enterGameButtonPanel = new JPanel();
+        enterGameButtonPanel.setBackground(Color.black);
+        enterGameButtonPanel.setBounds(600,400,200,100);
+        con.add(enterGameButtonPanel);
+
+
+        playerPageEnterGameButton = new JButton("ENTER GAME");
+        playerPageEnterGameButton.setFont(buttonFont);
+        playerPageEnterGameButton.setBackground(Color.black);
+        playerPageEnterGameButton.setForeground(Color.white);
+        playerPageEnterGameButton.addActionListener(enterHandler);
+
+        enterGameButtonPanel.add(playerPageEnterGameButton);
+
+    }
+
+    public void task1Screen(){
+
+        titleNamePanel.setVisible(false);   // if we want to display new screen, we need to disable the previous screen first
+        newGameButtonPanel.setVisible(false);
+        askForNamePanel.setVisible(false);
+
+        mainTextPanel = new JPanel();
+        mainTextPanel.setBounds(100,100,600,250);
+        mainTextPanel.setBackground(Color.blue);
+        con.add(mainTextPanel);
+
+        mainTextArea = new JTextArea("This should be description of task 1");
+        mainTextArea.setBounds(100,100,600,250);
+        mainTextArea.setBackground(Color.black);
+        mainTextArea.setForeground(Color.white);
+        mainTextArea.setFont(buttonFont);
+        mainTextArea.setLineWrap(true);
+        mainTextPanel.add(mainTextArea);
+
+
+        task1ScreenNextButton = new JButton("NEXT");
+        task1ScreenNextButton.setFont(buttonFont);
+        task1ScreenNextButton.setBackground(Color.black);
+        task1ScreenNextButton.setForeground(Color.white);
+
+        playerPageEnterGameButton.setVisible(false);
+        enterGameButtonPanel.add(task1ScreenNextButton);
 
 
     }
+
+
 
     public class TitleScreenHandler implements ActionListener{
         public void actionPerformed(ActionEvent event){
             playerNameScreen();
-           // Input.playerCreator();
+            // Input.playerCreator();
         }
     }
+    public class playerPageEnterGameHandler implements ActionListener{
+        public void actionPerformed(ActionEvent event){
+            task1Screen();
+            // Input.playerCreator();
+        }
+    }
+
+
+
+
 }
