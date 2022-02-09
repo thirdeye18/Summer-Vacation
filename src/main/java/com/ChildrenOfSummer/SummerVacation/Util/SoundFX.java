@@ -11,14 +11,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 public enum SoundFX {   // list all the sound types here
-    MUSIC1("summer.wav");   // main music
+    MUSIC("summervacation.wav"),    // Background music
+    MUSIC1("summer.wav");           // Alt background music
 
-    // specifies available volumes, defaults to MUTE
+    // specifies available volumes
     public enum Volume {
         MUTE, LOW
     }
 
-    public static Volume volume = Volume.MUTE;  //set volume to mute by default
+    public static Volume volume = Volume.LOW;  //set volume to low by default
     public Clip clip;  // clip is the object holding the sound file
 
     //constructor handles instantiating the sound clips
@@ -37,6 +38,10 @@ public enum SoundFX {   // list all the sound types here
         }
     }
 
+    /*
+     * This just plays the specified sound file once.
+     */
+
     public void play() {
         if (volume != Volume.MUTE) {    // if mute is set don't play
             if (clip.isRunning())
@@ -45,6 +50,10 @@ public enum SoundFX {   // list all the sound types here
             clip.start();     // Start playing
         }
     }
+
+    /*
+     * This loops the sound file based on the int value passed.
+     */
 
     public void loopPlay(int loops) {
         if (volume != Volume.MUTE) {    // if mute is set don't play
@@ -56,16 +65,21 @@ public enum SoundFX {   // list all the sound types here
     }
 
     public void stopPlay() {
-        if (clip.isRunning())
+        if (clip.isRunning()) {
             clip.stop();   // Stop clip if still running
+            clip.setFramePosition(0);
+        }
     }
 
     public static void setVolume(Volume volume) {
         SoundFX.volume = volume;
     }
 
-    // optional to prevent long load times preload sound files
-    static void init() {
+    /*
+     * Loads all the sound files into memory if desired to minimize initial load times.
+     */
+
+    public static void init() {
         values(); // calls the constructor for all the elements, preloading them into memory
     }
 

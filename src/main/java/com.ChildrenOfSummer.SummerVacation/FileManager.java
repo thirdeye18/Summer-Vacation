@@ -5,8 +5,10 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import javax.sound.sampled.*;
-import java.io.*;
+import java.io.BufferedOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -297,20 +299,5 @@ public class FileManager {
         writeJSONFile(playerJsonPath,saveFile);
     }
 
-
-    public static Clip getMusic(Clip clip) {
-
-        String AudioFile = "Assets/summervacation.wav";
-        try {
-            File file = new File(AudioFile);
-            AudioInputStream audioStream = AudioSystem.getAudioInputStream(file);
-            clip = AudioSystem.getClip();
-            clip.open(audioStream);
-        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
-            e.printStackTrace();
-        }
-        return clip;
-
-    }
 
 }
