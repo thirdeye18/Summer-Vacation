@@ -170,12 +170,10 @@ public class Input {
                 switch (noun2) {
                     case "on":
                         int loop = 3;
-                        SoundFX.setVolume(SoundFX.Volume.LOW);
                         SoundFX.MUSIC1.loopPlay(loop);
                         System.out.println("Back ground music turned on~~~~~");
                         break;
                     case "off":
-                        SoundFX.setVolume(SoundFX.Volume.MUTE);
                         SoundFX.MUSIC1.stopPlay();
                         System.out.println("Back ground music stopped~~~~~");
                         break;
