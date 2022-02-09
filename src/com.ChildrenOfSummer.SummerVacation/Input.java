@@ -1,13 +1,12 @@
 package com.ChildrenOfSummer.SummerVacation;
 
 import com.ChildrenOfSummer.SummerVacation.Util.Directions;
+import com.ChildrenOfSummer.SummerVacation.Util.SoundFX;
 import com.ChildrenOfSummer.SummerVacation.Util.TextParser;
 import org.json.simple.JSONObject;
 
 import javax.sound.sampled.Clip;
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Locale;
 import java.util.Scanner;
 
 public class Input {
@@ -15,7 +14,7 @@ public class Input {
     private static String ANSWER;
     private static ArrayList<String> empty = new ArrayList<>();
     private static Player player1 = Player.getInstance("default", "Player's House", "Suburb", empty);
-    private static final Clip clip = FileManager.getMusic(null);
+    // private static final Clip clip = FileManager.getMusic(null);
 
 
     public static boolean startMenu() {
@@ -170,12 +169,14 @@ public class Input {
             case "music":
                 switch (noun2) {
                     case "on":
-                        int loopTimes = 3;
-                        clip.loop(loopTimes);
+                        int loop = 3;
+                        SoundFX.setVolume(SoundFX.Volume.LOW);
+                        SoundFX.MUSIC1.loopPlay(loop);
                         System.out.println("Back ground music turned on~~~~~");
                         break;
                     case "off":
-                        clip.stop();
+                        SoundFX.setVolume(SoundFX.Volume.MUTE);
+                        SoundFX.MUSIC1.stopPlay();
                         System.out.println("Back ground music stopped~~~~~");
                         break;
                     default: System.out.println("Not a valid response\n [on] [off]");
