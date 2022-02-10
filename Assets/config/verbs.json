@@ -1,0 +1,69 @@
+{
+  "start": [
+    "run",
+    "execute",
+    "play",
+    "new game"
+  ],
+  "quit": [
+    "exit",
+    "leave",
+    "quit game"
+  ],
+  "continue": [
+    "load"
+  ],
+
+  "go": [
+    "move",
+    "turn"
+  ],
+  "open": [
+
+  ],
+  "get": [
+    "pick up",
+    "pickup",
+    "pick",
+    "grab",
+    "take",
+    "add"
+  ],
+  "drop": [
+    "discard",
+    "leave"
+  ],
+  "use": [
+    "enter",
+    "interact",
+    "open"
+  ],
+  "talk": [
+    "hello",
+    "speak"
+  ],
+  "inspect": [
+    "look at",
+    "look",
+    "examine",
+    "see",
+    "check out",
+    "search",
+    "investigate",
+    "scan",
+    "review",
+    "view",
+    "study",
+    "view",
+    "check"
+  ],
+
+  "help": [
+    "instructions",
+    "menu"
+  ],
+
+  "commands": [
+    "command"
+  ]
+}

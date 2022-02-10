@@ -24,7 +24,7 @@ Game written in Java using the JSON.Simple library for data manipulation.
 [Michael](https://github.com/AgentKD6-37) ||[Fan](https://github.com/fanwu513)|| [Zi-Cheng](https://github.com/thrashghost)
 
 >## Release Version
->Build 1.3
+>Build 2.1
 
 Java runtime environment is required. [Dowload it here](https://www.java.com/en/)
 

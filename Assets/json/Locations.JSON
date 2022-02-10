@@ -160,22 +160,22 @@
       }
     ],
     "Angus Queen": [
-    {
-      "location_name": "Angus Queen",
-      "location_zone": "Town Center"
-    },
-    {
-      "directions": {
-        "north": "Janie's House",
-        "east": "Old House North",
-        "south": "Beth's Treats",
-        "west": "Dead Presidents"
+      {
+        "location_name": "Angus Queen",
+        "location_zone": "Town Center"
+      },
+      {
+        "directions": {
+          "north": "Janie's House",
+          "east": "Old House North",
+          "south": "Beth's Treats",
+          "west": "Dead Presidents"
+        }
+      },
+      {
+        "description": "The inside of Angus Queen always smells good! Al, the cook, looks up as you enter.\n To the north, you see Janie's house.\n To the east, you see the northernmost Old House.\n To the south is Beth's Treats!\n To the west is Dead Presidents."
       }
-    },
-    {
-      "description": "The inside of Angus Queen always smells good! Al, the cook, looks up as you enter.\n To the north, you see Janie's house.\n To the east, you see the northernmost Old House.\n To the south is Beth's Treats!\n To the west is Dead Presidents."
-    }
-  ]
+    ]
   },
   "Old Town": {
     "Warehouse": [
