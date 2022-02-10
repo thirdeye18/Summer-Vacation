@@ -1,16 +1,22 @@
 package com.ChildrenOfSummer.SummerVacation;
 
 import javax.swing.*;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultHighlighter;
+import javax.swing.text.Highlighter;
+import javax.swing.text.Highlighter.HighlightPainter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Map;
 import java.util.Objects;
+import javax.swing.JOptionPane;
 
 public class GameGUI {
     JFrame window;
     Container con;
     JPanel titleNamePanel, newGameButtonPanel, askForNamePanel, playerPageFooterPanel, enterGameButtonPanel,
-            mainTextPanel,headerContentPanel,directionButtonPanel,mainLocationDescPanel,userInputPanel;
+            mainTextPanel,headerContentPanel,directionButtonPanel,mainLocationDescPanel,userInputPanel,inventoryPanel;
     JLabel titleNameLabel,locationImgLabel;
     Font titleFont = new Font("Times New Roman", Font.PLAIN, 40);    // customized font
     Font buttonFont = new Font("Times New Roman", Font.PLAIN, 20);
@@ -18,7 +24,12 @@ public class GameGUI {
             helpButton,northButton,eastButton,westButton,southButton,userInputEnterButton;
     JToggleButton musicButton;
     JTextField userName,userInput;
-    JTextArea askUserName,mainTextArea,askUserInput,locationDescText;
+    JTextArea askUserName,mainTextArea,askUserInput,locationDescText,inventoryTitleTextArea;
+    JList inventoryList;
+    DefaultListModel inventoryListModel;
+    BorderLayout setLayout;
+
+
 
 
     TitleScreenHandler tsHandler = new TitleScreenHandler();
@@ -138,7 +149,12 @@ public class GameGUI {
         mainTextPanel.setBackground(Color.black);
         con.add(mainTextPanel);
 
-        mainTextArea = new JTextArea("This should be description of task 1");
+        mainTextArea = new JTextArea("It's 2 weeks into summer vacation, you and your friend Sara are extremely bored.\n" +
+                "In this town, there isn't much to do for fun.\n" +
+                "Yesterday before splitting up Sara said \"we should go to the abandoned airport tomorrow!\"\n" +
+                "\n" +
+                "                              **New Task**\n" +
+                "                       EXPLORE THE AIRPORT");
         mainTextArea.setBounds(100,100,600,250);
         mainTextArea.setBackground(Color.black);
         mainTextArea.setForeground(Color.white);
@@ -160,7 +176,7 @@ public class GameGUI {
     }
 
 
-    public void yourHouse(){
+    public void yourHouse() {
 
         titleNamePanel.setVisible(false);   // if we want to display new screen, we need to disable the previous screen first
         newGameButtonPanel.setVisible(false);
@@ -172,31 +188,38 @@ public class GameGUI {
 
         //Location description panel.
         mainLocationDescPanel = new JPanel();
-        mainLocationDescPanel.setBounds(20,100,500,300);
+        mainLocationDescPanel.setBounds(20,50,540,430);
         mainLocationDescPanel.setBackground(Color.white);
         con.add(mainLocationDescPanel);
-        // text description of current location
-        locationDescText = new JTextArea("SAMPLE TEXT: You are in your house.");
+        // text description of current locatione
+
+        locationDescText = new JTextArea("You're in your house! Your family is home.\n" +
+                "\n"+
+                "To the north is Sara's house.\n" +
+                "To the east is Miss Janie's.\n" +
+                "To the south is Dead Presidents, the dollar store.\n" +
+                "To the west is Mr. Barkley's.\n" +
+                "You see Mom, Dad, and Neville.");
 
         // add a picture
         locationImgLabel = new JLabel();
-        locationImgLabel.setBounds(20,150,500,300);
-        //  ImageIcon yourhouseImg = new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("Assets/img/your_house.PNG")));
-        //   locationImgLabel.setIcon(yourhouseImg);
+        locationImgLabel.setBounds(20,120,540,300);
+        locationImgLabel.setBackground(Color.BLUE);
+        ImageIcon yourhouseImg = new ImageIcon("Assets/zone-png/zone2.png");
+        locationImgLabel.setIcon(yourhouseImg);
 
 
-        mainLocationDescPanel.add(locationDescText);
         mainLocationDescPanel.add(locationImgLabel);
+        mainLocationDescPanel.add(locationDescText);
 
         // UserInput panel, includes: text-What would you like to do? & textfield which takes user input & a ENTER button
         userInputPanel = new JPanel();
-        userInputPanel.setBounds(20,450,300,60);
+        userInputPanel.setBounds(20,500,300,60);
         userInputPanel.setBackground(Color.black);
         userInputPanel.setLayout(new GridLayout(3,1));
         // "What would you like to do?"
         askUserInput = new JTextArea("What would you like to do?");
         askUserInput.setEnabled(false);
-        askUserInput.setBounds(20,450,300,60);
         askUserInput.setBackground(Color.black);
         askUserInput.setForeground(Color.white);
         askUserInput.setFont(buttonFont);
@@ -215,6 +238,20 @@ public class GameGUI {
         userInputPanel.add(userInput);
         userInputPanel.add(userInputEnterButton);
 
+        // header menu
+//        seeMap=new JMenuItem("map");
+//
+//        seeMap.addActionListener((ActionListener) this);
+//
+//        mb=new JMenuBar();
+//        inventory=new JMenu("Inventory");
+//        map=new JMenu("Map");
+//        help=new JMenu("Help");
+//        map.add(seeMap);
+//        mb.add(inventory);mb.add(map);mb.add(help);
+//
+//        con.add(mb);
+//        window.setJMenuBar(mb);
 
 
         // Headers - include inventory/map/help buttons
@@ -223,13 +260,13 @@ public class GameGUI {
         headerContentPanel.setBounds(0,0,800,50);
         con.add(headerContentPanel);
 
-        // inventory button
-        inventoryButton = new JButton("INVENTORY");
-        inventoryButton.setFont(buttonFont);
-        inventoryButton.setBackground(Color.black);
-        inventoryButton.setForeground(Color.white);
-        inventoryButton.addActionListener(taskNextHandler);
-        headerContentPanel.add(inventoryButton);
+//        // inventory button
+//        inventoryButton = new JButton("INVENTORY");
+//        inventoryButton.setFont(buttonFont);
+//        inventoryButton.setBackground(Color.black);
+//        inventoryButton.setForeground(Color.white);
+//        inventoryButton.addActionListener(taskNextHandler);
+//        headerContentPanel.add(inventoryButton);
 
         // map button
         mapButton = new JButton("MAP");
@@ -249,7 +286,7 @@ public class GameGUI {
 
         // Direction buttons -North/South/West/East
         directionButtonPanel = new JPanel();
-        directionButtonPanel.setBounds(600,300,100,120);
+        directionButtonPanel.setBounds(630,300,100,120);
         directionButtonPanel.setBackground(Color.black);
         con.add(directionButtonPanel);
 
@@ -262,6 +299,45 @@ public class GameGUI {
         directionButtonPanel.add(southButton);
         directionButtonPanel.add(westButton);
         directionButtonPanel.add(eastButton);
+
+
+        // inventory panel
+        inventoryPanel = new JPanel();
+        inventoryPanel.setBounds(620,50,120,250);
+        inventoryPanel.setBackground(Color.yellow);
+        con.add(inventoryPanel);
+
+        inventoryTitleTextArea = new JTextArea("**Your inventory**");
+        inventoryTitleTextArea.setBackground(Color.yellow);
+        inventoryPanel.add(inventoryTitleTextArea);
+
+
+            setLayout=new BorderLayout();
+            inventoryListModel = new DefaultListModel();
+        // for iteration 1 demo purpose
+            String items[]= { "bowtie","shovel","chips","letter",
+                    "itemA","itemB","ItemC","itemD","itemE"};
+            inventoryList = new JList(items);
+            inventoryList.setFixedCellWidth(80);
+
+            JScrollPane pane = new JScrollPane(inventoryList);
+            JButton useButton = new JButton("Use item");
+            JButton dropButton = new JButton("Drop item");
+
+            useButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+
+                }
+            });
+            dropButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+
+                }
+            });
+
+            inventoryPanel.add(pane, BorderLayout.NORTH);
+            inventoryPanel.add(useButton, BorderLayout.WEST);
+            inventoryPanel.add(dropButton, BorderLayout.EAST);
 
 
 
@@ -286,7 +362,8 @@ public class GameGUI {
 
     public class task1ScreenNextButtonHandler implements ActionListener{
         public void actionPerformed(ActionEvent event){
-            yourHouse();
+                yourHouse();
+
         }
     }
 
