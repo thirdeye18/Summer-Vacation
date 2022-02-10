@@ -24,6 +24,8 @@ public class GameGUI {
     TitleScreenHandler tsHandler = new TitleScreenHandler();
     playerPageEnterGameHandler enterHandler = new playerPageEnterGameHandler();
     task1ScreenNextButtonHandler taskNextHandler = new task1ScreenNextButtonHandler();
+    displayImage displayImage = new displayImage();
+    displayMap displayMap = new displayMap();
     //musicOnOffToggleButton musicHandler = new musicOnOffToggleButton();
 
     public static void main(String[] args) {
@@ -232,19 +234,26 @@ public class GameGUI {
         headerContentPanel.add(inventoryButton);
 
         // map button
+
         mapButton = new JButton("MAP");
+
         mapButton.setFont(buttonFont);
         mapButton.setBackground(Color.black);
         mapButton.setForeground(Color.white);
-        mapButton.addActionListener(taskNextHandler);
+        mapButton.addActionListener(displayMap);
         headerContentPanel.add(mapButton);
+
+
+
+        //map Image
+
 
         //help button
         helpButton = new JButton("HELP");
         helpButton.setFont(buttonFont);
         helpButton.setBackground(Color.black);
         helpButton.setForeground(Color.white);
-        helpButton.addActionListener(taskNextHandler);
+        helpButton.addActionListener(displayImage);
         headerContentPanel.add(helpButton);
 
         // Direction buttons -North/South/West/East
@@ -290,7 +299,31 @@ public class GameGUI {
         }
     }
 
+    public class displayImage implements ActionListener{
+        public void actionPerformed(ActionEvent e){
+            JFrame frame = new JFrame("Map");
+            frame.setSize(400,400);
+            frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+            ImageIcon helpIcon = new ImageIcon("Assets/img/help.PNG");
+            JLabel label1 = new JLabel(helpIcon);
+            frame.add(label1);
+            frame.pack();
+            frame.setVisible(true);
+        }
+    }
 
+    public class displayMap implements ActionListener{
+        public void actionPerformed(ActionEvent e){
+            JFrame frame = new JFrame("Map");
+            frame.setSize(400,400);
+            frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+            ImageIcon mapIcon = new ImageIcon("Assets/img/map.PNG");
+            JLabel label = new JLabel(mapIcon);
+            frame.add(label);
+            frame.pack();
+            frame.setVisible(true);
+        }
+    }
 
 
 }

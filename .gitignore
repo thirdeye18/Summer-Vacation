@@ -2,6 +2,7 @@
 .idea/
 *iml
 
+
 # Compiled class file
 *.class
 
@@ -27,3 +28,4 @@
 hs_err_pid*
 
 /test/
+/target/
