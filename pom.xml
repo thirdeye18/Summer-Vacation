@@ -10,29 +10,10 @@
     <version>1.0-SNAPSHOT</version>
 
     <repositories>
-        <repository>
-            <id>com.github.cliftonlabs.json-simple</id>
-            <name>JSON.simple</name>
-            <url>https://mvnrepository.com/artifact/com.github.cliftonlabs/json-simple</url>
-        </repository>
+
     </repositories>
 
     <dependencies>
-
-        <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>1.3.2</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/com.github.cliftonlabs/json-simple -->
-        <dependency>
-            <groupId>com.github.cliftonlabs</groupId>
-            <artifactId>json-simple</artifactId>
-            <version>4.0.0</version>
-        </dependency>
-
 
     </dependencies>
 
