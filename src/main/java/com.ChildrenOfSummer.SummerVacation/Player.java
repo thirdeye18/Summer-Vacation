@@ -24,7 +24,7 @@ class Player {
 
 
     //private constructor
-    private Player(String playerName, String playerLocation, String playerZone, ArrayList<String> playerInventory) {
+    Player(String playerName, String playerLocation, String playerZone, ArrayList<String> playerInventory) {
         this.playerZone = playerZone;
         this.playerLocation = playerLocation;
         this.playerName = playerName;

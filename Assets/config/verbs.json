@@ -3,12 +3,12 @@
     "run",
     "execute",
     "play",
-    "new game"
+    "new"
   ],
   "quit": [
     "exit",
     "leave",
-    "quit game"
+    "quit"
   ],
   "continue": [
     "load"
@@ -65,5 +65,17 @@
 
   "commands": [
     "command"
+  ],
+  "map": [
+    "location",
+    "where am i"
+  ],
+  "inventory": [
+    "stock",
+    "supply",
+    "cache",
+    "purse",
+    "hoard",
+    "stockpile"
   ]
 }
