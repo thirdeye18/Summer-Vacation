@@ -1,6 +1,5 @@
 package com.ChildrenOfSummer.SummerVacation;
 
-import com.ChildrenOfSummer.SummerVacation.Util.JsonManager;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -12,7 +11,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.stream.Stream;
 
 
 
@@ -24,13 +25,13 @@ public class FileManager {
 
     private static String locationsJsonPath = "Assets/json/Locations.JSON";
     private static String npcsJsonPath = "Assets/json/NPCs.JSON";
-    private static String playerJsonPath = "Assets/Save/player.JSON";
+    private static String playerJsonPath = "Assets/json/Player.JSON";
     private static String locationItemsJsonPath = "Assets/json/Location_items.JSON";
     private static String locationNpcsJsonPath = "Assets/json/Location_NPCs.JSON";
     private static JSONParser jsonParser = new JSONParser();
-
     private static String defaultLocationItemsJsonPath = "Assets/defaults/Location_items_default.JSON";
     private static String defaultLocationNpcsJsonPath = "Assets/defaults/Location_NPCs_default.JSON";
+
     private static String defaultPlayerJsonPath = "Assets/defaults/Player_default.JSON";
 
     /*
@@ -57,6 +58,19 @@ public class FileManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static String txtFileToString(String fileName){
+        String file = "./Assets/story/" + fileName;
+        Path path = Paths.get(file);
+        StringBuilder sb = new StringBuilder();
+
+        try (Stream<String> stream = Files.lines(path)) {
+            stream.forEach(s -> sb.append(s).append("\n"));
+        } catch (IOException e) {
+            System.out.println("File not found.");
+        }
+        return sb.toString();
     }
 
     /*
@@ -224,26 +238,37 @@ public class FileManager {
         return inventory;
     }
 
-    /*
-     * In order to save the game I found it helpful to copy over the current values from the Player fields used
-     * in construction and then pass them to this method to be saved. The game background saves frequently which
-     * isn't strictly necessary but is nice for when you are testing and just hit the x without typing quit. -MS
-     */
-
     public static void saveGame(String name, String location, String zone, ArrayList<String>inventory){
+        /*
+         * In order to save the game I found it helpful to copy over the current values from the Player fields used
+         * in construction and then pass them to this method to be saved. The game background saves frequently which
+         * isn't strictly necessary but is nice for when you are testing and just hit the x without typing quit. -MS
+         */
             JSONObject saveFileJson = loadGame();
-            saveFileJson.put("name", name);
-            saveFileJson.put("location", location);
+            saveFileJson.put("name",name);
+            saveFileJson.put("location",location);
             saveFileJson.put("zone", zone);
             JSONArray inventoryArr = new JSONArray();
             inventoryArr.addAll(inventory);
             saveFileJson.put("inventory", inventoryArr);
-            JsonManager.writeJSONFile(playerJsonPath, saveFileJson);
+            try(FileWriter w = new FileWriter(playerJsonPath)) {
+                w.write(saveFileJson.toJSONString());
+                w.flush();
+            }catch(IOException e){
+                e.printStackTrace();
+            }
     }
 
     public static JSONObject loadGame(){
         //loads Player.JSON for parsing by save method and other load methods outside this class -MS
-        return JsonManager.getJsonObject("player.json", "save");
+        JSONObject saveFileJson = new JSONObject();
+        try(FileReader reader = new FileReader(playerJsonPath)){
+            Object saveFileObj = jsonParser.parse(reader);
+            saveFileJson = (JSONObject) saveFileObj;
+        }catch(IOException | ParseException e){
+            e.printStackTrace();
+        }
+        return saveFileJson;
     }
 
     public static void loadDefaults(){
