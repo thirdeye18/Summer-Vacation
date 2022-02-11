@@ -12,7 +12,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.stream.Stream;
 
 
 
@@ -57,6 +59,19 @@ public class FileManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static String txtFileToString(String fileName){
+        String file = "./Assets/story/" + fileName;
+        Path path = Paths.get(file);
+        StringBuilder sb = new StringBuilder();
+
+        try (Stream<String> stream = Files.lines(path)) {
+            stream.forEach(s -> sb.append(s).append("\n"));
+        } catch (IOException e) {
+            System.out.println("File not found.");
+        }
+        return sb.toString();
     }
 
     /*
