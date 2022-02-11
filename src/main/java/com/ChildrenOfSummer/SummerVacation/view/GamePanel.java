@@ -32,6 +32,7 @@ public class GamePanel extends JFrame {
     public GamePanel() {
         super("Summer Vacation");
         setUpMainMenu();
+        setupListeners();
     }
 
     public void setUpMainMenu() {
@@ -133,7 +134,29 @@ public class GamePanel extends JFrame {
         // use writeToTextArea()
     }
 
-
+    //set up listeners
+    private void setupListeners(){
+        mapButton.addActionListener(e -> {
+            JFrame frame = new JFrame("Map");
+            frame.setSize(400,400);
+            frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+            ImageIcon mapIcon = new ImageIcon("Assets/img/map.PNG");
+            JLabel label = new JLabel(mapIcon);
+            frame.add(label);
+            frame.pack();
+            frame.setVisible(true);
+        });
+        helpButton.addActionListener(e -> {
+            JFrame frame = new JFrame("Map");
+            frame.setSize(400,400);
+            frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+            ImageIcon helpIcon = new ImageIcon("Assets/img/help.PNG");
+            JLabel label1 = new JLabel(helpIcon);
+            frame.add(label1);
+            frame.pack();
+            frame.setVisible(true);
+        });
+    }
 
     public void task1Screen() {
         titleNamePanel.setVisible(false);   // if we want to display new screen, we need to disable the previous screen first
@@ -301,31 +324,6 @@ public class GamePanel extends JFrame {
         product.setBackground(background);
         product.setVisible(visible);
         return product;
-    }
-    public class displayImage implements ActionListener{
-        public void actionPerformed(ActionEvent e){
-            JFrame frame = new JFrame("Map");
-            frame.setSize(400,400);
-            frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-            ImageIcon helpIcon = new ImageIcon("Assets/img/help.PNG");
-            JLabel label1 = new JLabel(helpIcon);
-            frame.add(label1);
-            frame.pack();
-            frame.setVisible(true);
-        }
-    }
-
-    public class displayMap implements ActionListener{
-        public void actionPerformed(ActionEvent e){
-            JFrame frame = new JFrame("Map");
-            frame.setSize(400,400);
-            frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-            ImageIcon mapIcon = new ImageIcon("Assets/img/map.PNG");
-            JLabel label = new JLabel(mapIcon);
-            frame.add(label);
-            frame.pack();
-            frame.setVisible(true);
-        }
     }
 
 }
