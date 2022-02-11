@@ -1,5 +1,4 @@
-{
-  "money":0,
+{"money":0,
   "zone":"Old Town",
   "name":"default",
   "location":"Paine Field",
@@ -8,5 +7,4 @@
   "sceneTwoPassed": false,
   "sceneThreePassed": false,
   "sceneFourPassed": false,
-  "sceneFivePassed": false
-}
+"sceneFivePassed": false}

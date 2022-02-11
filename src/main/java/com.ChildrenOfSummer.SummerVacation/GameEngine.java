@@ -1,6 +1,5 @@
 package com.ChildrenOfSummer.SummerVacation;
 
-import com.ChildrenOfSummer.SummerVacation.Util.JsonManager;
 import org.json.simple.JSONObject;
 
 import java.io.File;
@@ -14,7 +13,7 @@ public class GameEngine {
     static boolean sceneFivePassed;
 
     public static void execute() {
-        // JsonManager.loadDefaults();
+        FileManager.loadDefaults();
         if (Input.startMenu()) {
             Input.introduction();
 
