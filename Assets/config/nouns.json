@@ -11,18 +11,7 @@
   "west": [
     "left"
   ],
-  "map": [
-    "location",
-    "where am i"
-  ],
-  "inventory": [
-    "stock",
-    "supply",
-    "cache",
-    "purse",
-    "hoard",
-    "stockpile"
-  ],
+
   "River": [],
   "Island": [],
   "School": [],
@@ -92,6 +81,7 @@
   "Helena": [],
   "Janie": [],
   "Beth": [],
+
   "paper": [
     "sheet",
     "form",
