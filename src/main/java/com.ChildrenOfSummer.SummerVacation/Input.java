@@ -26,18 +26,17 @@ public class Input {
 
         boolean newGame = false;
 
-        while (!newGame) {  //loop until new game option selected, error msg for invalid input
+        while (!newGame) {  //loop until new game option selected, error msg for invalid input -JH
             FileManager.menuFiles();    //display menu text
-            String startMenuChoice = TextParser.getVerb(scanner.nextLine());
-
+            String startMenuChoice = TextParser.getVerb(scanner.nextLine());    //.strip().toLowerCase();
             switch (startMenuChoice) {
                 case "start":
-                    FileManager.loadDefaults();
+                    player1.setPlayerInventory(empty);
                     player1.setPlayerName("default");
                     player1.setPlayerLocation("Player's House");
                     player1.setPlayerZone("Suburb");
-                    player1.setPlayerInventory(empty);
                     playerCreator();
+                    FileManager.loadDefaults();
                     return true;
 
                 case "continue":
@@ -79,9 +78,10 @@ public class Input {
          *Takes in your name and saves the save file with default values.
          */
         System.out.print("Enter your name:");
-        String name = scanner.nextLine().strip();
-        player1.setPlayerName(name);
+        ANSWER = scanner.nextLine().strip();
+        player1.setPlayerName(ANSWER);
         FileManager.saveGame(player1.getPlayerName(), player1.getPlayerLocation(), player1.getPlayerZone(), player1.getPlayerInventory());
+
     }
 
     public static void inputCommandsLogic() {
@@ -104,14 +104,10 @@ public class Input {
         }
         System.out.print("\nWhat would you like to do?");
 
-        String userInput = scanner.nextLine();
-        String verb = TextParser.getVerb(userInput);
-        ArrayList<String> nouns = TextParser.getNouns(userInput);
-        String noun = "";
-        if(nouns.isEmpty()) {
-            noun = "blank";
-        }
-        else noun = nouns.get(0);
+        ANSWER = scanner.nextLine().strip().toLowerCase();
+        String[] answerWords = ANSWER.split(" ");
+        String verb = answerWords[0];
+        String noun2 = answerWords[answerWords.length - 1];
 
         switch (verb) {
             case "map":
@@ -125,32 +121,32 @@ public class Input {
             case "go":
                 boolean didMove = false;
                 for (Directions dir : Directions.values()) {
-                    if (dir.name().equals(noun.toUpperCase())) {
-                        player1.move(noun);
+                    if (dir.name().equals(noun2.toUpperCase())) {
+                        player1.move(noun2);
                         didMove = true;
                     }
                 }
                 if (!didMove) {
-                    System.out.println("you were unable to move " + noun + ".");
+                    System.out.println("you were unable to move " + noun2 + ".");
                 }
                 FileManager.saveGame(player1.getPlayerName(), player1.getPlayerLocation(), player1.getPlayerZone(), player1.getPlayerInventory());
                 break;
             case "get":
-                if (locationList.contains(noun)) {
-                    locationList.remove(noun);
-                    playerList.add(noun);
+                if (locationList.contains(noun2)) {
+                    locationList.remove(noun2);
+                    playerList.add(noun2);
                     FileManager.updateLocationItems(player1.getPlayerLocation(), locationList);
                     FileManager.savePlayerItems(playerList);
                     player1.setPlayerInventory(playerList);
                     System.out.println("Your inventory has: " + playerList);
                 } else {
-                    System.out.println("I can't get that! There's no " + noun + " for me to pick up!");
+                    System.out.println("I can't get that! There's no " + noun2 + " for me to pick up!");
                 }
                 break;
             case "drop":
-                if (playerList.contains(noun)) {
-                    locationList.add(noun);
-                    playerList.remove(noun);
+                if (playerList.contains(noun2)) {
+                    locationList.add(noun2);
+                    playerList.remove(noun2);
                     FileManager.updateLocationItems(player1.getPlayerLocation(), locationList);
                     FileManager.savePlayerItems(playerList);
                     player1.setPlayerInventory(playerList);
@@ -163,7 +159,7 @@ public class Input {
                 System.out.println("Nothing happens...");
                 break;
             case "talk":
-                System.out.println(player1.talk(noun));
+                System.out.println(player1.talk(noun2));
                 break;
             case "help":
                 System.out.println("Your current location is " + player1.getPlayerLocation());
@@ -171,7 +167,7 @@ public class Input {
                 inputCommandsLogic();
                 break;
             case "music":
-                switch (noun) {
+                switch (noun2) {
                     case "on":
                         int loop = 3;
                         SoundFX.MUSIC1.loopPlay(loop);
