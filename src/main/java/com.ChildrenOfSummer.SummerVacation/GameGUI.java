@@ -123,7 +123,6 @@ public class GameGUI {
         playerPageFooterPanel.add(musicButton);
 
 
-
         enterGameButtonPanel = new JPanel();
         enterGameButtonPanel.setBackground(Color.black);
         enterGameButtonPanel.setBounds(600,400,200,100);

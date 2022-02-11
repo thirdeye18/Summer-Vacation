@@ -3,6 +3,7 @@ package com.ChildrenOfSummer.SummerVacation;
 import com.ChildrenOfSummer.SummerVacation.Util.Directions;
 import com.ChildrenOfSummer.SummerVacation.Util.SoundFX;
 import com.ChildrenOfSummer.SummerVacation.Util.TextParser;
+import com.ChildrenOfSummer.SummerVacation.view.MainFrame;
 import org.json.simple.JSONObject;
 
 import javax.sound.sampled.Clip;
@@ -14,6 +15,7 @@ public class Input {
     private static String ANSWER;
     private static ArrayList<String> empty = new ArrayList<>();
     private static Player player1 = Player.getInstance("default", "Player's House", "Suburb", empty);
+    private static MainFrame mainFrame = new MainFrame();
     // private static final Clip clip = FileManager.getMusic(null);
 
 
@@ -23,10 +25,13 @@ public class Input {
          *Load will of course over-write those values with the Player.json values so that you can continue your game.
          * -MS
          */
-
+        mainFrame.createGameScreen();
         boolean newGame = false;
 
-        while (!newGame) {  //loop until new game option selected, error msg for invalid input -JH
+
+        while (!newGame) {  //loop until new game option selected, error msg for invalid input
+
+
             FileManager.menuFiles();    //display menu text
             String startMenuChoice = TextParser.getVerb(scanner.nextLine());    //.strip().toLowerCase();
             switch (startMenuChoice) {
