@@ -8,7 +8,7 @@ import java.awt.*;
 
 public class GamePanel extends JFrame {
 
-    public TextField userName = new TextField("", 20);
+    public JTextField userName = new JTextField("", 20);
     public JTextField userInput = new JTextField(10);
     private JTextArea textArea = new JTextArea(20, 20);
     private JTextArea askUserName = new JTextArea();
@@ -19,7 +19,7 @@ public class GamePanel extends JFrame {
 
     public JButton newGameButton,loadGameButton, quitGameButton,playerPageEnterGameButton,task1ScreenNextButton,userInputEnterButton,
             mapButton,helpButton,northButton,southButton,eastButton,westButton,dropButton,useButton,
-            testArriveSpecialSceneButton, arriveSpecialSceneNextButton;
+            testFunct, arriveSpecialSceneNextButton;
     private Container con;
     public JPanel titleNamePanel, newGameButtonPanel,askForNamePanel,playerPageFooterPanel,enterGameButtonPanel,
             mainTextPanel,mainLocationDescPanel,userInputPanel,headerContentPanel,directionButtonPanel,
@@ -52,6 +52,7 @@ public class GamePanel extends JFrame {
         newGameButtonPanel.add(loadGameButton);
         newGameButtonPanel.add(quitGameButton);
         newGameButton.addActionListener(e -> playerNameScreen());
+        quitGameButton.addActionListener(e->System.exit(0));
 
         con.add(titleNamePanel);
         con.add(newGameButtonPanel);
@@ -105,7 +106,7 @@ public class GamePanel extends JFrame {
         eastButton = createJButton("Go East",100,20,false,Color.white,Color.black);
         useButton = createJButton("use item",100,20,false,Color.white,Color.black);
         dropButton = createJButton("drop item",100,20,false,Color.white,Color.black);
-        testArriveSpecialSceneButton = createJButton("testarriveSc",100,20,false,Color.red,Color.black);
+        testFunct = createJButton("testFunct",100,20,false,Color.red,Color.black);
         arriveSpecialSceneNextButton = createJButton("NEXT",100,30,false,Color.white,Color.black);
     }
     public void createGameScreen() {
@@ -128,6 +129,8 @@ public class GamePanel extends JFrame {
         askUserName.setForeground(Color.white);
         askForNamePanel.add(askUserName);
         askForNamePanel.add(userName);
+
+
 
         musicButton = new JToggleButton("music on/off");
         playerPageFooterPanel.add(musicButton);
@@ -161,6 +164,18 @@ public class GamePanel extends JFrame {
             frame.pack();
             frame.setVisible(true);
         });
+        userInputEnterButton.addActionListener(e->{
+
+            if (userInput.getText().contains("get")) {
+                JOptionPane.showMessageDialog(null, "Zoe test: xxx has been added to your inventory", "", JOptionPane.PLAIN_MESSAGE);
+            }
+            else if (userInput.getText().contains("talk")){
+                JOptionPane.showMessageDialog(null, "Zoe test: Dad said xxxxxx", "", JOptionPane.PLAIN_MESSAGE);
+            }
+            else {
+                JOptionPane.showMessageDialog(null, "Zoe test: Invalid input", "", JOptionPane.PLAIN_MESSAGE);
+            }
+        });
     }
 
     public void task1Screen() {
@@ -189,7 +204,7 @@ public class GamePanel extends JFrame {
         //Location description panel.
 
         con.add(mainLocationDescPanel);
-        // text description of current locatione
+        // text description of current location
 
         // add a picture
         locationImgLabel = new JLabel();
@@ -242,8 +257,8 @@ public class GamePanel extends JFrame {
         directionButtonPanel.add(southButton);
         directionButtonPanel.add(westButton);
         directionButtonPanel.add(eastButton);
-        directionButtonPanel.add(testArriveSpecialSceneButton);
-        testArriveSpecialSceneButton.addActionListener(e -> {arriveSpecialScene("scene-five.txt");});
+        directionButtonPanel.add(testFunct);
+        testFunct.addActionListener(e -> {taskPaddleRiverWithEnoughInventory();});
 
 
         // inventory panel
@@ -288,7 +303,105 @@ public class GamePanel extends JFrame {
         con.add(largeTextAreaPanel);
     }
 
+    public void failedPassOrFinalWin(String fileName) {
+        mainLocationDescPanel.setVisible(false);
+        userInputPanel.setVisible(false);
+        directionButtonPanel.setVisible(false);
+        inventoryPanel.setVisible(false);
+        // String text =FileManager.txtFileToString("scene-one.txt");
+        String text = FileManager.txtFileToString(fileName);
+        largeTextArea.setText(text);
 
+
+        largeTextAreaPanel.add(largeTextArea);
+        largeTextArea.setLineWrap(true);
+        scroll = new JScrollPane(largeTextArea);
+        largeTextArea.setBounds(20,60,740,380);
+        largeTextAreaPanel.add(scroll);
+        largeTextAreaPanel.add(quitGameButton);
+        con.add(largeTextAreaPanel);
+    }
+    public void taskEscapeWithEnoughInventory() {
+        mainLocationDescPanel.setVisible(false);
+        userInputPanel.setVisible(false);
+        directionButtonPanel.setVisible(false);
+        inventoryPanel.setVisible(false);
+        // String text =FileManager.txtFileToString("scene-one.txt");
+
+       int reply1 = JOptionPane.showConfirmDialog(null, "You noticed that your rope and planks could be combined!\n" +
+                "You can create a ladder to get out!\n" +
+                "Do you wish to combine the items to get out?", "", JOptionPane.YES_NO_OPTION);
+       if (reply1 == JOptionPane.YES_OPTION){
+           JOptionPane.showMessageDialog(null,"You've finished the first scene. You have gotten out of the airport!","",JOptionPane.PLAIN_MESSAGE);
+       }
+       else{
+           JOptionPane.showMessageDialog(null,"you lost the game","",JOptionPane.PLAIN_MESSAGE);
+       }
+
+
+        largeTextAreaPanel.add(largeTextArea);
+        con.add(largeTextAreaPanel);
+    }
+    public void taskThrowRockWithEnoughInventory() {
+        mainLocationDescPanel.setVisible(false);
+        userInputPanel.setVisible(false);
+        directionButtonPanel.setVisible(false);
+        inventoryPanel.setVisible(false);
+        // String text =FileManager.txtFileToString("scene-one.txt");
+
+        int reply1 = JOptionPane.showConfirmDialog(null, "You can throw a rock to escape. Do you want to?", "", JOptionPane.YES_NO_OPTION);
+        if (reply1 == JOptionPane.YES_OPTION){
+            JOptionPane.showMessageDialog(null,"You've escaped from the farmer.","",JOptionPane.PLAIN_MESSAGE);
+        }
+        else{
+            JOptionPane.showMessageDialog(null,"You got caught! Game Over.","",JOptionPane.PLAIN_MESSAGE);
+        }
+
+
+        largeTextAreaPanel.add(largeTextArea);
+        con.add(largeTextAreaPanel);
+    }
+    public void taskPaddleRiverWithEnoughInventory() {
+        mainLocationDescPanel.setVisible(false);
+        userInputPanel.setVisible(false);
+        directionButtonPanel.setVisible(false);
+        inventoryPanel.setVisible(false);
+        // String text =FileManager.txtFileToString("scene-one.txt");
+
+        Object[] paddleOptions = { "paddle left", "paddle right" };
+        int reply1 = JOptionPane.showOptionDialog(null, "Rapids rush up to meet you in the middle of the river!\nWhich way will you paddle to avoid them?",
+                "", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, paddleOptions, paddleOptions[0]);
+        if (reply1 == JOptionPane.YES_OPTION){
+            JOptionPane.showMessageDialog(null,"You paddle left. A tree branch in the river snags your raft! It takes some damage.","",JOptionPane.PLAIN_MESSAGE);
+        }
+        else{
+            JOptionPane.showMessageDialog(null,"You paddle right. A massive boulder stops your progress... \nAfter dislodging your raft you are free.","",JOptionPane.PLAIN_MESSAGE);
+        }
+
+        Object[] innerOrCenter = { "hug the inner bank", "center the raft" };
+        int reply2 = JOptionPane.showOptionDialog(null, "The river curves left\nYou need to choose to hug the inner bank of center the raft in the river.",
+                "", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, innerOrCenter, innerOrCenter[0]);
+        if (reply2 == JOptionPane.YES_OPTION){
+            JOptionPane.showMessageDialog(null,"A rock in the shallow inner bank scrapes your raft! ","",JOptionPane.PLAIN_MESSAGE);
+        }
+        else{
+            JOptionPane.showMessageDialog(null,"The raft hits no obstacles as you glide around the bend.","",JOptionPane.PLAIN_MESSAGE);
+        }
+
+        Object[] duckOrPaddle = { "duck under branches", "use paddle on branches" };
+        int reply3 = JOptionPane.showOptionDialog(null, "Ahead, thorny branches almost cover the water.\nThey will snag you unless you find a way to avoid them!",
+                "", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, duckOrPaddle, duckOrPaddle[0]);
+        if (reply3 == JOptionPane.YES_OPTION){
+            JOptionPane.showMessageDialog(null,"The branches puncture holes in your raft!","",JOptionPane.PLAIN_MESSAGE);
+        }
+        else{
+            JOptionPane.showMessageDialog(null,"You push the thorny branches out of the way of your raft.","",JOptionPane.PLAIN_MESSAGE);
+        }
+
+
+        largeTextAreaPanel.add(largeTextArea);
+        con.add(largeTextAreaPanel);
+    }
 
     public void writeToTextArea(String string) {
         textArea.setFont(new Font("Arial", Font.BOLD, 15));
@@ -308,31 +421,7 @@ public class GamePanel extends JFrame {
         //     displayPanel.removeAll();
     }
 
-    public void displayCurtain() {
-//        curtainLabel = new JLabel();
-//        displayPanel.add(curtainLabel);
-//        ImageIcon curtainIcon = new ImageIcon("resources/curtain1.png");
-//        displayPanel.add(curtainLabel);
-//        curtainLabel.setIcon(curtainIcon);
-    }
 
-    public void displayOpenedChest() {
-//        chestOpenedLabel = new JLabel();
-//        displayPanel.add(chestOpenedLabel);
-//        ImageIcon chestOpened = new ImageIcon("resources/openedchest.png");
-//        displayPanel.add(chestOpenedLabel);
-//        chestOpenedLabel.setIcon(chestOpened);
-    }
-
-    public void displayClosedChest() {
-//        chestClosedLabel = new JLabel();
-//        displayPanel.remove(curtainLabel);
-//        displayPanel.add(chestClosedLabel);
-//        displayPanel.updateUI(); //gets the curtain to be removed
-//        ImageIcon chestClosed = new ImageIcon("resources/closedchest.png");
-//        displayPanel.add(chestClosedLabel);
-//        chestClosedLabel.setIcon(chestClosed);
-    }
 
     private JButton createJButton(String title, int width, int height, boolean focusable, Color foreground, Color background) {
         JButton product = new JButton(title);
@@ -350,5 +439,6 @@ public class GamePanel extends JFrame {
         product.setVisible(visible);
         return product;
     }
+
 
 }
