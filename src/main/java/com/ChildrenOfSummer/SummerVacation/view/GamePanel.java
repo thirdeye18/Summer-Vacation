@@ -1,9 +1,9 @@
 package com.ChildrenOfSummer.SummerVacation.view;
 
+import com.ChildrenOfSummer.SummerVacation.FileManager;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 
 public class GamePanel extends JFrame {
@@ -15,18 +15,21 @@ public class GamePanel extends JFrame {
     public JTextArea textField = new JTextArea();
     public JTextArea locationDesc = new JTextArea();
     public JTextArea askUserInput = new JTextArea();
+    public JTextArea largeTextArea = new JTextArea("",22,80);
 
     public JButton newGameButton,loadGameButton, quitGameButton,playerPageEnterGameButton,task1ScreenNextButton,userInputEnterButton,
-            mapButton,helpButton,northButton,southButton,eastButton,westButton,dropButton,useButton;
+            mapButton,helpButton,northButton,southButton,eastButton,westButton,dropButton,useButton,
+            testArriveSpecialSceneButton, arriveSpecialSceneNextButton;
     private Container con;
     public JPanel titleNamePanel, newGameButtonPanel,askForNamePanel,playerPageFooterPanel,enterGameButtonPanel,
             mainTextPanel,mainLocationDescPanel,userInputPanel,headerContentPanel,directionButtonPanel,
-            inventoryPanel;
+            inventoryPanel, largeTextAreaPanel;
     public JLabel titleNameLabel,locationImgLabel;
     public JToggleButton musicButton;
     public BorderLayout setLayout;
     public DefaultListModel inventoryListModel;
     public JList inventoryList;
+    public JScrollPane scroll;
 
 
     public GamePanel() {
@@ -82,8 +85,9 @@ public class GamePanel extends JFrame {
         mainLocationDescPanel = createJPanel(20,50,540,430,Color.red,true);
         userInputPanel = createJPanel(20,500,300,60,Color.green,true);
         headerContentPanel = createJPanel(0,0,800,50, Color.yellow,true);
-        directionButtonPanel = createJPanel(630,300,100,120,Color.yellow,true);
+        directionButtonPanel = createJPanel(630,300,100,150,Color.yellow,true);
         inventoryPanel = createJPanel(620,50,120,250,Color.yellow,true);
+        largeTextAreaPanel = createJPanel(20,60,740,430,Color.white,true);
     }
 
     private void setAllButtons() {
@@ -101,7 +105,8 @@ public class GamePanel extends JFrame {
         eastButton = createJButton("Go East",100,20,false,Color.white,Color.black);
         useButton = createJButton("use item",100,20,false,Color.white,Color.black);
         dropButton = createJButton("drop item",100,20,false,Color.white,Color.black);
-
+        testArriveSpecialSceneButton = createJButton("testarriveSc",100,20,false,Color.red,Color.black);
+        arriveSpecialSceneNextButton = createJButton("NEXT",100,30,false,Color.white,Color.black);
     }
     public void createGameScreen() {
         titleNamePanel.setVisible(true);
@@ -173,7 +178,6 @@ public class GamePanel extends JFrame {
 
     public void zoneView() {
 
-
         titleNamePanel.setVisible(false);   // if we want to display new screen, we need to disable the previous screen first
         newGameButtonPanel.setVisible(false);
         askForNamePanel.setVisible(false);
@@ -238,6 +242,8 @@ public class GamePanel extends JFrame {
         directionButtonPanel.add(southButton);
         directionButtonPanel.add(westButton);
         directionButtonPanel.add(eastButton);
+        directionButtonPanel.add(testArriveSpecialSceneButton);
+        testArriveSpecialSceneButton.addActionListener(e -> {arriveSpecialScene("scene-five.txt");});
 
 
         // inventory panel
@@ -262,6 +268,25 @@ public class GamePanel extends JFrame {
 
     }
 
+    // arrive to special scene. read txt
+    public void arriveSpecialScene(String fileName) {
+        mainLocationDescPanel.setVisible(false);
+        userInputPanel.setVisible(false);
+        directionButtonPanel.setVisible(false);
+        inventoryPanel.setVisible(false);
+       // String text =FileManager.txtFileToString("scene-one.txt");
+        String text = FileManager.txtFileToString(fileName);
+        largeTextArea.setText(text);
+
+
+        largeTextAreaPanel.add(largeTextArea);
+        largeTextArea.setLineWrap(true);
+        scroll = new JScrollPane(largeTextArea);
+        largeTextArea.setBounds(20,60,740,380);
+        largeTextAreaPanel.add(scroll);
+        largeTextAreaPanel.add(arriveSpecialSceneNextButton);
+        con.add(largeTextAreaPanel);
+    }
 
 
 
