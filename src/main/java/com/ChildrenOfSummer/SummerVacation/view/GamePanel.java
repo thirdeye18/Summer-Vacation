@@ -1,9 +1,19 @@
 package com.ChildrenOfSummer.SummerVacation.view;
 
 import com.ChildrenOfSummer.SummerVacation.FileManager;
+import com.ChildrenOfSummer.SummerVacation.GameEngine;
+import com.ChildrenOfSummer.SummerVacation.Input;
+import com.ChildrenOfSummer.SummerVacation.Player;
+import com.ChildrenOfSummer.SummerVacation.Util.Directions;
+import com.ChildrenOfSummer.SummerVacation.Util.SoundFX;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Locale;
+import java.util.Scanner;
 
 
 public class GamePanel extends JFrame {
@@ -30,6 +40,19 @@ public class GamePanel extends JFrame {
     public DefaultListModel inventoryListModel;
     public JList inventoryList;
     public JScrollPane scroll;
+    //from Input class
+    private static String ANSWER;
+    private static ArrayList<String> empty = new ArrayList<>();
+    private static Player player1 = Player.getInstance("default", "Player's House", "Suburb", empty);
+    ArrayList<String> locationList = FileManager.getLocationItems(player1.getPlayerLocation());
+    ArrayList<String> playerList = FileManager.getPlayerItems();
+    // from Player class
+    private static Player singleton = null;
+    private String playerZone;
+    private String playerLocation;
+    private String playerName;
+    private ArrayList<String> playerInventory;
+    private int playerMoney;
 
 
     public GamePanel() {
@@ -51,8 +74,7 @@ public class GamePanel extends JFrame {
         newGameButtonPanel.add(newGameButton);
         newGameButtonPanel.add(loadGameButton);
         newGameButtonPanel.add(quitGameButton);
-        newGameButton.addActionListener(e -> playerNameScreen());
-        quitGameButton.addActionListener(e->System.exit(0));
+
 
         con.add(titleNamePanel);
         con.add(newGameButtonPanel);
@@ -127,6 +149,7 @@ public class GamePanel extends JFrame {
         askUserName.setText("Please enter your name: ");
         askUserName.setBackground(Color.black);
         askUserName.setForeground(Color.white);
+        askUserName.setEditable(false);
         askForNamePanel.add(askUserName);
         askForNamePanel.add(userName);
 
@@ -135,7 +158,7 @@ public class GamePanel extends JFrame {
         musicButton = new JToggleButton("music on/off");
         playerPageFooterPanel.add(musicButton);
         enterGameButtonPanel.add(playerPageEnterGameButton);
-        playerPageEnterGameButton.addActionListener(e -> task1Screen());
+
 
         // Zoe notes: task --add function to playerPageEnterGameButton,
         // need to add introduction.txt to task1Screen mainTextPanel.
@@ -144,6 +167,26 @@ public class GamePanel extends JFrame {
 
     //set up listeners
     private void setupListeners(){
+
+        newGameButton.addActionListener(e -> {
+            playerNameScreen();
+            player1.setPlayerInventory(empty);
+            player1.setPlayerName("default");
+            player1.setPlayerLocation("Player's House");
+            player1.setPlayerZone("Suburb");
+        });
+
+
+        quitGameButton.addActionListener(e->System.exit(0));
+
+        playerPageEnterGameButton.addActionListener(e-> {
+           task1Screen();
+           ANSWER = userName.getText();
+           player1.setPlayerName(ANSWER);
+           FileManager.saveGame(player1.getPlayerName(), player1.getPlayerLocation(), player1.getPlayerZone(), player1.getPlayerInventory());
+           textField.setText("Hi "+ ANSWER+"\n"+FileManager.txtFileToString("introduction.txt"));
+        });
+
         mapButton.addActionListener(e -> {
             JFrame frame = new JFrame("Map");
             frame.setSize(400,400);
@@ -164,17 +207,134 @@ public class GamePanel extends JFrame {
             frame.pack();
             frame.setVisible(true);
         });
-        userInputEnterButton.addActionListener(e->{
 
-            if (userInput.getText().contains("get")) {
-                JOptionPane.showMessageDialog(null, "Zoe test: xxx has been added to your inventory", "", JOptionPane.PLAIN_MESSAGE);
-            }
-            else if (userInput.getText().contains("talk")){
-                JOptionPane.showMessageDialog(null, "Zoe test: Dad said xxxxxx", "", JOptionPane.PLAIN_MESSAGE);
-            }
-            else {
-                JOptionPane.showMessageDialog(null, "Zoe test: Invalid input", "", JOptionPane.PLAIN_MESSAGE);
-            }
+        dropButton.addActionListener(e -> {
+                int index = inventoryList.getSelectedIndex();
+                String droppedItem = (String) inventoryList.getSelectedValue();
+                locationList.add(droppedItem);
+                playerList.remove(droppedItem);
+                FileManager.updateLocationItems(player1.getPlayerLocation(), locationList);
+                FileManager.savePlayerItems(playerList);
+                player1.setPlayerInventory(playerList);
+                inventoryListModel.removeElementAt(index);
+        });
+
+        useButton.addActionListener(e -> {
+            JOptionPane.showMessageDialog(null,"Nothing happens...", "", JOptionPane.PLAIN_MESSAGE);
+        });
+
+        loadGameButton.addActionListener(e -> {
+            JSONObject saveFile = FileManager.loadGame();
+            String name = (String) saveFile.get("name");
+            String location = (String) saveFile.get("location");
+            String zone = (String) saveFile.get("zone");
+            ArrayList<String> inventory = (ArrayList<String>) saveFile.get("inventory");
+            player1.setPlayerInventory(inventory);
+            player1.setPlayerName(name);
+            player1.setPlayerLocation(location);
+            player1.setPlayerZone(zone);
+        });
+
+
+
+        userInputEnterButton.addActionListener(e->{
+            ArrayList<String> locationList = FileManager.getLocationItems(player1.getPlayerLocation());
+            ArrayList<String> playerList = FileManager.getPlayerItems();
+            ANSWER = userInput.getText();
+            String[] answerWords = ANSWER.split(" ");
+            String verb = answerWords[0];
+            String noun2 = answerWords[answerWords.length - 1];
+            switch (verb) {
+                case "map":
+                    JFrame frame = new JFrame("Map");
+                    frame.setSize(400, 400);
+                    frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+                    ImageIcon mapIcon = new ImageIcon("Assets/img/map.PNG");
+                    JLabel label = new JLabel(mapIcon);
+                    frame.add(label);
+                    frame.pack();
+                    frame.setVisible(true);
+                    break;
+                case "inventory":
+                    JOptionPane.showMessageDialog(null, "Your inventory has: " + playerList, "", JOptionPane.PLAIN_MESSAGE);
+                    break;
+                case "get":
+                    if (verb.equals("get") && locationList.contains(noun2)) {
+                        locationList.remove(noun2);
+                        playerList.add(noun2);
+                        FileManager.updateLocationItems(player1.getPlayerLocation(), locationList);
+                        FileManager.savePlayerItems(playerList);
+                        player1.setPlayerInventory(playerList);
+                        inventoryListModel.addElement(noun2);
+                        JOptionPane.showMessageDialog(null, noun2 + " has been added to your inventory.", "", JOptionPane.PLAIN_MESSAGE);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "I can't get that! There's no " + noun2 + " for me to pick up!", "", JOptionPane.PLAIN_MESSAGE);
+                    }
+                    break;
+                case "drop":
+                    if (playerList.contains(noun2)) {
+                        locationList.add(noun2);
+                        playerList.remove(noun2);
+                        FileManager.updateLocationItems(player1.getPlayerLocation(), locationList);
+                        FileManager.savePlayerItems(playerList);
+                        player1.setPlayerInventory(playerList);
+                        inventoryListModel.removeElement(noun2);
+                    } else {
+                        JOptionPane.showMessageDialog(null,"Sorry, I can't drop what I don't have.", "", JOptionPane.PLAIN_MESSAGE);
+                    }
+                    break;
+                case "use":
+                    JOptionPane.showMessageDialog(null,"Nothing happens...", "", JOptionPane.PLAIN_MESSAGE);
+                    break;
+                case "talk":
+                    JOptionPane.showMessageDialog(null, player1.talk(noun2), "", JOptionPane.PLAIN_MESSAGE);
+                    break;
+
+                case "help":
+                    frame = new JFrame("Map");
+                    frame.setSize(400, 400);
+                    frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+                    ImageIcon helpIcon = new ImageIcon("Assets/img/help.PNG");
+                    JLabel label1 = new JLabel(helpIcon);
+                    frame.add(label1);
+                    frame.pack();
+                    frame.setVisible(true);
+                    break;
+                case "music":
+                    switch (noun2) {
+                        case "on":
+                            int loop = 3;
+                            SoundFX.MUSIC1.loopPlay(loop);
+                            JOptionPane.showMessageDialog(null, "Back ground music turned on", "", JOptionPane.PLAIN_MESSAGE);
+                            break;
+                        case "off":
+                            SoundFX.MUSIC1.stopPlay();
+                            JOptionPane.showMessageDialog(null, "Back ground music turned off", "", JOptionPane.PLAIN_MESSAGE);
+                            break;
+                        default:
+                            JOptionPane.showMessageDialog(null, "Not a valid response\n [on] [off]", "", JOptionPane.PLAIN_MESSAGE);
+                    }
+                    break;
+                case "go":
+                    boolean didMove = false;
+                    for (Directions dir : Directions.values()) {
+                        if (dir.name().equals(noun2.toUpperCase())) {
+                            player1.move(noun2);
+                            didMove = true;
+                        }
+                    }
+                    if (!didMove) {
+                        System.out.println("you were unable to move " + noun2 + ".");
+                    }
+                    FileManager.saveGame(player1.getPlayerName(), player1.getPlayerLocation(), player1.getPlayerZone(), player1.getPlayerInventory());
+                    break;
+                case "quit":
+                    FileManager.saveGame(player1.getPlayerName(), player1.getPlayerLocation(), player1.getPlayerZone(), player1.getPlayerInventory());
+                    System.exit(0);
+                    break;
+                default:
+                    JOptionPane.showMessageDialog(null, "I didn't understand that command. for help click help button on the top or type help.", "", JOptionPane.PLAIN_MESSAGE);
+                  }
         });
     }
 
@@ -183,6 +343,7 @@ public class GamePanel extends JFrame {
         newGameButtonPanel.setVisible(false);
         askForNamePanel.setVisible(false);
         playerPageEnterGameButton.setVisible(false);
+        textField.setEditable(false);
         mainTextPanel.add(textField);
         con.add(mainTextPanel);
 
@@ -202,7 +363,6 @@ public class GamePanel extends JFrame {
 
 
         //Location description panel.
-
         con.add(mainLocationDescPanel);
         // text description of current location
 
@@ -210,13 +370,37 @@ public class GamePanel extends JFrame {
         locationImgLabel = new JLabel();
         locationImgLabel.setBounds(20,120,540,300);
         locationImgLabel.setBackground(Color.BLUE);
-        ImageIcon yourhouseImg = new ImageIcon("Assets/zone-png/zone2.png");
-        locationImgLabel.setIcon(yourhouseImg);
-        locationDesc.setText("This should be location desc");
+        String currentZone = player1.getPlayerZone().toLowerCase();
+        String zoneImgFileName = "Assets/zone-png/"+currentZone+".jpg";
+        ImageIcon currentZoneImg = new ImageIcon(zoneImgFileName);
+        locationImgLabel.setIcon(currentZoneImg);
         locationDesc.setForeground(Color.white);
-        locationDesc.setBackground(Color.green);
+        locationDesc.setBackground(Color.blue);
+        locationDesc.setEditable(false);
 
         mainLocationDescPanel.add(locationImgLabel);
+
+        //get description from Locations.JSON
+        String locationDescJson = FileManager.getLocationDescription(player1.getPlayerLocation(), player1.getPlayerZone());
+        locationDesc.append(locationDescJson);
+
+        //display available items for current location
+        ArrayList<String> locationList = FileManager.getLocationItems(player1.getPlayerLocation());
+
+        if (!locationList.isEmpty()) {
+            String seeItems="You see the following items lying around: ";
+            String result = "";
+            for (String item : locationList) {
+                String singleItem =("|" + item);
+                result+=singleItem;
+            }
+            result+="|";
+            locationDesc.append("\n"+seeItems+"\n"+result);
+        }
+        //display available people in current location
+
+
+
         mainLocationDescPanel.add(locationDesc);  // add "you are in xxxx, to the north is xxxx..."
 
         // UserInput panel, includes: text-What would you like to do? & textfield which takes user input & a ENTER button
@@ -224,6 +408,7 @@ public class GamePanel extends JFrame {
         // "What would you like to do?"
         askUserInput = new JTextArea("What would you like to do?");
         askUserInput.setEnabled(false);
+        askUserInput.setEditable(false);
         askUserInput.setBackground(Color.black);
         askUserInput.setForeground(Color.white);
         con.add(userInputPanel);
@@ -242,12 +427,10 @@ public class GamePanel extends JFrame {
         con.add(headerContentPanel);
 
         // map button
-      //  mapButton.addActionListener(displayMap);
         headerContentPanel.add(mapButton);
 
 
         //help button
-      //  helpButton.addActionListener(displayImage);
         headerContentPanel.add(helpButton);
 
         // Direction buttons -North/South/West/East
@@ -270,9 +453,9 @@ public class GamePanel extends JFrame {
 
         inventoryListModel = new DefaultListModel();
         // for iteration 1 demo purpose
-        String items[]= {"bowtie","shovel","chips","letter",
-                "itemA","itemB","ItemC","itemD","itemE"};
-        inventoryList = new JList(items);
+
+        inventoryList = new JList(inventoryListModel);
+
         inventoryList.setFixedCellWidth(80);
 
         JScrollPane pane = new JScrollPane(inventoryList);
@@ -292,6 +475,7 @@ public class GamePanel extends JFrame {
        // String text =FileManager.txtFileToString("scene-one.txt");
         String text = FileManager.txtFileToString(fileName);
         largeTextArea.setText(text);
+        largeTextArea.setEditable(false);
 
 
         largeTextAreaPanel.add(largeTextArea);
@@ -420,6 +604,7 @@ public class GamePanel extends JFrame {
     public void clearDisplayPanel() {
         //     displayPanel.removeAll();
     }
+
 
 
 

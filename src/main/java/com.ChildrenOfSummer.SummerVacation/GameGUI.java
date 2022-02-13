@@ -206,7 +206,7 @@ public class GameGUI {
         locationImgLabel = new JLabel();
         locationImgLabel.setBounds(20,120,540,300);
         locationImgLabel.setBackground(Color.BLUE);
-        ImageIcon yourhouseImg = new ImageIcon("Assets/zone-png/zone2.png");
+        ImageIcon yourhouseImg = new ImageIcon("Assets/zone-png/suburb.png");
         locationImgLabel.setIcon(yourhouseImg);
 
 
