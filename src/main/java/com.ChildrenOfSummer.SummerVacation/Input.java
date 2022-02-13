@@ -30,7 +30,6 @@ public class Input {
 
         while (!newGame) {  //loop until new game option selected, error msg for invalid input
 
-
             FileManager.menuFiles();    //display menu text
             String startMenuChoice = TextParser.getVerb(scanner.nextLine());    //.strip().toLowerCase();
             switch (startMenuChoice) {
