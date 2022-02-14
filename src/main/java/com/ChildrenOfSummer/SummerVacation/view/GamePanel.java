@@ -22,6 +22,8 @@ public class GamePanel extends JFrame {
     public JTextField userInput = new JTextField(10);
     private JTextArea textArea = new JTextArea(20, 20);
     private JTextArea askUserName = new JTextArea();
+    private JTextArea seeItem = new JTextArea();
+    private JTextArea seePeople = new JTextArea();
     public JTextArea textField = new JTextArea();
     public JTextArea locationDesc = new JTextArea();
     public JTextArea askUserInput = new JTextArea();
@@ -32,7 +34,7 @@ public class GamePanel extends JFrame {
             testFunct, arriveSpecialSceneNextButton;
     private Container con;
     public JPanel titleNamePanel, newGameButtonPanel,askForNamePanel,playerPageFooterPanel,enterGameButtonPanel,
-            mainTextPanel,mainLocationDescPanel,userInputPanel,headerContentPanel,directionButtonPanel,
+            mainTextPanel,mainLocationDescPanel,locationImgPanel,userInputPanel,headerContentPanel,directionButtonPanel,
             inventoryPanel, largeTextAreaPanel;
     public JLabel titleNameLabel,locationImgLabel;
     public JToggleButton musicButton;
@@ -44,21 +46,15 @@ public class GamePanel extends JFrame {
     private static String ANSWER;
     private static ArrayList<String> empty = new ArrayList<>();
     private static Player player1 = Player.getInstance("default", "Player's House", "Suburb", empty);
-    ArrayList<String> locationList = FileManager.getLocationItems(player1.getPlayerLocation());
-    ArrayList<String> playerList = FileManager.getPlayerItems();
-    // from Player class
-    private static Player singleton = null;
-    private String playerZone;
-    private String playerLocation;
-    private String playerName;
-    private ArrayList<String> playerInventory;
-    private int playerMoney;
+    String locationDescJson = FileManager.getLocationDescription(player1.getPlayerLocation(), player1.getPlayerZone());
+
 
 
     public GamePanel() {
         super("Summer Vacation");
         setUpMainMenu();
         setupListeners();
+
     }
 
     public void setUpMainMenu() {
@@ -105,12 +101,14 @@ public class GamePanel extends JFrame {
         playerPageFooterPanel = createJPanel(500,500,100,30,Color.red,true);
         enterGameButtonPanel = createJPanel(600,400,200,100,Color.yellow,true);
         mainTextPanel = createJPanel(100,100,600,250,Color.yellow,true);
-        mainLocationDescPanel = createJPanel(20,50,540,430,Color.red,true);
-        userInputPanel = createJPanel(20,500,300,60,Color.green,true);
-        headerContentPanel = createJPanel(0,0,800,50, Color.yellow,true);
+        locationImgPanel = createJPanel(20,30,540,300,Color.blue,true);
+        mainLocationDescPanel = createJPanel(20,330,540,140,Color.red,true);
+        userInputPanel = createJPanel(20,480,300,60,Color.green,true);
+        headerContentPanel = createJPanel(0,0,800,30, Color.yellow,true);
         directionButtonPanel = createJPanel(630,300,100,150,Color.yellow,true);
         inventoryPanel = createJPanel(620,50,120,250,Color.yellow,true);
         largeTextAreaPanel = createJPanel(20,60,740,430,Color.white,true);
+
     }
 
     private void setAllButtons() {
@@ -120,8 +118,8 @@ public class GamePanel extends JFrame {
         playerPageEnterGameButton = createJButton("ENTER GAME",150,50,false, Color.white,Color.black);
         task1ScreenNextButton = createJButton("NEXT",150,50,false,Color.white,Color.black);
         userInputEnterButton = createJButton("ENTER",150,50,false,Color.white,Color.black);
-        mapButton = createJButton("MAP",150,50,false,Color.white,Color.black);
-        helpButton = createJButton("HELP",150,50,false,Color.white,Color.black);
+        mapButton = createJButton("MAP",100,30,false,Color.white,Color.black);
+        helpButton = createJButton("HELP",100,30,false,Color.white,Color.black);
         northButton = createJButton("Go North",100,20,false,Color.white,Color.black);
         southButton = createJButton("Go South",100,20,false,Color.white,Color.black);
         westButton = createJButton("Go West",100,20,false,Color.white,Color.black);
@@ -208,15 +206,35 @@ public class GamePanel extends JFrame {
             frame.setVisible(true);
         });
 
+        northButton.addActionListener(e -> {
+            goDirection("north");
+        });
+        southButton.addActionListener(e -> {
+            goDirection("south");
+        });
+        eastButton.addActionListener(e -> {
+            goDirection("east");
+        });
+        westButton.addActionListener(e -> {
+            goDirection("west");
+        });
+
         dropButton.addActionListener(e -> {
+            ArrayList<String> locationList = FileManager.getLocationItems(player1.getPlayerLocation());
+            ArrayList<String> playerList = FileManager.getPlayerItems();
                 int index = inventoryList.getSelectedIndex();
-                String droppedItem = (String) inventoryList.getSelectedValue();
-                locationList.add(droppedItem);
-                playerList.remove(droppedItem);
-                FileManager.updateLocationItems(player1.getPlayerLocation(), locationList);
-                FileManager.savePlayerItems(playerList);
-                player1.setPlayerInventory(playerList);
-                inventoryListModel.removeElementAt(index);
+                if (index>=0) {
+                    String droppedItem = (String) inventoryList.getSelectedValue();
+                    locationList.add(droppedItem);
+                    playerList.remove(droppedItem);
+                    FileManager.updateLocationItems(player1.getPlayerLocation(), locationList);
+                    FileManager.savePlayerItems(playerList);
+                    player1.setPlayerInventory(playerList);
+                    inventoryListModel.removeElementAt(index);
+                }
+                else{
+                    JOptionPane.showMessageDialog(null, "Nothing selected, please select one item to drop", "", JOptionPane.PLAIN_MESSAGE);
+                }
         });
 
         useButton.addActionListener(e -> {
@@ -259,7 +277,7 @@ public class GamePanel extends JFrame {
                     JOptionPane.showMessageDialog(null, "Your inventory has: " + playerList, "", JOptionPane.PLAIN_MESSAGE);
                     break;
                 case "get":
-                    if (verb.equals("get") && locationList.contains(noun2)) {
+                    if (locationList.contains(noun2)) {
                         locationList.remove(noun2);
                         playerList.add(noun2);
                         FileManager.updateLocationItems(player1.getPlayerLocation(), locationList);
@@ -268,9 +286,13 @@ public class GamePanel extends JFrame {
                         inventoryListModel.addElement(noun2);
                         JOptionPane.showMessageDialog(null, noun2 + " has been added to your inventory.", "", JOptionPane.PLAIN_MESSAGE);
                     } else {
+                        System.out.println(locationList);
                         JOptionPane.showMessageDialog(null, "I can't get that! There's no " + noun2 + " for me to pick up!", "", JOptionPane.PLAIN_MESSAGE);
+
                     }
+
                     break;
+
                 case "drop":
                     if (playerList.contains(noun2)) {
                         locationList.add(noun2);
@@ -316,17 +338,7 @@ public class GamePanel extends JFrame {
                     }
                     break;
                 case "go":
-                    boolean didMove = false;
-                    for (Directions dir : Directions.values()) {
-                        if (dir.name().equals(noun2.toUpperCase())) {
-                            player1.move(noun2);
-                            didMove = true;
-                        }
-                    }
-                    if (!didMove) {
-                        System.out.println("you were unable to move " + noun2 + ".");
-                    }
-                    FileManager.saveGame(player1.getPlayerName(), player1.getPlayerLocation(), player1.getPlayerZone(), player1.getPlayerInventory());
+                    goDirection(noun2);
                     break;
                 case "quit":
                     FileManager.saveGame(player1.getPlayerName(), player1.getPlayerLocation(), player1.getPlayerZone(), player1.getPlayerInventory());
@@ -377,32 +389,72 @@ public class GamePanel extends JFrame {
         locationDesc.setForeground(Color.white);
         locationDesc.setBackground(Color.blue);
         locationDesc.setEditable(false);
+        seeItem.setBackground(Color.green);
+        seeItem.setForeground(Color.white);
+        seeItem.setEditable(false);
 
-        mainLocationDescPanel.add(locationImgLabel);
+
+
+
+        seePeople.setBackground(Color.pink);
+        seePeople.setForeground(Color.white);
+        seePeople.setEditable(false);
+        con.add(locationImgPanel);
+        locationImgPanel.add(locationImgLabel);
+
+
 
         //get description from Locations.JSON
-        String locationDescJson = FileManager.getLocationDescription(player1.getPlayerLocation(), player1.getPlayerZone());
         locationDesc.append(locationDescJson);
 
         //display available items for current location
-        ArrayList<String> locationList = FileManager.getLocationItems(player1.getPlayerLocation());
-
-        if (!locationList.isEmpty()) {
+        if (!FileManager.getLocationItems(player1.getPlayerLocation()).isEmpty()) {
             String seeItems="You see the following items lying around: ";
-            String result = "";
-            for (String item : locationList) {
-                String singleItem =("|" + item);
-                result+=singleItem;
-            }
-            result+="|";
-            locationDesc.append("\n"+seeItems+"\n"+result);
+            String result = String.join(",", FileManager.getLocationItems(player1.getPlayerLocation()));
+            String itemText = seeItems + "\n" + result;
+            seeItem.setText(itemText+"\n");
+
+        }
+        else if(FileManager.getLocationItems(player1.getPlayerLocation()).isEmpty()){
+            seeItem.setText("");
         }
         //display available people in current location
+        JSONArray NPCname= FileManager.getNPCsName(player1.getPlayerLocation());
+        ArrayList<String> npcNames = (ArrayList<String>) NPCname;
+
+        if(!npcNames.isEmpty()){
+            String nameThree = null;
+            String nameTwo = null;
+            String name = null;
+            switch (npcNames.size()){
+                case 3:
+                    nameThree = npcNames.get(2);
+                case 2:
+                    nameTwo = npcNames.get(1);
+                case 1:
+                    name = npcNames.get(0);
+            }
+            switch (npcNames.size()){
+                case 3:
+                    seePeople.setText("You see " + nameThree + ", " + nameTwo + ", and " + name + ".");
+                    break;
+                case 2:
+                    seePeople.setText("You see " + name + " and " + nameTwo + ".");
+                    break;
+                case 1:
+                    seePeople.setText("You see "+name+".");
+                    break;
+            }
+        }
+        else if(npcNames.isEmpty()){
+            seePeople.setText("");
+        }
 
 
 
         mainLocationDescPanel.add(locationDesc);  // add "you are in xxxx, to the north is xxxx..."
-
+        mainLocationDescPanel.add(seeItem);
+        mainLocationDescPanel.add(seePeople);
         // UserInput panel, includes: text-What would you like to do? & textfield which takes user input & a ENTER button
         userInputPanel.setLayout(new GridLayout(3,1));
         // "What would you like to do?"
@@ -601,8 +653,9 @@ public class GamePanel extends JFrame {
         textField.setText(string);
     }
 
-    public void clearDisplayPanel() {
-        //     displayPanel.removeAll();
+    public void clearZoneViewPanel() {
+        locationImgPanel.removeAll();
+        mainLocationDescPanel.removeAll();
     }
 
 
@@ -625,5 +678,77 @@ public class GamePanel extends JFrame {
         return product;
     }
 
+    public void goDirection(String direction){
+        boolean didMove = false;
+        for (Directions dir : Directions.values()) {
+            if (dir.name().equals(direction.toUpperCase())) {
+                String tempLocation = FileManager.getNewLocation(player1.getPlayerZone(), player1.getPlayerLocation(), direction);
+                if (tempLocation.equals("Off Map")){
+                    JOptionPane.showMessageDialog(null,"you were unable to move " + direction + ".","",JOptionPane.PLAIN_MESSAGE);
+                }else { //success on move
+
+                    player1.setPlayerLocation(tempLocation);
+                    player1.setPlayerZone(FileManager.getNewZone(player1.getPlayerLocation()));
+                    FileManager.getLocationDescription(player1.getPlayerLocation(), player1.getPlayerZone());
+
+                    JSONArray NPCname= FileManager.getNPCsName(player1.getPlayerLocation());
+                    ArrayList<String> npcNames = (ArrayList<String>) NPCname;
+                    //display available items for current location
+                    if (!FileManager.getLocationItems(tempLocation).isEmpty()) {
+                        System.out.println(FileManager.getLocationItems(tempLocation));
+                        String seeItems="You see the following items lying around: ";
+                        String result = String.join(",", FileManager.getLocationItems(tempLocation));
+                        String itemText = seeItems + "\n" + result;
+                        seeItem.setText(itemText+"\n");
+
+
+                    }
+                    else if(FileManager.getLocationItems(tempLocation).isEmpty()){
+                        seeItem.setText("");
+                    }
+                    //display available people in current location
+                    if(!npcNames.isEmpty()){
+                        String nameThree = null;
+                        String nameTwo = null;
+                        String name = null;
+                        switch (npcNames.size()){
+                            case 3:
+                                nameThree = npcNames.get(2);
+                            case 2:
+                                nameTwo = npcNames.get(1);
+                            case 1:
+                                name = npcNames.get(0);
+                        }
+                        switch (npcNames.size()){
+                            case 3:
+                                seePeople.setText("You see " + nameThree + ", " + nameTwo + ", and " + name + ".");
+                                break;
+                            case 2:
+                                seePeople.setText("You see " + name + " and " + nameTwo + ".");
+                                break;
+                            case 1:
+                                seePeople.setText("You see "+name+".");
+                                break;
+                        }
+                    }
+                    else{
+                        seePeople.setText("");
+                    }
+
+                }
+                didMove = true;
+                String currentZone = player1.getPlayerZone().toLowerCase();
+                String zoneImgFileName = "Assets/zone-png/"+currentZone+".jpg";
+                ImageIcon currentZoneImg = new ImageIcon(zoneImgFileName);
+                locationImgLabel.setIcon(currentZoneImg);
+                locationDesc.setText(FileManager.getLocationDescription(player1.getPlayerLocation(), player1.getPlayerZone()));
+            }
+        }
+        if (!didMove) {
+            JOptionPane.showMessageDialog(null,"you were unable to move " + direction + ".","",JOptionPane.PLAIN_MESSAGE);
+        }
+        FileManager.saveGame(player1.getPlayerName(), player1.getPlayerLocation(), player1.getPlayerZone(), player1.getPlayerInventory());
+
+    }
 
 }
