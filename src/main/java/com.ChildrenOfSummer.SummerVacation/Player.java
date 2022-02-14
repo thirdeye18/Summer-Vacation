@@ -46,6 +46,7 @@ public class Player {
     }
 
     public void setPlayerLocation(String playerLocation) {
+        // capitalize first letter to match json locations
         this.playerLocation = playerLocation;
     }
 

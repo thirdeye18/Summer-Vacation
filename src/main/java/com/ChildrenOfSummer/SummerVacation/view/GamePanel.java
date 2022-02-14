@@ -1,10 +1,9 @@
 package com.ChildrenOfSummer.SummerVacation.view;
 
 import com.ChildrenOfSummer.SummerVacation.FileManager;
-import com.ChildrenOfSummer.SummerVacation.GameEngine;
-import com.ChildrenOfSummer.SummerVacation.Input;
 import com.ChildrenOfSummer.SummerVacation.Player;
 import com.ChildrenOfSummer.SummerVacation.Util.Directions;
+import com.ChildrenOfSummer.SummerVacation.Util.JsonHandler;
 import com.ChildrenOfSummer.SummerVacation.Util.SoundFX;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -13,7 +12,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Locale;
-import java.util.Scanner;
+import java.util.Map;
 
 
 public class GamePanel extends JFrame {
@@ -680,6 +679,9 @@ public class GamePanel extends JFrame {
 
     public void goDirection(String direction){
         boolean didMove = false;
+        Map<String, ArrayList<String>> locations = JsonHandler.jsonToMapStringList("LocationsSimple.json", "json");
+        String parsedDirection = direction.substring(0, 1).toUpperCase() + direction.substring(1);
+
         for (Directions dir : Directions.values()) {
             if (dir.name().equals(direction.toUpperCase())) {
                 String tempLocation = FileManager.getNewLocation(player1.getPlayerZone(), player1.getPlayerLocation(), direction);
@@ -743,7 +745,61 @@ public class GamePanel extends JFrame {
                 locationImgLabel.setIcon(currentZoneImg);
                 locationDesc.setText(FileManager.getLocationDescription(player1.getPlayerLocation(), player1.getPlayerZone()));
             }
+
         }
+
+        for (ArrayList<String> locArr : locations.values()) {
+            if(locArr.contains(parsedDirection.toLowerCase())) {
+                String tempLocation = FileManager.getNewLocation(player1.getPlayerZone(), player1.getPlayerLocation(), parsedDirection);
+                player1.setPlayerLocation(parsedDirection);
+                player1.setPlayerZone(FileManager.getNewZone(player1.getPlayerLocation()));
+                FileManager.getLocationDescription(player1.getPlayerLocation(), player1.getPlayerZone());
+                JSONArray NPCname= FileManager.getNPCsName(player1.getPlayerLocation());
+                ArrayList<String> npcNames = (ArrayList<String>) NPCname;
+
+                //display available items for current location
+                if (!FileManager.getLocationItems(parsedDirection).isEmpty()) {
+                    System.out.println(FileManager.getLocationItems(tempLocation));
+                    String seeItems="You see the following items lying around: ";
+                    String result = String.join(",", FileManager.getLocationItems(tempLocation));
+                    String itemText = seeItems + "\n" + result;
+                    seeItem.setText(itemText+"\n");
+                }
+                else if(FileManager.getLocationItems(tempLocation).isEmpty()){
+                    seeItem.setText("");
+                }
+                //display available people in current location
+                if(!npcNames.isEmpty()){
+                    String nameThree = null;
+                    String nameTwo = null;
+                    String name = null;
+                    switch (npcNames.size()){
+                        case 3:
+                            nameThree = npcNames.get(2);
+                        case 2:
+                            nameTwo = npcNames.get(1);
+                        case 1:
+                            name = npcNames.get(0);
+                    }
+                    switch (npcNames.size()){
+                        case 3:
+                            seePeople.setText("You see " + nameThree + ", " + nameTwo + ", and " + name + ".");
+                            break;
+                        case 2:
+                            seePeople.setText("You see " + name + " and " + nameTwo + ".");
+                            break;
+                        case 1:
+                            seePeople.setText("You see "+name+".");
+                            break;
+                    }
+                }
+                else{
+                    seePeople.setText("");
+                }
+                didMove = true;
+            }
+        }
+
         if (!didMove) {
             JOptionPane.showMessageDialog(null,"you were unable to move " + direction + ".","",JOptionPane.PLAIN_MESSAGE);
         }
