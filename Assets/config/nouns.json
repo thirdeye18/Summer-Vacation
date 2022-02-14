@@ -97,18 +97,5 @@
     "form",
     "document",
     "writings"
-  ],
-  "lock": [
-    "keypad",
-    "padlock"
-  ],
-  "door": [
-    "gate",
-    "passage",
-    "entry",
-    "portal",
-    "opening",
-    "hatch",
-    "gateway"
   ]
 }

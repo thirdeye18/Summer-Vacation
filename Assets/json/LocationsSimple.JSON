@@ -1,0 +1,42 @@
+{
+  "Wild Field": [
+    "woods west",
+    "woods east",
+    "river",
+    "island"
+  ],
+  "Town Center": [
+    "school",
+    "dead presidents",
+    "fast journey",
+    "bill's produce",
+    "beth's treats",
+    "angus queen"
+  ],
+  "Old Town": [
+    "warehouse",
+    "paine filed",
+    "old house north",
+    "old house south"
+  ],
+  "Suburb": [
+    "sarah's house",
+    "player's house",
+    "fred's house",
+    "dewey's house",
+    "kory's house",
+    "janie's house"
+  ],
+  "New Suburb": [
+    "waste pile",
+    "new house north",
+    "new house south",
+    "new house northeast"
+
+  ],
+  "Farm": [
+    "corn field",
+    "hay field",
+    "barn"
+  ]
+}

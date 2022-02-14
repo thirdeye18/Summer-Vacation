@@ -1,5 +1,7 @@
 package com.ChildrenOfSummer.SummerVacation;
 
+import com.ChildrenOfSummer.SummerVacation.Util.Directions;
+import com.ChildrenOfSummer.SummerVacation.Util.JsonHandler;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -13,6 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.stream.Stream;
 
 
@@ -120,14 +123,26 @@ public class FileManager {
          * Ask Michael if you need more information. -MS
          */
 
-
-        String newLocation;
+        Map<String, ArrayList<String>> locations = JsonHandler.jsonToMapStringList("LocationsSimple.json", "json");
+        String newLocation = null;
         JSONObject locationJSON = grabJSONData(locationsJsonPath);//THIS IS THE WHOLE JSON FILE
         JSONObject locationZone = (JSONObject) locationJSON.get(zone); //JUST EVERYTHING IN OUR ZONE
         JSONArray locationArea = (JSONArray) locationZone.get(location); //JUST EVERYTHING IN OUR AREA
         JSONObject locationDirection = (JSONObject) locationArea.get(1); //JUST THE DIRECTIONS
         JSONObject locationDirectionCardinal = (JSONObject) locationDirection.get("directions"); //JUST THE DIRECTION I WANT
-        newLocation = (String) locationDirectionCardinal.get(direction);
+
+        //check for cardinal direction first
+        for (Directions dir : Directions.values()) {
+            if(dir.equals(direction.toUpperCase())) {
+                newLocation = (String) locationDirectionCardinal.get(direction);
+            }
+        }
+        // check for specific location
+        for (ArrayList<String> locArr : locations.values()) {
+            if(locArr.contains(direction.toLowerCase())) {
+                newLocation = direction;
+            }
+        }
 
         return newLocation;
     }
