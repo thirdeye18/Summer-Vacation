@@ -1,8 +1,6 @@
 package com.ChildrenOfSummer.SummerVacation.view;
 
 import com.ChildrenOfSummer.SummerVacation.FileManager;
-import com.ChildrenOfSummer.SummerVacation.GameEngine;
-import com.ChildrenOfSummer.SummerVacation.Input;
 import com.ChildrenOfSummer.SummerVacation.Player;
 import com.ChildrenOfSummer.SummerVacation.Util.Directions;
 import com.ChildrenOfSummer.SummerVacation.Util.SoundFX;
@@ -12,8 +10,6 @@ import org.json.simple.JSONObject;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Locale;
-import java.util.Scanner;
 
 
 public class GamePanel extends JFrame {
@@ -22,20 +18,23 @@ public class GamePanel extends JFrame {
     public JTextField userInput = new JTextField(10);
     private JTextArea textArea = new JTextArea(20, 20);
     private JTextArea askUserName = new JTextArea();
-    private JTextArea seeItem = new JTextArea();
+    public JTextArea seeItem = new JTextArea();
     private JTextArea seePeople = new JTextArea();
     public JTextArea textField = new JTextArea();
+    public JTextArea inventoryTextField = new JTextArea();
     public JTextArea locationDesc = new JTextArea();
     public JTextArea askUserInput = new JTextArea();
     public JTextArea largeTextArea = new JTextArea("",22,80);
 
-    public JButton newGameButton,loadGameButton, quitGameButton,playerPageEnterGameButton,task1ScreenNextButton,userInputEnterButton,
+    public JButton newGameButton,loadGameButton, quitGameButton,playerPageEnterGameButton, introScreenNextButton,userInputEnterButton,
             mapButton,helpButton,northButton,southButton,eastButton,westButton,dropButton,useButton,
-            testFunct, arriveSpecialSceneNextButton;
+            exploreAirportButton, arriveSpecialSceneNextButton,taskScreenNextButton,explorePlayerHouseButton,exploreHayFieldButton,
+            hayfieldNextButton;
     private Container con;
-    public JPanel titleNamePanel, newGameButtonPanel,askForNamePanel,playerPageFooterPanel,enterGameButtonPanel,
+    public JPanel titleNamePanel, newGameButtonPanel,askForNamePanel,playerPageFooterPanel, introScreenEnterGameButtonPanel,
             mainTextPanel,mainLocationDescPanel,locationImgPanel,userInputPanel,headerContentPanel,directionButtonPanel,
-            inventoryPanel, largeTextAreaPanel;
+            inventoryPanel, largeTextAreaPanel,exploreButtonPanel,taskScreenNextButtonPanel,explorePlayerHouseButtonPanel,
+            exploreHayFieldButtonPanel,hayfieldNextButtonPanel;
     public JLabel titleNameLabel,locationImgLabel;
     public JToggleButton musicButton;
     public BorderLayout setLayout;
@@ -76,7 +75,7 @@ public class GamePanel extends JFrame {
         con.add(newGameButtonPanel);
         con.add(askForNamePanel);
         con.add(playerPageFooterPanel);
-        con.add(enterGameButtonPanel);
+        con.add(introScreenEnterGameButtonPanel);
 
         setVisible(true);
     }
@@ -99,8 +98,8 @@ public class GamePanel extends JFrame {
         newGameButtonPanel = createJPanel(300,400,200,150,Color.yellow,true);
         askForNamePanel = createJPanel(100,100,600,250,Color.blue,true);
         playerPageFooterPanel = createJPanel(500,500,100,30,Color.red,true);
-        enterGameButtonPanel = createJPanel(600,400,200,100,Color.yellow,true);
-        mainTextPanel = createJPanel(100,100,600,250,Color.yellow,true);
+        introScreenEnterGameButtonPanel = createJPanel(600,400,200,100,Color.yellow,true);
+        mainTextPanel = createJPanel(20,60,740,430,Color.yellow,true);
         locationImgPanel = createJPanel(20,30,540,300,Color.blue,true);
         mainLocationDescPanel = createJPanel(20,330,540,140,Color.red,true);
         userInputPanel = createJPanel(20,480,300,60,Color.green,true);
@@ -108,7 +107,11 @@ public class GamePanel extends JFrame {
         directionButtonPanel = createJPanel(630,300,100,150,Color.yellow,true);
         inventoryPanel = createJPanel(620,50,120,250,Color.yellow,true);
         largeTextAreaPanel = createJPanel(20,60,740,430,Color.white,true);
-
+        exploreButtonPanel = createJPanel(620,500,100,30,Color.white,true);
+        explorePlayerHouseButtonPanel = createJPanel(620,500,100,30,Color.white,true);
+        exploreHayFieldButtonPanel = createJPanel(620,500,100,30,Color.white,true);
+        taskScreenNextButtonPanel = createJPanel(600,400,200,100,Color.yellow,true);
+        hayfieldNextButtonPanel = createJPanel(600,400,200,100,Color.yellow,true);
     }
 
     private void setAllButtons() {
@@ -116,7 +119,7 @@ public class GamePanel extends JFrame {
         loadGameButton = createJButton("Load Game",150,50,false,Color.white,Color.black);
         quitGameButton = createJButton("Quit Game",150,50,false,Color.white,Color.black);
         playerPageEnterGameButton = createJButton("ENTER GAME",150,50,false, Color.white,Color.black);
-        task1ScreenNextButton = createJButton("NEXT",150,50,false,Color.white,Color.black);
+        introScreenNextButton = createJButton("NEXT",150,50,false,Color.white,Color.black);
         userInputEnterButton = createJButton("ENTER",150,50,false,Color.white,Color.black);
         mapButton = createJButton("MAP",100,30,false,Color.white,Color.black);
         helpButton = createJButton("HELP",100,30,false,Color.white,Color.black);
@@ -126,15 +129,19 @@ public class GamePanel extends JFrame {
         eastButton = createJButton("Go East",100,20,false,Color.white,Color.black);
         useButton = createJButton("use item",100,20,false,Color.white,Color.black);
         dropButton = createJButton("drop item",100,20,false,Color.white,Color.black);
-        testFunct = createJButton("testFunct",100,20,false,Color.red,Color.black);
+        exploreAirportButton = createJButton("GO TO AIRPORT",100,20,false,Color.red,Color.white);
+        explorePlayerHouseButton = createJButton("GO TO Player's House",100,20,false,Color.red,Color.white);
+        exploreHayFieldButton = createJButton("GO TO Hay Field",100,20,false,Color.red,Color.white);
         arriveSpecialSceneNextButton = createJButton("NEXT",100,30,false,Color.white,Color.black);
+        taskScreenNextButton = createJButton("GO TASK",150,50,false,Color.white,Color.black);
+        hayfieldNextButton = createJButton("GO hay field",150,50,false,Color.white,Color.black);
     }
     public void createGameScreen() {
         titleNamePanel.setVisible(true);
         newGameButtonPanel.setVisible(true);
         askForNamePanel.setVisible(false);
         playerPageFooterPanel.setVisible(false);
-        enterGameButtonPanel.setVisible(false);
+        introScreenEnterGameButtonPanel.setVisible(false);
     }
 
     public void playerNameScreen() {
@@ -142,7 +149,7 @@ public class GamePanel extends JFrame {
         newGameButtonPanel.setVisible(false);
         askForNamePanel.setVisible(true);
         playerPageFooterPanel.setVisible(true);
-        enterGameButtonPanel.setVisible(true);
+        introScreenEnterGameButtonPanel.setVisible(true);
 
         askUserName.setText("Please enter your name: ");
         askUserName.setBackground(Color.black);
@@ -155,7 +162,7 @@ public class GamePanel extends JFrame {
 
         musicButton = new JToggleButton("music on/off");
         playerPageFooterPanel.add(musicButton);
-        enterGameButtonPanel.add(playerPageEnterGameButton);
+        introScreenEnterGameButtonPanel.add(playerPageEnterGameButton);
 
 
         // Zoe notes: task --add function to playerPageEnterGameButton,
@@ -178,7 +185,7 @@ public class GamePanel extends JFrame {
         quitGameButton.addActionListener(e->System.exit(0));
 
         playerPageEnterGameButton.addActionListener(e-> {
-           task1Screen();
+           introScreen();
            ANSWER = userName.getText();
            player1.setPlayerName(ANSWER);
            FileManager.saveGame(player1.getPlayerName(), player1.getPlayerLocation(), player1.getPlayerZone(), player1.getPlayerInventory());
@@ -256,12 +263,13 @@ public class GamePanel extends JFrame {
 
 
         userInputEnterButton.addActionListener(e->{
+
             ArrayList<String> locationList = FileManager.getLocationItems(player1.getPlayerLocation());
             ArrayList<String> playerList = FileManager.getPlayerItems();
             ANSWER = userInput.getText();
             String[] answerWords = ANSWER.split(" ");
-            String verb = answerWords[0];
-            String noun2 = answerWords[answerWords.length - 1];
+            String verb = answerWords[0].toLowerCase();
+            String noun2 = answerWords[answerWords.length - 1].toLowerCase();
             switch (verb) {
                 case "map":
                     JFrame frame = new JFrame("Map");
@@ -278,12 +286,14 @@ public class GamePanel extends JFrame {
                     break;
                 case "get":
                     if (locationList.contains(noun2)) {
+
                         locationList.remove(noun2);
                         playerList.add(noun2);
                         FileManager.updateLocationItems(player1.getPlayerLocation(), locationList);
                         FileManager.savePlayerItems(playerList);
                         player1.setPlayerInventory(playerList);
                         inventoryListModel.addElement(noun2);
+
                         JOptionPane.showMessageDialog(null, noun2 + " has been added to your inventory.", "", JOptionPane.PLAIN_MESSAGE);
                     } else {
                         System.out.println(locationList);
@@ -347,10 +357,74 @@ public class GamePanel extends JFrame {
                 default:
                     JOptionPane.showMessageDialog(null, "I didn't understand that command. for help click help button on the top or type help.", "", JOptionPane.PLAIN_MESSAGE);
                   }
+
+
         });
+        exploreAirportButton.addActionListener(e ->
+        {
+            arriveSpecialScene("scene-one.txt");
+        });
+
+        arriveSpecialSceneNextButton.addActionListener(e ->
+        {
+                if (FileManager.getPlayerItems().contains("rope") && FileManager.getPlayerItems().contains("planks")) {
+                    taskEscapeWithEnoughInventory();
+                } else {
+                    JOptionPane.showMessageDialog(null,"With no items to help you, you and your friends are caught by security! You're grounded!\nGame Over!","",JOptionPane.PLAIN_MESSAGE);
+                    System.exit(0);
+                }
+        });
+
+        taskScreenNextButton.addActionListener(e->{
+            mainTextPanel.setVisible(false);
+            taskScreenNextButtonPanel.setVisible(false);
+            largeTextAreaPanel.setVisible(false);
+           locationImgPanel.setVisible(true);
+           mainLocationDescPanel.setVisible(true);
+           userInputPanel.setVisible(true);
+           directionButtonPanel.setVisible(true);
+           inventoryPanel.setVisible(true);
+
+                }
+
+
+
+        );
+
+        explorePlayerHouseButton.addActionListener(e->{
+            clearZoneViewPanel();
+            explorePlayerHouseButtonPanel.setVisible(false);
+            taskScreen("scene-two.txt");
+            taskScreenNextButtonPanel.setVisible(true);
+            taskScreenNextButtonPanel.add(taskScreenNextButton);
+            con.add(taskScreenNextButtonPanel);
+            FileManager.sceneWriter(true, "sceneTwoPassed");
+            JOptionPane.showMessageDialog(null,"You arrived and completed task", "", JOptionPane.PLAIN_MESSAGE);
+                }
+
+        );
+
+        exploreHayFieldButton.addActionListener(e->{
+                    clearZoneViewPanel();
+                    explorePlayerHouseButtonPanel.setVisible(false);
+                    taskScreen("scene-three.txt");
+                    con.add(hayfieldNextButtonPanel);
+                    hayfieldNextButtonPanel.setVisible(true);
+                    hayfieldNextButtonPanel.add(hayfieldNextButton);
+                    exploreHayFieldButtonPanel.setVisible(false);
+                    FileManager.sceneWriter(true, "sceneThreePassed");
+                    JOptionPane.showMessageDialog(null,"You arrived and completed task", "", JOptionPane.PLAIN_MESSAGE);
+                }
+
+        );
+        hayfieldNextButton.addActionListener(e->{
+                    taskThrowRockWithEnoughInventory();
+                }
+
+        );
     }
 
-    public void task1Screen() {
+    public void introScreen() {
         titleNamePanel.setVisible(false);   // if we want to display new screen, we need to disable the previous screen first
         newGameButtonPanel.setVisible(false);
         askForNamePanel.setVisible(false);
@@ -360,8 +434,8 @@ public class GamePanel extends JFrame {
         con.add(mainTextPanel);
 
         mainTextPanel.add(textField);
-        enterGameButtonPanel.add(task1ScreenNextButton);
-        task1ScreenNextButton.addActionListener(e -> zoneView());
+        introScreenEnterGameButtonPanel.add(introScreenNextButton);
+        introScreenNextButton.addActionListener(e -> zoneView());
     }
 
     public void zoneView() {
@@ -370,12 +444,14 @@ public class GamePanel extends JFrame {
         newGameButtonPanel.setVisible(false);
         askForNamePanel.setVisible(false);
         playerPageEnterGameButton.setVisible(false);
-        enterGameButtonPanel.setVisible(false);
+        introScreenEnterGameButtonPanel.setVisible(false);
         mainTextPanel.setVisible(false);
 
 
         //Location description panel.
         con.add(mainLocationDescPanel);
+        exploreButtonPanel.add(exploreAirportButton);
+        con.add(exploreButtonPanel);
         // text description of current location
 
         // add a picture
@@ -392,6 +468,7 @@ public class GamePanel extends JFrame {
         seeItem.setBackground(Color.green);
         seeItem.setForeground(Color.white);
         seeItem.setEditable(false);
+
 
 
 
@@ -492,16 +569,16 @@ public class GamePanel extends JFrame {
         directionButtonPanel.add(southButton);
         directionButtonPanel.add(westButton);
         directionButtonPanel.add(eastButton);
-        directionButtonPanel.add(testFunct);
-        testFunct.addActionListener(e -> {taskPaddleRiverWithEnoughInventory();});
+
+
 
 
         // inventory panel
         con.add(inventoryPanel);
 
-        textField.setText("**Your inventory**");
-        textField.setBackground(Color.yellow);
-        inventoryPanel.add(textField);
+        inventoryTextField.setText("**Your inventory**");
+        inventoryTextField.setBackground(Color.yellow);
+        inventoryPanel.add(inventoryTextField);
 
         inventoryListModel = new DefaultListModel();
         // for iteration 1 demo purpose
@@ -524,6 +601,8 @@ public class GamePanel extends JFrame {
         userInputPanel.setVisible(false);
         directionButtonPanel.setVisible(false);
         inventoryPanel.setVisible(false);
+        locationImgPanel.setVisible(false);
+        exploreButtonPanel.setVisible(false);
        // String text =FileManager.txtFileToString("scene-one.txt");
         String text = FileManager.txtFileToString(fileName);
         largeTextArea.setText(text);
@@ -568,16 +647,35 @@ public class GamePanel extends JFrame {
                 "You can create a ladder to get out!\n" +
                 "Do you wish to combine the items to get out?", "", JOptionPane.YES_NO_OPTION);
        if (reply1 == JOptionPane.YES_OPTION){
+           boolean sceneOnePass = FileManager.sceneReader("sceneOnePassed");
+           ArrayList<String> playerList = FileManager.getPlayerItems();
+           ArrayList<String> locationList = FileManager.getLocationItems(player1.getPlayerLocation());
+           sceneOnePass = true;
+           player1.getPlayerInventory();
+           playerList.remove("rope");
+           playerList.remove("planks");
+           playerList.add("ladder");
+            inventoryListModel.removeElement("rope");
+            inventoryListModel.removeElement("planks");
+            inventoryListModel.addElement("ladder");
+
+           player1.setPlayerInventory(playerList);
+           FileManager.savePlayerItems(playerList);
+           FileManager.sceneWriter(true, "sceneOnePassed");
            JOptionPane.showMessageDialog(null,"You've finished the first scene. You have gotten out of the airport!","",JOptionPane.PLAIN_MESSAGE);
+           taskScreen("scene-one-end.txt");
+
        }
        else{
            JOptionPane.showMessageDialog(null,"you lost the game","",JOptionPane.PLAIN_MESSAGE);
+           System.exit(0);
        }
-
 
         largeTextAreaPanel.add(largeTextArea);
         con.add(largeTextAreaPanel);
     }
+
+
     public void taskThrowRockWithEnoughInventory() {
         mainLocationDescPanel.setVisible(false);
         userInputPanel.setVisible(false);
@@ -588,6 +686,8 @@ public class GamePanel extends JFrame {
         int reply1 = JOptionPane.showConfirmDialog(null, "You can throw a rock to escape. Do you want to?", "", JOptionPane.YES_NO_OPTION);
         if (reply1 == JOptionPane.YES_OPTION){
             JOptionPane.showMessageDialog(null,"You've escaped from the farmer.","",JOptionPane.PLAIN_MESSAGE);
+            taskScreen("scene-three-end.txt");
+            hayfieldNextButtonPanel.setVisible(false);
         }
         else{
             JOptionPane.showMessageDialog(null,"You got caught! Game Over.","",JOptionPane.PLAIN_MESSAGE);
@@ -639,23 +739,13 @@ public class GamePanel extends JFrame {
         con.add(largeTextAreaPanel);
     }
 
-    public void writeToTextArea(String string) {
-        textArea.setFont(new Font("Arial", Font.BOLD, 15));
-        textArea.setPreferredSize(new Dimension(400, 75));
-        textArea.setBackground(Color.yellow);
-        textArea.setText(string);
-    }
-
-    public void writeToTextField(String string) {
-        textField.setFont(new Font("Arial", Font.BOLD, 15));
-        textField.setPreferredSize(new Dimension(700, 300));
-        textField.setBackground(Color.yellow);
-        textField.setText(string);
-    }
 
     public void clearZoneViewPanel() {
-        locationImgPanel.removeAll();
-        mainLocationDescPanel.removeAll();
+        locationImgPanel.setVisible(false);
+        mainLocationDescPanel.setVisible(false);
+        inventoryPanel.setVisible(false);
+        directionButtonPanel.setVisible(false);
+        userInputPanel.setVisible(false);
     }
 
 
@@ -683,35 +773,32 @@ public class GamePanel extends JFrame {
         for (Directions dir : Directions.values()) {
             if (dir.name().equals(direction.toUpperCase())) {
                 String tempLocation = FileManager.getNewLocation(player1.getPlayerZone(), player1.getPlayerLocation(), direction);
-                if (tempLocation.equals("Off Map")){
-                    JOptionPane.showMessageDialog(null,"you were unable to move " + direction + ".","",JOptionPane.PLAIN_MESSAGE);
-                }else { //success on move
-
+                if (tempLocation.equals("Off Map")) {
+                    JOptionPane.showMessageDialog(null, "you were unable to move " + direction + ".", "", JOptionPane.PLAIN_MESSAGE);
+                } else { //success on move
                     player1.setPlayerLocation(tempLocation);
                     player1.setPlayerZone(FileManager.getNewZone(player1.getPlayerLocation()));
                     FileManager.getLocationDescription(player1.getPlayerLocation(), player1.getPlayerZone());
 
-                    JSONArray NPCname= FileManager.getNPCsName(player1.getPlayerLocation());
+                    JSONArray NPCname = FileManager.getNPCsName(player1.getPlayerLocation());
                     ArrayList<String> npcNames = (ArrayList<String>) NPCname;
                     //display available items for current location
                     if (!FileManager.getLocationItems(tempLocation).isEmpty()) {
                         System.out.println(FileManager.getLocationItems(tempLocation));
-                        String seeItems="You see the following items lying around: ";
+                        String seeItems = "You see the following items lying around: ";
                         String result = String.join(",", FileManager.getLocationItems(tempLocation));
                         String itemText = seeItems + "\n" + result;
-                        seeItem.setText(itemText+"\n");
+                        seeItem.setText(itemText + "\n");
 
-
-                    }
-                    else if(FileManager.getLocationItems(tempLocation).isEmpty()){
+                    } else if (FileManager.getLocationItems(tempLocation).isEmpty()) {
                         seeItem.setText("");
                     }
                     //display available people in current location
-                    if(!npcNames.isEmpty()){
+                    if (!npcNames.isEmpty()) {
                         String nameThree = null;
                         String nameTwo = null;
                         String name = null;
-                        switch (npcNames.size()){
+                        switch (npcNames.size()) {
                             case 3:
                                 nameThree = npcNames.get(2);
                             case 2:
@@ -719,7 +806,7 @@ public class GamePanel extends JFrame {
                             case 1:
                                 name = npcNames.get(0);
                         }
-                        switch (npcNames.size()){
+                        switch (npcNames.size()) {
                             case 3:
                                 seePeople.setText("You see " + nameThree + ", " + nameTwo + ", and " + name + ".");
                                 break;
@@ -727,21 +814,35 @@ public class GamePanel extends JFrame {
                                 seePeople.setText("You see " + name + " and " + nameTwo + ".");
                                 break;
                             case 1:
-                                seePeople.setText("You see "+name+".");
+                                seePeople.setText("You see " + name + ".");
                                 break;
                         }
-                    }
-                    else{
+
+                    } else {
                         seePeople.setText("");
                     }
 
                 }
+
                 didMove = true;
                 String currentZone = player1.getPlayerZone().toLowerCase();
-                String zoneImgFileName = "Assets/zone-png/"+currentZone+".jpg";
+                String zoneImgFileName = "Assets/zone-png/" + currentZone + ".jpg";
                 ImageIcon currentZoneImg = new ImageIcon(zoneImgFileName);
                 locationImgLabel.setIcon(currentZoneImg);
                 locationDesc.setText(FileManager.getLocationDescription(player1.getPlayerLocation(), player1.getPlayerZone()));
+                if ((tempLocation.equalsIgnoreCase("player's house")) && FileManager.sceneReader("sceneOnePassed") && !FileManager.sceneReader("sceneTwoPassed")) {
+                    directionButtonPanel.setVisible(false);
+                    con.add(explorePlayerHouseButtonPanel);
+                    explorePlayerHouseButtonPanel.add(explorePlayerHouseButton);
+
+                }
+                if ((tempLocation.equalsIgnoreCase("hay field")) && FileManager.sceneReader("sceneOnePassed") && FileManager.sceneReader("sceneTwoPassed") && !FileManager.sceneReader("sceneThreePassed")) {
+                    directionButtonPanel.setVisible(false);
+                    exploreHayFieldButtonPanel.setVisible(true);
+                    con.add(exploreHayFieldButtonPanel);
+                    exploreHayFieldButtonPanel.add(exploreHayFieldButton);
+
+                }
             }
         }
         if (!didMove) {
@@ -750,5 +851,24 @@ public class GamePanel extends JFrame {
         FileManager.saveGame(player1.getPlayerName(), player1.getPlayerLocation(), player1.getPlayerZone(), player1.getPlayerInventory());
 
     }
+    public void exploreSpecialSceneClearedPanel(){
+        exploreButtonPanel.add(exploreAirportButton);
+        con.add(exploreButtonPanel);
+    }
+
+    public void taskScreen(String taskFileName){
+        largeTextAreaPanel.setVisible(false);
+        con.add(mainTextPanel);
+        con.add(taskScreenNextButtonPanel);
+
+        mainTextPanel.setVisible(true);
+
+        taskScreenNextButtonPanel.add(taskScreenNextButton);
+        textField.setText(FileManager.txtFileToString(taskFileName));
+        mainTextPanel.add(textField);
+
+    }
+
+
 
 }
