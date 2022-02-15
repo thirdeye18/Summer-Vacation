@@ -208,7 +208,7 @@ public class Input {
         FileManager.saveGame(player1.getPlayerName(), player1.getPlayerLocation(), player1.getPlayerZone(), player1.getPlayerInventory());
     }
 
-    static boolean sceneOneAction() {
+    public static boolean sceneOneAction() {
         boolean sceneOnePass = FileManager.sceneReader("sceneOnePassed");
         ArrayList<String> playerList = FileManager.getPlayerItems();
         System.out.println("You noticed that your rope and planks could be combined!\n " +
