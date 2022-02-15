@@ -12,7 +12,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Locale;
-import java.util.Map;+
+import java.util.Map;
 
 
 public class GamePanel extends JFrame {

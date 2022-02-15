@@ -133,7 +133,7 @@ public class FileManager {
 
         //check for cardinal direction first
         for (Directions dir : Directions.values()) {
-            if(dir.equals(direction.toUpperCase())) {
+            if(dir.name().equals(direction.toUpperCase())) {
                 newLocation = (String) locationDirectionCardinal.get(direction);
             }
         }
