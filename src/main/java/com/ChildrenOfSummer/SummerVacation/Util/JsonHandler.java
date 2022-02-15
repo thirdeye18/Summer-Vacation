@@ -113,7 +113,7 @@ public class JsonHandler {
         // Create JSON objects from the default files
         JSONObject defaultItemLocations = getJsonObject("default_item_location.json", "default");
         JSONObject defaultNpcLocation = getJsonObject("default_NPC_location.json", "default");
-        JSONObject newPlayer = getJsonObject("defaultPlayer.json", "default");
+        JSONObject newPlayer = getJsonObject("default_player.json", "default");
 
         // Write JSON objects to the save file location
         writeJSONFile(itemLocationJsonPath, defaultItemLocations);
