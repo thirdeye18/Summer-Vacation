@@ -1,9 +1,8 @@
 package com.ChildrenOfSummer.SummerVacation.Util;
 
-import com.ChildrenOfSummer.SummerVacation.FileManager;
-import org.json.simple.JSONObject;
-
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 /*
@@ -14,25 +13,20 @@ import java.util.Map;
 
 public class TextParser {
 
-    public static ArrayList<String> parseText(String userInput) {
+    public static List<String> parseText(String userInput) {
         String[] strArr;
-        ArrayList<String> parsedArr = new ArrayList<>();
         String stripRegex = "[^A-Za-z]";
+        ArrayList<String> removeWords = new ArrayList<>();
+        removeWords.add("the");
+        removeWords.add("to");
+        removeWords.add("");
 
-        strArr = userInput.trim().split(stripRegex);
+        strArr = userInput.toLowerCase().trim().split(stripRegex);
+        List<String> parsedArr =
+                new ArrayList<>(Arrays.asList(strArr));
 
-        for (String s : strArr) {
+        parsedArr.removeAll(removeWords);
 
-            // removing empty strings left by split()
-            if (s.equals("")) ;
-                // ignoring "the" and "to"
-            else if (s.equalsIgnoreCase("the")) ;
-            else if (s.equalsIgnoreCase("to")) ;
-                // add what's left back to the ArrayList
-            else {
-                parsedArr.add(s);
-            }
-        }
         return parsedArr;
     }
 
@@ -42,23 +36,16 @@ public class TextParser {
      */
 
     public static String getVerb(String userInput) {
-        ArrayList<String> parsedArr = parseText(userInput.toLowerCase());
-        String path = "./Assets/config/verbs.json";
-        // This gets the file as a JSON Object
-        JSONObject verbJson;
-        verbJson = FileManager.grabJSONData(path);
-
-        //keywords from JSON loaded to Map
-        Map<String, ArrayList<String>> keywordMap;
-        keywordMap = verbJson;
+        List<String> parsedArr = parseText(userInput.toLowerCase());
+        Map<String, ArrayList<String>> verbMap = JsonHandler.jsonToMapStringList("verbs.json", "config");
 
         for (String word : parsedArr) {
-            assert keywordMap != null;
-            if (keywordMap.containsKey(word)) {  // if user input matches specific keyword no need to iterate Map synonyms
+            assert verbMap != null;
+            if (verbMap.containsKey(word)) {  // if user input matches specific keyword no need to iterate Map synonyms
                 return word;
             }
             // checking synonyms, then return keyword if there is a match
-            for (Map.Entry<String, ArrayList<String>> entry : keywordMap.entrySet()) {
+            for (Map.Entry<String, ArrayList<String>> entry : verbMap.entrySet()) {
                 if (entry.getValue().contains(word)) {
                     return entry.getKey();
                 }
@@ -71,34 +58,28 @@ public class TextParser {
      * accepts userInput string, parses to leave verbs and nouns,
      * then move through parsed array removing the nouns
      * will return an array with verb keywords removed
+     * if no nouns were found returns ArrayList containing "empty"
      */
 
     public static ArrayList<String> getNouns(String userInput) {
-        ArrayList<String> parsedArr = parseText(userInput.toLowerCase());
-        String path = "./Assets/config/nouns.json";
-        // This gets the file as a JSON Object
-        JSONObject nounJson;
-        nounJson = FileManager.grabJSONData(path);
+        List<String> parsedArr = parseText(userInput.toLowerCase());
+        Map<String, ArrayList<String>> nounMap = JsonHandler.jsonToMapStringList("nouns.json", "config");
 
         ArrayList<String> nouns = new ArrayList<>();
-        String word;
-
-        //keywords from JSON loaded to Map
-        Map<String, ArrayList<String>> keywordMap;
-        keywordMap = nounJson;
 
         for (String s : parsedArr) {
-            word = s;
-            assert keywordMap != null;
-            if (keywordMap.containsKey(word)) {
-                nouns.add(word);
+            assert nounMap != null;
+            if (nounMap.containsKey(s)) {
+                nouns.add(s);
             }
-            for (Map.Entry<String, ArrayList<String>> entry : keywordMap.entrySet()) {
-                if (entry.getValue().contains(word)) {
+            for (Map.Entry<String, ArrayList<String>> entry : nounMap.entrySet()) {
+                if (entry.getValue().contains(s)) {
                     nouns.add(entry.getKey());
                 }
             }
         }
+        if(nouns.isEmpty()) nouns.add("empty");
+
         return nouns;
     }
 
