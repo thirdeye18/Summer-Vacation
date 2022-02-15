@@ -1,11 +1,12 @@
 package com.ChildrenOfSummer.SummerVacation;
 
+import com.ChildrenOfSummer.SummerVacation.view.GamePanel;
 import org.json.simple.JSONArray;
 
 import java.util.ArrayList;
 import java.util.Scanner;
 
-class Player {
+public class Player {
     private static Player singleton = null;
     private String playerZone;
     private String playerLocation;
@@ -24,7 +25,7 @@ class Player {
 
 
     //private constructor
-    private Player(String playerName, String playerLocation, String playerZone, ArrayList<String> playerInventory) {
+    Player(String playerName, String playerLocation, String playerZone, ArrayList<String> playerInventory) {
         this.playerZone = playerZone;
         this.playerLocation = playerLocation;
         this.playerName = playerName;
@@ -45,6 +46,7 @@ class Player {
     }
 
     public void setPlayerLocation(String playerLocation) {
+        // capitalize first letter to match json locations
         this.playerLocation = playerLocation;
     }
 
@@ -85,7 +87,6 @@ class Player {
          * so the player can interact with their surroundings -MS
          */
 
-        Scanner scanner = new Scanner(System.in);
         String tempLocation = FileManager.getNewLocation(playerZone, playerLocation, direction);
 
         if (tempLocation.equals("Off Map")){
@@ -96,8 +97,7 @@ class Player {
             playerZone = FileManager.getNewZone(playerLocation);
             JSONArray NPCname= FileManager.getNPCsName(playerLocation);
             ArrayList<String> npcNames = (ArrayList<String>) NPCname;
-            System.out.println("You move " + direction + ". Press Enter to continue...");
-            scanner.nextLine();
+
             switch (playerZone){
                 case "Wild Field":
                     FileManager.getZoneArtFile("zone1.txt");
@@ -146,6 +146,7 @@ class Player {
         }
 
     }
+
 
 
     void wakeUp(){

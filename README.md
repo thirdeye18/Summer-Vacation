@@ -10,6 +10,8 @@ Game written in Java using the JSON.Simple library for data manipulation.
 
 ## How to
 #### Interaction 
+GUI implemented for navigation and general game functions.
+Commands through the text box
 * talk
   * interact with NPCs and friends
 * get
@@ -22,9 +24,10 @@ Game written in Java using the JSON.Simple library for data manipulation.
 
 ## Contributors
 [Michael](https://github.com/AgentKD6-37) ||[Fan](https://github.com/fanwu513)|| [Zi-Cheng](https://github.com/thrashghost)
+[Sushma](https://github.com/spakhre) || [Zoe](https://github.com/zoeji569) || [Justin](https://github.com/thirdeye18/)
 
 >## Release Version
->Build 2.1
+>Build 2.2
 
 Java runtime environment is required. [Dowload it here](https://www.java.com/en/)
 
@@ -32,4 +35,4 @@ Java runtime environment is required. [Dowload it here](https://www.java.com/en/
 ```Installation Instructions:
 1. Download the .zip file
 2. Extract the file
-3. Click run.cmd or run.sh
+3. Run from .jar file

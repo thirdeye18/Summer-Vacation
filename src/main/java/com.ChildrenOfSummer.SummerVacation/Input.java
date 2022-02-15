@@ -1,12 +1,16 @@
 package com.ChildrenOfSummer.SummerVacation;
 
 import com.ChildrenOfSummer.SummerVacation.Util.Directions;
+import com.ChildrenOfSummer.SummerVacation.Util.JsonHandler;
 import com.ChildrenOfSummer.SummerVacation.Util.SoundFX;
 import com.ChildrenOfSummer.SummerVacation.Util.TextParser;
+import com.ChildrenOfSummer.SummerVacation.view.GamePanel;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import javax.sound.sampled.Clip;
+import javax.swing.*;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Input {
@@ -14,6 +18,7 @@ public class Input {
     private static String ANSWER;
     private static ArrayList<String> empty = new ArrayList<>();
     private static Player player1 = Player.getInstance("default", "Player's House", "Suburb", empty);
+    private static GamePanel gamePanel = new GamePanel();
     // private static final Clip clip = FileManager.getMusic(null);
 
 
@@ -23,10 +28,14 @@ public class Input {
          *Load will of course over-write those values with the Player.json values so that you can continue your game.
          * -MS
          */
+        gamePanel.createGameScreen();
+        setupListeners();
 
         boolean newGame = false;
 
-        while (!newGame) {  //loop until new game option selected, error msg for invalid input -JH
+
+        while (!newGame) {  //loop until new game option selected, error msg for invalid input
+
             FileManager.menuFiles();    //display menu text
             String startMenuChoice = TextParser.getVerb(scanner.nextLine());    //.strip().toLowerCase();
             switch (startMenuChoice) {
@@ -61,8 +70,366 @@ public class Input {
         }
         return newGame;
     }
+    //set up listeners
+    private static void setupListeners(){
+
+        gamePanel.newGameButton.addActionListener(e -> {
+            gamePanel.playerNameScreen();
+            player1.setPlayerInventory(empty);
+            player1.setPlayerName("default");
+            player1.setPlayerLocation("Player's House");
+            player1.setPlayerZone("Suburb");
+        });
 
 
+        gamePanel.quitGameButton.addActionListener(e->System.exit(0));
+
+        gamePanel.playerPageEnterGameButton.addActionListener(e-> {
+            gamePanel.introScreen();
+            ANSWER = gamePanel.userName.getText();
+            player1.setPlayerName(ANSWER);
+            FileManager.saveGame(player1.getPlayerName(), player1.getPlayerLocation(), player1.getPlayerZone(), player1.getPlayerInventory());
+            gamePanel.textField.setText("Hi "+ ANSWER+"\n"+FileManager.txtFileToString("introduction.txt"));
+        });
+
+        gamePanel.mapButton.addActionListener(e -> {
+            JFrame frame = new JFrame("Map");
+            frame.setSize(400,400);
+            frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+            ImageIcon mapIcon = new ImageIcon("Assets/img/map.PNG");
+            JLabel label = new JLabel(mapIcon);
+            frame.add(label);
+            frame.pack();
+            frame.setVisible(true);
+        });
+        gamePanel.helpButton.addActionListener(e -> {
+            JFrame frame = new JFrame("Map");
+            frame.setSize(400,400);
+            frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+            ImageIcon helpIcon = new ImageIcon("Assets/img/help.PNG");
+            JLabel label1 = new JLabel(helpIcon);
+            frame.add(label1);
+            frame.pack();
+            frame.setVisible(true);
+        });
+        gamePanel.musicButton.addActionListener(e -> {
+            if (gamePanel.musicButton.isSelected()){
+                gamePanel.musicButton.setText("Music On");
+                int loop = 3;
+                SoundFX.MUSIC1.loopPlay(loop);
+            }else {
+                gamePanel.musicButton.setText("Music off");
+                SoundFX.MUSIC1.stopPlay();
+            }
+        });
+
+        gamePanel.northButton.addActionListener(e -> goDirection("north"));
+        gamePanel.southButton.addActionListener(e -> goDirection("south"));
+        gamePanel.eastButton.addActionListener(e -> goDirection("east"));
+        gamePanel.westButton.addActionListener(e -> goDirection("west"));
+
+        gamePanel.dropButton.addActionListener(e -> {
+            ArrayList<String> locationList = FileManager.getLocationItems(player1.getPlayerLocation());
+            ArrayList<String> playerList = FileManager.getPlayerItems();
+            int index = gamePanel.inventoryList.getSelectedIndex();
+            if (index>=0) {
+                String droppedItem = (String) gamePanel.inventoryList.getSelectedValue();
+                locationList.add(droppedItem);
+                playerList.remove(droppedItem);
+                FileManager.updateLocationItems(player1.getPlayerLocation(), locationList);
+                FileManager.savePlayerItems(playerList);
+                player1.setPlayerInventory(playerList);
+                gamePanel.inventoryListModel.removeElementAt(index);
+            }
+            else{
+                JOptionPane.showMessageDialog(null, "Nothing selected, please select one item to drop", "", JOptionPane.PLAIN_MESSAGE);
+            }
+        });
+
+        gamePanel.useButton.addActionListener(e -> {
+            JOptionPane.showMessageDialog(null,"Nothing happens...", "", JOptionPane.PLAIN_MESSAGE);
+        });
+
+        gamePanel.loadGameButton.addActionListener(e -> {
+            JSONObject saveFile = FileManager.loadGame();
+            String name = (String) saveFile.get("name");
+            String location = (String) saveFile.get("location");
+            String zone = (String) saveFile.get("zone");
+            ArrayList<String> inventory = (ArrayList<String>) saveFile.get("inventory");
+            player1.setPlayerInventory(inventory);
+            player1.setPlayerName(name);
+            player1.setPlayerLocation(location);
+            player1.setPlayerZone(zone);
+        });
+
+
+
+        gamePanel.userInputEnterButton.addActionListener(e->{
+
+            ArrayList<String> locationList = FileManager.getLocationItems(player1.getPlayerLocation());
+            ArrayList<String> playerList = FileManager.getPlayerItems();
+            ANSWER = gamePanel.userInput.getText();
+            String[] answerWords = ANSWER.split(" ");
+            String verb = answerWords[0].toLowerCase();
+            String noun2 = answerWords[answerWords.length - 1].toLowerCase();
+            switch (verb) {
+                case "inventory":
+                    JOptionPane.showMessageDialog(null, "Your inventory has: " + playerList, "", JOptionPane.PLAIN_MESSAGE);
+                    break;
+                case "get":
+                    if (locationList.contains(noun2)) {
+
+                        locationList.remove(noun2);
+                        playerList.add(noun2);
+                        FileManager.updateLocationItems(player1.getPlayerLocation(), locationList);
+                        FileManager.savePlayerItems(playerList);
+                        player1.setPlayerInventory(playerList);
+                        gamePanel.inventoryListModel.addElement(noun2);
+
+                        JOptionPane.showMessageDialog(null, noun2 + " has been added to your inventory.", "", JOptionPane.PLAIN_MESSAGE);
+                    } else {
+                        System.out.println(locationList);
+                        JOptionPane.showMessageDialog(null, "I can't get that! There's no " + noun2 + " for me to pick up!", "", JOptionPane.PLAIN_MESSAGE);
+
+                    }
+
+                    break;
+
+                case "drop":
+                    if (playerList.contains(noun2)) {
+                        locationList.add(noun2);
+                        playerList.remove(noun2);
+                        FileManager.updateLocationItems(player1.getPlayerLocation(), locationList);
+                        FileManager.savePlayerItems(playerList);
+                        player1.setPlayerInventory(playerList);
+                        gamePanel.inventoryListModel.removeElement(noun2);
+                    } else {
+                        JOptionPane.showMessageDialog(null,"Sorry, I can't drop what I don't have.", "", JOptionPane.PLAIN_MESSAGE);
+                    }
+                    break;
+                case "use":
+                    JOptionPane.showMessageDialog(null,"Nothing happens...", "", JOptionPane.PLAIN_MESSAGE);
+                    break;
+                case "talk":
+                    JOptionPane.showMessageDialog(null, player1.talk(noun2), "", JOptionPane.PLAIN_MESSAGE);
+                    break;
+                case "go":
+                    goDirection(noun2);
+                    break;
+                case "quit":
+                    FileManager.saveGame(player1.getPlayerName(), player1.getPlayerLocation(), player1.getPlayerZone(), player1.getPlayerInventory());
+                    System.exit(0);
+                    break;
+                default:
+                    JOptionPane.showMessageDialog(null, "I didn't understand that command. for help click help button on the top or type help.", "", JOptionPane.PLAIN_MESSAGE);
+            }
+
+
+        });
+        gamePanel.exploreAirportButton.addActionListener(e ->
+        {
+            gamePanel.arriveSpecialScene("scene-one.txt");
+        });
+
+        gamePanel.arriveSpecialSceneNextButton.addActionListener(e ->
+        {
+            if (FileManager.getPlayerItems().contains("rope") && FileManager.getPlayerItems().contains("planks")) {
+                gamePanel.taskEscapeWithEnoughInventory();
+            } else {
+                JOptionPane.showMessageDialog(null,"With no items to help you, you and your friends are caught by security! You're grounded!\nGame Over!","",JOptionPane.PLAIN_MESSAGE);
+                System.exit(0);
+            }
+        });
+
+        gamePanel.taskScreenNextButton.addActionListener(e->{
+            gamePanel.mainTextPanel.setVisible(false);
+            gamePanel.taskScreenNextButtonPanel.setVisible(false);
+            gamePanel.largeTextAreaPanel.setVisible(false);
+            gamePanel.locationImgPanel.setVisible(true);
+            gamePanel.mainLocationDescPanel.setVisible(true);
+            gamePanel.userInputPanel.setVisible(true);
+            gamePanel.directionButtonPanel.setVisible(true);
+            gamePanel.inventoryPanel.setVisible(true);
+
+                }
+
+
+
+        );
+
+        gamePanel.explorePlayerHouseButton.addActionListener(e->{
+            gamePanel.clearZoneViewPanel();
+            gamePanel.explorePlayerHouseButtonPanel.setVisible(false);
+            gamePanel.taskScreen("scene-two.txt");
+            gamePanel.taskScreenNextButtonPanel.setVisible(true);
+            gamePanel.taskScreenNextButtonPanel.add(gamePanel.taskScreenNextButton);
+            gamePanel.con.add(gamePanel.taskScreenNextButtonPanel);
+                    FileManager.sceneWriter(true, "sceneTwoPassed");
+                    JOptionPane.showMessageDialog(null,"You arrived and completed task", "", JOptionPane.PLAIN_MESSAGE);
+                }
+
+        );
+
+        gamePanel.exploreHayFieldButton.addActionListener(e->{
+            gamePanel.clearZoneViewPanel();
+            gamePanel.explorePlayerHouseButtonPanel.setVisible(false);
+            gamePanel.taskScreen("scene-three.txt");
+            gamePanel.con.add(gamePanel.hayfieldNextButtonPanel);
+            gamePanel.hayfieldNextButtonPanel.setVisible(true);
+            gamePanel.hayfieldNextButtonPanel.add(gamePanel.hayfieldNextButton);
+            gamePanel.exploreHayFieldButtonPanel.setVisible(false);
+                    FileManager.sceneWriter(true, "sceneThreePassed");
+                    JOptionPane.showMessageDialog(null,"You arrived and completed task", "", JOptionPane.PLAIN_MESSAGE);
+                }
+
+        );
+        gamePanel.hayfieldNextButton.addActionListener(e->{
+            gamePanel.taskThrowRockWithEnoughInventory();
+                }
+
+        );
+    }
+
+    public static void goDirection(String direction){
+        boolean didMove = false;
+        Map<String, ArrayList<String>> locations = JsonHandler.jsonToMapStringList("LocationsSimple.json", "json");
+        String parsedDirection = direction.substring(0, 1).toUpperCase() + direction.substring(1);
+
+        for (Directions dir : Directions.values()) {
+            if (dir.name().equals(direction.toUpperCase())) {
+                String tempLocation = FileManager.getNewLocation(player1.getPlayerZone(), player1.getPlayerLocation(), direction);
+                if (tempLocation.equals("Off Map")) {
+                    JOptionPane.showMessageDialog(null, "you were unable to move " + direction + ".", "", JOptionPane.PLAIN_MESSAGE);
+                } else { //success on move
+                    player1.setPlayerLocation(tempLocation);
+                    player1.setPlayerZone(FileManager.getNewZone(player1.getPlayerLocation()));
+                    FileManager.getLocationDescription(player1.getPlayerLocation(), player1.getPlayerZone());
+
+                    JSONArray NPCname = FileManager.getNPCsName(player1.getPlayerLocation());
+                    ArrayList<String> npcNames = (ArrayList<String>) NPCname;
+                    //display available items for current location
+                    if (!FileManager.getLocationItems(tempLocation).isEmpty()) {
+                        System.out.println(FileManager.getLocationItems(tempLocation));
+                        String seeItems = "You see the following items lying around: ";
+                        String result = String.join(",", FileManager.getLocationItems(tempLocation));
+                        String itemText = seeItems + "\n" + result;
+                        gamePanel.seeItem.setText(itemText + "\n");
+
+                    } else if (FileManager.getLocationItems(tempLocation).isEmpty()) {
+                        gamePanel.seeItem.setText("");
+                    }
+                    //display available people in current location
+                    if (!npcNames.isEmpty()) {
+                        String nameThree = null;
+                        String nameTwo = null;
+                        String name = null;
+                        switch (npcNames.size()) {
+                            case 3:
+                                nameThree = npcNames.get(2);
+                            case 2:
+                                nameTwo = npcNames.get(1);
+                            case 1:
+                                name = npcNames.get(0);
+                        }
+                        switch (npcNames.size()) {
+                            case 3:
+                                gamePanel.seePeople.setText("You see " + nameThree + ", " + nameTwo + ", and " + name + ".");
+                                break;
+                            case 2:
+                                gamePanel.seePeople.setText("You see " + name + " and " + nameTwo + ".");
+                                break;
+                            case 1:
+                                gamePanel.seePeople.setText("You see " + name + ".");
+                                break;
+                        }
+
+                    } else {
+                        gamePanel.seePeople.setText("");
+                    }
+
+                }
+
+                didMove = true;
+                String currentZone = player1.getPlayerZone().toLowerCase();
+                String zoneImgFileName = "Assets/zone-png/" + currentZone + ".jpg";
+                ImageIcon currentZoneImg = new ImageIcon(zoneImgFileName);
+                gamePanel.locationImgLabel.setIcon(currentZoneImg);
+                gamePanel.locationDesc.setText(FileManager.getLocationDescription(player1.getPlayerLocation(), player1.getPlayerZone()));
+                if ((tempLocation.equalsIgnoreCase("player's house")) && FileManager.sceneReader("sceneOnePassed") && !FileManager.sceneReader("sceneTwoPassed")) {
+                    gamePanel.directionButtonPanel.setVisible(false);
+                    gamePanel.con.add(gamePanel.explorePlayerHouseButtonPanel);
+                    gamePanel.explorePlayerHouseButtonPanel.add(gamePanel.explorePlayerHouseButton);
+
+                }
+                if ((tempLocation.equalsIgnoreCase("hay field")) && FileManager.sceneReader("sceneOnePassed") && FileManager.sceneReader("sceneTwoPassed") && !FileManager.sceneReader("sceneThreePassed")) {
+                    gamePanel.directionButtonPanel.setVisible(false);
+                    gamePanel.exploreHayFieldButtonPanel.setVisible(true);
+                    gamePanel.con.add(gamePanel.exploreHayFieldButtonPanel);
+                    gamePanel.exploreHayFieldButtonPanel.add(gamePanel.exploreHayFieldButton);
+
+                }
+            }
+
+        }
+
+        for (ArrayList<String> locArr : locations.values()) {
+            if(locArr.contains(parsedDirection.toLowerCase())) {
+                String tempLocation = FileManager.getNewLocation(player1.getPlayerZone(), player1.getPlayerLocation(), parsedDirection);
+                player1.setPlayerLocation(parsedDirection);
+                player1.setPlayerZone(FileManager.getNewZone(player1.getPlayerLocation()));
+                FileManager.getLocationDescription(player1.getPlayerLocation(), player1.getPlayerZone());
+                JSONArray NPCname= FileManager.getNPCsName(player1.getPlayerLocation());
+                ArrayList<String> npcNames = (ArrayList<String>) NPCname;
+
+                //display available items for current location
+                if (!FileManager.getLocationItems(parsedDirection).isEmpty()) {
+                    System.out.println(FileManager.getLocationItems(tempLocation));
+                    String seeItems="You see the following items lying around: ";
+                    String result = String.join(",", FileManager.getLocationItems(tempLocation));
+                    String itemText = seeItems + "\n" + result;
+                    gamePanel.seeItem.setText(itemText+"\n");
+                }
+                else if(FileManager.getLocationItems(tempLocation).isEmpty()){
+                    gamePanel.seeItem.setText("");
+                }
+                //display available people in current location
+                if(!npcNames.isEmpty()){
+                    String nameThree = null;
+                    String nameTwo = null;
+                    String name = null;
+                    switch (npcNames.size()){
+                        case 3:
+                            nameThree = npcNames.get(2);
+                        case 2:
+                            nameTwo = npcNames.get(1);
+                        case 1:
+                            name = npcNames.get(0);
+                    }
+                    switch (npcNames.size()){
+                        case 3:
+                            gamePanel.seePeople.setText("You see " + nameThree + ", " + nameTwo + ", and " + name + ".");
+                            break;
+                        case 2:
+                            gamePanel.seePeople.setText("You see " + name + " and " + nameTwo + ".");
+                            break;
+                        case 1:
+                            gamePanel.seePeople.setText("You see "+name+".");
+                            break;
+                    }
+                }
+                else{
+                    gamePanel.seePeople.setText("");
+                }
+                didMove = true;
+            }
+        }
+
+        if (!didMove) {
+            JOptionPane.showMessageDialog(null,"you were unable to move " + direction + ".","",JOptionPane.PLAIN_MESSAGE);
+        }
+        FileManager.saveGame(player1.getPlayerName(), player1.getPlayerLocation(), player1.getPlayerZone(), player1.getPlayerInventory());
+
+    }
     static void introduction() {
         FileManager.getAssetFile("introduction.txt");
         System.out.println("Press Enter to continue...");
@@ -205,7 +572,7 @@ public class Input {
         FileManager.saveGame(player1.getPlayerName(), player1.getPlayerLocation(), player1.getPlayerZone(), player1.getPlayerInventory());
     }
 
-    static boolean sceneOneAction() {
+    public static boolean sceneOneAction() {
         boolean sceneOnePass = FileManager.sceneReader("sceneOnePassed");
         ArrayList<String> playerList = FileManager.getPlayerItems();
         System.out.println("You noticed that your rope and planks could be combined!\n " +
@@ -379,4 +746,3 @@ public class Input {
         return sceneFivePass;
     }
 }
-
