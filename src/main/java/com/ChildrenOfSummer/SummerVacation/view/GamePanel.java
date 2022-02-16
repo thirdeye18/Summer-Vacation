@@ -100,28 +100,28 @@ public class GamePanel extends JFrame {
         newGameButtonPanel = createJPanel(300,400,200,150,Color.yellow,true);
         askForNamePanel = createJPanel(100,100,600,250,Color.blue,true);
         playerPageFooterPanel = createJPanel(500,500,100,30,Color.red,true);
-        introScreenEnterGameButtonPanel = createJPanel(600,400,200,100,Color.yellow,true);
-        mainTextPanel = createJPanel(20,60,740,430,Color.yellow,true);
+        introScreenEnterGameButtonPanel = createJPanel(600,420,160,50,Color.yellow,true);
+        mainTextPanel = createJPanel(20,60,740,350,Color.yellow,true);
         locationImgPanel = createJPanel(20,30,540,300,Color.blue,true);
         mainLocationDescPanel = createJPanel(20,330,540,140,Color.red,true);
         userInputPanel = createJPanel(20,480,300,60,Color.green,true);
         headerContentPanel = createJPanel(0,0,800,30, Color.yellow,true);
-        directionButtonPanel = createJPanel(630,300,100,150,Color.yellow,true);
+        directionButtonPanel = createJPanel(630,300,100,120,Color.yellow,true);
         inventoryPanel = createJPanel(620,50,120,250,Color.yellow,true);
-        largeTextAreaPanel = createJPanel(20,60,740,430,Color.white,true);
-        exploreButtonPanel = createJPanel(620,500,100,30,Color.white,true);
-        explorePlayerHouseButtonPanel = createJPanel(620,500,100,30,Color.white,true);
-        exploreHayFieldButtonPanel = createJPanel(620,500,100,30,Color.white,true);
-        taskScreenNextButtonPanel = createJPanel(600,400,200,100,Color.yellow,true);
-        hayfieldNextButtonPanel = createJPanel(600,400,200,100,Color.yellow,true);
+        largeTextAreaPanel = createJPanel(20,60,740,420,Color.white,true);
+        exploreButtonPanel = createJPanel(600,450,180,40,Color.white,true);
+        explorePlayerHouseButtonPanel = createJPanel(600,450,180,40,Color.white,true);
+        exploreHayFieldButtonPanel = createJPanel(600,450,180,40,Color.white,true);
+        taskScreenNextButtonPanel = createJPanel(600,420,180,40,Color.yellow,true);
+        hayfieldNextButtonPanel = createJPanel(600,420,180,40,Color.yellow,true);
     }
 
     private void setAllButtons() {
         newGameButton = createJButton("New Game",150,50,false,Color.white,Color.black);
         loadGameButton = createJButton("Load Game",150,50,false,Color.white,Color.black);
         quitGameButton = createJButton("Quit Game",150,50,false,Color.white,Color.black);
-        playerPageEnterGameButton = createJButton("ENTER GAME",150,50,false, Color.white,Color.black);
-        introScreenNextButton = createJButton("NEXT",150,50,false,Color.white,Color.black);
+        playerPageEnterGameButton = createJButton("ENTER GAME",150,40,false, Color.white,Color.black);
+        introScreenNextButton = createJButton("NEXT",150,40,false,Color.white,Color.black);
         userInputEnterButton = createJButton("ENTER",150,50,false,Color.white,Color.black);
         mapButton = createJButton("MAP",100,30,false,Color.white,Color.black);
         helpButton = createJButton("HELP",100,30,false,Color.white,Color.black);
@@ -131,12 +131,12 @@ public class GamePanel extends JFrame {
         eastButton = createJButton("Go East",100,20,false,Color.white,Color.black);
         useButton = createJButton("use item",100,20,false,Color.white,Color.black);
         dropButton = createJButton("drop item",100,20,false,Color.white,Color.black);
-        exploreAirportButton = createJButton("GO TO AIRPORT",100,20,false,Color.red,Color.white);
-        explorePlayerHouseButton = createJButton("GO TO Player's House",100,20,false,Color.red,Color.white);
-        exploreHayFieldButton = createJButton("GO TO Hay Field",100,20,false,Color.red,Color.white);
+        exploreAirportButton = createJButton("GO TO AIRPORT",180,40,false,Color.red,Color.white);
+        explorePlayerHouseButton = createJButton("GO TO Player's House",180,40,false,Color.red,Color.white);
+        exploreHayFieldButton = createJButton("GO TO Hay Field",180,40,false,Color.red,Color.white);
         arriveSpecialSceneNextButton = createJButton("NEXT",100,30,false,Color.white,Color.black);
-        taskScreenNextButton = createJButton("GO TASK",150,50,false,Color.white,Color.black);
-        hayfieldNextButton = createJButton("GO hay field",150,50,false,Color.white,Color.black);
+        taskScreenNextButton = createJButton("GO TO TASK",180,40,false,Color.white,Color.black);
+        hayfieldNextButton = createJButton("GO hay field",180,40,false,Color.white,Color.black);
         musicButton = new JToggleButton("Music Off");
     }
     public void createGameScreen() {

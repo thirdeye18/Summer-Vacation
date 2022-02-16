@@ -11,18 +11,6 @@
   "west": [
     "left"
   ],
-  "map": [
-    "location",
-    "where am i"
-  ],
-  "inventory": [
-    "stock",
-    "supply",
-    "cache",
-    "purse",
-    "hoard",
-    "stockpile"
-  ],
   "dead presidents": [],
   "fast journey": [],
   "bills produce": [],

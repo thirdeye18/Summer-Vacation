@@ -1,1 +1,2 @@
-{"sceneFivePassed":false,"money":0,"zone":"Old Town","sceneTwoPassed":false,"name":"","sceneThreePassed":false,"location":"Warehouse","sceneFourPassed":false,"inventory":["chips","paddle","doorknob","shoes","rope"],"sceneOnePassed":false}
+{"sceneFivePassed":false,"money":0,"zone":"Suburb","sceneTwoPassed":true,"name":"","sceneThreePassed":false,"location":"Player's House","sceneFourPassed":false,"inventory":["ladder"],"sceneOnePassed":true}
+
