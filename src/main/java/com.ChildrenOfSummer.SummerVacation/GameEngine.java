@@ -80,7 +80,8 @@ public class GameEngine {
         JSONObject saveFile;
         String playerLocation;
         do {
-            Input.inputCommandsLogic();
+            // TODO: this is the only current place still using Input.inputCommandsLogic, pretty sure can go
+            //Input.inputCommandsLogic();
             saveFile = FileManager.loadGame();
             playerLocation = (String) saveFile.get("location");
         } while (!playerLocation.equals(location));
