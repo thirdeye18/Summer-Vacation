@@ -178,7 +178,6 @@ public class Input {
                     break;
                 case "get":
                     if (locationList.contains(noun2)) {
-
                         locationList.remove(noun2);
                         playerList.add(noun2);
                         FileManager.updateLocationItems(player1.getPlayerLocation(), locationList);
@@ -190,9 +189,7 @@ public class Input {
                     } else {
                         System.out.println(locationList);
                         JOptionPane.showMessageDialog(null, "I can't get that! There's no " + noun2 + " for me to pick up!", "", JOptionPane.PLAIN_MESSAGE);
-
                     }
-
                     break;
 
                 case "drop":
@@ -288,6 +285,50 @@ public class Input {
                 }
 
         );
+
+        gamePanel.findSaraButton.addActionListener(e->{
+            gamePanel.mainTextPanel.setVisible(false);
+            gamePanel.taskScreenNextButtonPanel.setVisible(false);
+            gamePanel.largeTextAreaPanel.setVisible(false);
+            gamePanel.locationImgPanel.setVisible(true);
+            gamePanel.mainLocationDescPanel.setVisible(true);
+            gamePanel.userInputPanel.setVisible(true);
+            gamePanel.directionButtonPanel.setVisible(true);
+            gamePanel.inventoryPanel.setVisible(true);
+            gamePanel.findSaraButtonPanel.setVisible(false);
+                }
+
+        );
+        gamePanel.exploreOldHouseSouthButton.addActionListener(e->{
+                    gamePanel.clearZoneViewPanel();
+                    gamePanel.taskScreen("scene-four.txt");
+                    gamePanel.exploreOldHouseSouthButtonPanel.setVisible(false);
+                    FileManager.sceneWriter(true, "sceneFourPassed");
+                    gamePanel.findSuppliesButtonPanel.setVisible(true);
+                    gamePanel.con.add(gamePanel.findSuppliesButtonPanel);
+                    gamePanel.findSuppliesButtonPanel.add(gamePanel.findSuppliesButton);
+                }
+
+        );
+        gamePanel.findSuppliesButton.addActionListener(e->{
+            gamePanel.mainTextPanel.setVisible(false);
+            gamePanel.taskScreenNextButtonPanel.setVisible(false);
+            gamePanel.largeTextAreaPanel.setVisible(false);
+            gamePanel.locationImgPanel.setVisible(true);
+            gamePanel.mainLocationDescPanel.setVisible(true);
+            gamePanel.userInputPanel.setVisible(true);
+            gamePanel.directionButtonPanel.setVisible(true);
+            gamePanel.inventoryPanel.setVisible(true);
+            gamePanel.findSuppliesButtonPanel.setVisible(false);
+                }
+
+        );
+        gamePanel.exploreRiverButton.addActionListener(e->{
+            GamePanel.taskPaddleRiverWithEnoughInventory();
+                }
+
+        );
+
     }
 
     public static void goDirection(String direction){
@@ -366,6 +407,23 @@ public class Input {
                     gamePanel.exploreHayFieldButtonPanel.setVisible(true);
                     gamePanel.con.add(gamePanel.exploreHayFieldButtonPanel);
                     gamePanel.exploreHayFieldButtonPanel.add(gamePanel.exploreHayFieldButton);
+
+                }
+                if ((tempLocation.equalsIgnoreCase("old house south")) && FileManager.sceneReader("sceneOnePassed") && FileManager.sceneReader("sceneTwoPassed")
+                        && FileManager.sceneReader("sceneThreePassed")&&!FileManager.sceneReader("sceneFourPassed")) {
+                    gamePanel.directionButtonPanel.setVisible(false);
+                    gamePanel.exploreOldHouseSouthButtonPanel.setVisible(true);
+                    gamePanel.con.add(gamePanel.exploreOldHouseSouthButtonPanel);
+                    gamePanel.exploreOldHouseSouthButtonPanel.add(gamePanel.exploreOldHouseSouthButton);
+
+
+                }
+                if ((tempLocation.equalsIgnoreCase("river")) && FileManager.sceneReader("sceneOnePassed") && FileManager.sceneReader("sceneTwoPassed")
+                        && FileManager.sceneReader("sceneThreePassed")&&FileManager.sceneReader("sceneFourPassed")&&!FileManager.sceneReader("sceneFivePassed")) {
+                    gamePanel.directionButtonPanel.setVisible(false);
+                    gamePanel.exploreRiverButtonPanel.setVisible(true);
+                    gamePanel.con.add(gamePanel.exploreRiverButtonPanel);
+                    gamePanel.exploreRiverButtonPanel.add(gamePanel.exploreRiverButton);
 
                 }
             }
