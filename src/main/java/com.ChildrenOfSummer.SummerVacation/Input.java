@@ -161,52 +161,63 @@ public class Input {
         });
 
 
-        gamePanel.exploreAirportButton.addActionListener(e -> gamePanel.arriveSpecialScene("scene-one.txt"));
+        gamePanel.exploreAirportButton.addActionListener(e ->
+                {
+                    if (FileManager.getPlayerItems().contains("rope") && !FileManager.getPlayerItems().contains("planks")) {
+                        JOptionPane.showMessageDialog(null, "It looks like you have a rope in your bag! You may need something to make a ladder by combining something " +
+                                "with the rope! Come back once you got the item!", "", JOptionPane.PLAIN_MESSAGE);
+                    } else if (FileManager.getPlayerItems().contains("planks") && !FileManager.getPlayerItems().contains("rope")) {
+                        JOptionPane.showMessageDialog(null, "It looks like you have planks in your bag! You may need something to make a ladder by combining something " +
+                                "with the planks! Come back once you got the item!", "", JOptionPane.PLAIN_MESSAGE);
+                    } else if (FileManager.getPlayerItems().contains("rope") && FileManager.getPlayerItems().contains("planks")) {
+                        gamePanel.arriveSpecialScene("scene-one.txt");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "With no items to help you, you and your friends are caught by security! You're grounded!\nGame Over!", "", JOptionPane.PLAIN_MESSAGE);
+                        System.exit(0);
+                    }
+                }
+
+        );
 
 
         gamePanel.arriveSpecialSceneNextButton.addActionListener(e ->
         {
-            if (FileManager.getPlayerItems().contains("rope") && FileManager.getPlayerItems().contains("planks")) {
-                gamePanel.taskEscapeWithEnoughInventory();
-            } else {
-                JOptionPane.showMessageDialog(null,"With no items to help you, you and your friends are caught by security! You're grounded!\nGame Over!","",JOptionPane.PLAIN_MESSAGE);
-                System.exit(0);
-            }
+            gamePanel.taskEscapeWithEnoughInventory();
         });
 
         gamePanel.taskScreenNextButton.addActionListener(e->{
-            gamePanel.mainTextPanel.setVisible(false);
-            gamePanel.taskScreenNextButtonPanel.setVisible(false);
-            gamePanel.largeTextAreaPanel.setVisible(false);
-            gamePanel.locationImgPanel.setVisible(true);
-            gamePanel.mainLocationDescPanel.setVisible(true);
-            gamePanel.userInputPanel.setVisible(true);
-            gamePanel.directionButtonPanel.setVisible(true);
-            gamePanel.inventoryPanel.setVisible(true);
+                    gamePanel.mainTextPanel.setVisible(false);
+                    gamePanel.taskScreenNextButtonPanel.setVisible(false);
+                    gamePanel.largeTextAreaPanel.setVisible(false);
+                    gamePanel.locationImgPanel.setVisible(true);
+                    gamePanel.mainLocationDescPanel.setVisible(true);
+                    gamePanel.userInputPanel.setVisible(true);
+                    gamePanel.directionButtonPanel.setVisible(true);
+                    gamePanel.inventoryPanel.setVisible(true);
 
                 }
         );
 
         gamePanel.explorePlayerHouseButton.addActionListener(e->{
-            gamePanel.clearZoneViewPanel();
-            gamePanel.explorePlayerHouseButtonPanel.setVisible(false);
-            gamePanel.taskScreen("scene-two.txt");
-            gamePanel.taskScreenNextButtonPanel.setVisible(true);
-            gamePanel.taskScreenNextButtonPanel.add(gamePanel.taskScreenNextButton);
-            gamePanel.con.add(gamePanel.taskScreenNextButtonPanel);
+                    gamePanel.clearZoneViewPanel();
+                    gamePanel.explorePlayerHouseButtonPanel.setVisible(false);
+                    gamePanel.taskScreen("scene-two.txt");
+                    gamePanel.taskScreenNextButtonPanel.setVisible(true);
+                    gamePanel.taskScreenNextButtonPanel.add(gamePanel.taskScreenNextButton);
+                    gamePanel.con.add(gamePanel.taskScreenNextButtonPanel);
                     FileManager.sceneWriter(true, "sceneTwoPassed");
                     JOptionPane.showMessageDialog(null,"You arrived and completed task", "", JOptionPane.PLAIN_MESSAGE);
                 }
         );
 
         gamePanel.exploreHayFieldButton.addActionListener(e->{
-            gamePanel.clearZoneViewPanel();
-            gamePanel.explorePlayerHouseButtonPanel.setVisible(false);
-            gamePanel.taskScreen("scene-three.txt");
-            gamePanel.con.add(gamePanel.hayfieldNextButtonPanel);
-            gamePanel.hayfieldNextButtonPanel.setVisible(true);
-            gamePanel.hayfieldNextButtonPanel.add(gamePanel.hayfieldNextButton);
-            gamePanel.exploreHayFieldButtonPanel.setVisible(false);
+                    gamePanel.clearZoneViewPanel();
+                    gamePanel.explorePlayerHouseButtonPanel.setVisible(false);
+                    gamePanel.taskScreen("scene-three.txt");
+                    gamePanel.con.add(gamePanel.hayfieldNextButtonPanel);
+                    gamePanel.hayfieldNextButtonPanel.setVisible(true);
+                    gamePanel.hayfieldNextButtonPanel.add(gamePanel.hayfieldNextButton);
+                    gamePanel.exploreHayFieldButtonPanel.setVisible(false);
                     FileManager.sceneWriter(true, "sceneThreePassed");
                     JOptionPane.showMessageDialog(null,"You arrived and completed task", "", JOptionPane.PLAIN_MESSAGE);
                 }
@@ -216,15 +227,15 @@ public class Input {
         );
 
         gamePanel.findSaraButton.addActionListener(e->{
-            gamePanel.mainTextPanel.setVisible(false);
-            gamePanel.taskScreenNextButtonPanel.setVisible(false);
-            gamePanel.largeTextAreaPanel.setVisible(false);
-            gamePanel.locationImgPanel.setVisible(true);
-            gamePanel.mainLocationDescPanel.setVisible(true);
-            gamePanel.userInputPanel.setVisible(true);
-            gamePanel.directionButtonPanel.setVisible(true);
-            gamePanel.inventoryPanel.setVisible(true);
-            gamePanel.findSaraButtonPanel.setVisible(false);
+                    gamePanel.mainTextPanel.setVisible(false);
+                    gamePanel.taskScreenNextButtonPanel.setVisible(false);
+                    gamePanel.largeTextAreaPanel.setVisible(false);
+                    gamePanel.locationImgPanel.setVisible(true);
+                    gamePanel.mainLocationDescPanel.setVisible(true);
+                    gamePanel.userInputPanel.setVisible(true);
+                    gamePanel.directionButtonPanel.setVisible(true);
+                    gamePanel.inventoryPanel.setVisible(true);
+                    gamePanel.findSaraButtonPanel.setVisible(false);
                 }
 
         );
@@ -240,20 +251,20 @@ public class Input {
 
         );
         gamePanel.findSuppliesButton.addActionListener(e->{
-            gamePanel.mainTextPanel.setVisible(false);
-            gamePanel.taskScreenNextButtonPanel.setVisible(false);
-            gamePanel.largeTextAreaPanel.setVisible(false);
-            gamePanel.locationImgPanel.setVisible(true);
-            gamePanel.mainLocationDescPanel.setVisible(true);
-            gamePanel.userInputPanel.setVisible(true);
-            gamePanel.directionButtonPanel.setVisible(true);
-            gamePanel.inventoryPanel.setVisible(true);
-            gamePanel.findSuppliesButtonPanel.setVisible(false);
+                    gamePanel.mainTextPanel.setVisible(false);
+                    gamePanel.taskScreenNextButtonPanel.setVisible(false);
+                    gamePanel.largeTextAreaPanel.setVisible(false);
+                    gamePanel.locationImgPanel.setVisible(true);
+                    gamePanel.mainLocationDescPanel.setVisible(true);
+                    gamePanel.userInputPanel.setVisible(true);
+                    gamePanel.directionButtonPanel.setVisible(true);
+                    gamePanel.inventoryPanel.setVisible(true);
+                    gamePanel.findSuppliesButtonPanel.setVisible(false);
                 }
 
         );
         gamePanel.exploreRiverButton.addActionListener(e->{
-            GamePanel.taskPaddleRiverWithEnoughInventory();
+                    GamePanel.taskPaddleRiverWithEnoughInventory();
                 }
 
         );
