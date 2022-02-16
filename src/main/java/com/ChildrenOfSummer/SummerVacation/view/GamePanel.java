@@ -85,7 +85,7 @@ public class GamePanel extends JFrame {
     public JList inventoryList;
     public JScrollPane scroll;
     //from Input class
-    private static String ANSWER;
+    public static String ANSWER;
     private static ArrayList<String> empty = new ArrayList<>();
     private static Player player1 = Player.getInstance("default", "Player's House", "Suburb", empty);
     String locationDescJson = FileManager.getLocationDescription(player1.getPlayerLocation(), player1.getPlayerZone());
