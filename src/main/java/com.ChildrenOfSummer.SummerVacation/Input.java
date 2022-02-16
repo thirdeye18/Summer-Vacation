@@ -15,12 +15,10 @@ import java.util.Scanner;
 
 public class Input {
     private static Scanner scanner = new Scanner(System.in);   //takes direct input currently from the user and passes it to the program
-    private static String ANSWER;
+    private static String userInput;
     private static ArrayList<String> empty = new ArrayList<>();
     private static Player player1 = Player.getInstance("default", "Player's House", "Suburb", empty);
     private static GamePanel gamePanel = new GamePanel();
-    // private static final Clip clip = FileManager.getMusic(null);
-
 
     public static boolean startMenu() {
         /*
@@ -70,6 +68,7 @@ public class Input {
         }
         return newGame;
     }
+
     //set up listeners
     private static void setupListeners(){
 
@@ -86,10 +85,10 @@ public class Input {
 
         gamePanel.playerPageEnterGameButton.addActionListener(e-> {
             gamePanel.introScreen();
-            ANSWER = gamePanel.userName.getText();
-            player1.setPlayerName(ANSWER);
+            userInput = gamePanel.userName.getText();
+            player1.setPlayerName(userInput);
             FileManager.saveGame(player1.getPlayerName(), player1.getPlayerLocation(), player1.getPlayerZone(), player1.getPlayerInventory());
-            gamePanel.textField.setText("Hi "+ ANSWER+"\n"+FileManager.txtFileToString("introduction.txt"));
+            gamePanel.textField.setText("Hi "+ userInput +"\n"+FileManager.txtFileToString("introduction.txt"));
         });
 
         gamePanel.mapButton.addActionListener(e -> {
@@ -140,15 +139,14 @@ public class Input {
                 FileManager.savePlayerItems(playerList);
                 player1.setPlayerInventory(playerList);
                 gamePanel.inventoryListModel.removeElementAt(index);
+
             }
             else{
                 JOptionPane.showMessageDialog(null, "Nothing selected, please select one item to drop", "", JOptionPane.PLAIN_MESSAGE);
             }
         });
 
-        gamePanel.useButton.addActionListener(e -> {
-            JOptionPane.showMessageDialog(null,"Nothing happens...", "", JOptionPane.PLAIN_MESSAGE);
-        });
+        gamePanel.useButton.addActionListener(e -> JOptionPane.showMessageDialog(null,"Nothing happens...", "", JOptionPane.PLAIN_MESSAGE));
 
         gamePanel.loadGameButton.addActionListener(e -> {
             JSONObject saveFile = FileManager.loadGame();
@@ -163,70 +161,8 @@ public class Input {
         });
 
 
+        gamePanel.exploreAirportButton.addActionListener(e -> gamePanel.arriveSpecialScene("scene-one.txt"));
 
-        gamePanel.userInputEnterButton.addActionListener(e->{
-
-            ArrayList<String> locationList = FileManager.getLocationItems(player1.getPlayerLocation());
-            ArrayList<String> playerList = FileManager.getPlayerItems();
-            ANSWER = gamePanel.userInput.getText();
-            String[] answerWords = ANSWER.split(" ");
-            String verb = answerWords[0].toLowerCase();
-            String noun2 = answerWords[answerWords.length - 1].toLowerCase();
-            switch (verb) {
-                case "inventory":
-                    JOptionPane.showMessageDialog(null, "Your inventory has: " + playerList, "", JOptionPane.PLAIN_MESSAGE);
-                    break;
-                case "get":
-                    if (locationList.contains(noun2)) {
-                        locationList.remove(noun2);
-                        playerList.add(noun2);
-                        FileManager.updateLocationItems(player1.getPlayerLocation(), locationList);
-                        FileManager.savePlayerItems(playerList);
-                        player1.setPlayerInventory(playerList);
-                        gamePanel.inventoryListModel.addElement(noun2);
-
-                        JOptionPane.showMessageDialog(null, noun2 + " has been added to your inventory.", "", JOptionPane.PLAIN_MESSAGE);
-                    } else {
-                        System.out.println(locationList);
-                        JOptionPane.showMessageDialog(null, "I can't get that! There's no " + noun2 + " for me to pick up!", "", JOptionPane.PLAIN_MESSAGE);
-                    }
-                    break;
-
-                case "drop":
-                    if (playerList.contains(noun2)) {
-                        locationList.add(noun2);
-                        playerList.remove(noun2);
-                        FileManager.updateLocationItems(player1.getPlayerLocation(), locationList);
-                        FileManager.savePlayerItems(playerList);
-                        player1.setPlayerInventory(playerList);
-                        gamePanel.inventoryListModel.removeElement(noun2);
-                    } else {
-                        JOptionPane.showMessageDialog(null,"Sorry, I can't drop what I don't have.", "", JOptionPane.PLAIN_MESSAGE);
-                    }
-                    break;
-                case "use":
-                    JOptionPane.showMessageDialog(null,"Nothing happens...", "", JOptionPane.PLAIN_MESSAGE);
-                    break;
-                case "talk":
-                    JOptionPane.showMessageDialog(null, player1.talk(noun2), "", JOptionPane.PLAIN_MESSAGE);
-                    break;
-                case "go":
-                    goDirection(noun2);
-                    break;
-                case "quit":
-                    FileManager.saveGame(player1.getPlayerName(), player1.getPlayerLocation(), player1.getPlayerZone(), player1.getPlayerInventory());
-                    System.exit(0);
-                    break;
-                default:
-                    JOptionPane.showMessageDialog(null, "I didn't understand that command. for help click help button on the top or type help.", "", JOptionPane.PLAIN_MESSAGE);
-            }
-
-
-        });
-        gamePanel.exploreAirportButton.addActionListener(e ->
-        {
-            gamePanel.arriveSpecialScene("scene-one.txt");
-        });
 
         gamePanel.arriveSpecialSceneNextButton.addActionListener(e ->
         {
@@ -249,9 +185,6 @@ public class Input {
             gamePanel.inventoryPanel.setVisible(true);
 
                 }
-
-
-
         );
 
         gamePanel.explorePlayerHouseButton.addActionListener(e->{
@@ -264,7 +197,6 @@ public class Input {
                     FileManager.sceneWriter(true, "sceneTwoPassed");
                     JOptionPane.showMessageDialog(null,"You arrived and completed task", "", JOptionPane.PLAIN_MESSAGE);
                 }
-
         );
 
         gamePanel.exploreHayFieldButton.addActionListener(e->{
@@ -278,11 +210,8 @@ public class Input {
                     FileManager.sceneWriter(true, "sceneThreePassed");
                     JOptionPane.showMessageDialog(null,"You arrived and completed task", "", JOptionPane.PLAIN_MESSAGE);
                 }
-
         );
-        gamePanel.hayfieldNextButton.addActionListener(e->{
-            gamePanel.taskThrowRockWithEnoughInventory();
-                }
+        gamePanel.hayfieldNextButton.addActionListener(e-> gamePanel.taskThrowRockWithEnoughInventory()
 
         );
 
@@ -351,10 +280,76 @@ public class Input {
                     //display available items for current location
                     if (!FileManager.getLocationItems(tempLocation).isEmpty()) {
                         System.out.println(FileManager.getLocationItems(tempLocation));
+                        System.out.println(gamePanel.inventoryList);
                         String seeItems = "You see the following items lying around: ";
                         String result = String.join(",", FileManager.getLocationItems(tempLocation));
                         String itemText = seeItems + "\n" + result;
                         gamePanel.seeItem.setText(itemText + "\n");
+                        gamePanel.userInputEnterButton.addActionListener(e->{
+                            ArrayList<String> locationList = FileManager.getLocationItems(player1.getPlayerLocation());
+                            ArrayList<String> playerList = FileManager.getPlayerItems();
+                            ANSWER = gamePanel.userInput.getText();
+                            String[] answerWords = ANSWER.split(" ");
+                            String verb = answerWords[0].toLowerCase();
+                            String noun2 = answerWords[answerWords.length - 1].toLowerCase();
+                            gamePanel.userInput.setText("");
+                            switch (verb) {
+                                case "inventory":
+                                    JOptionPane.showMessageDialog(gamePanel, "Your inventory has: " + playerList, "", JOptionPane.PLAIN_MESSAGE);
+                                    break;
+                                case "get":
+                                    if (locationList.contains(noun2)) {
+                                        locationList.remove(noun2);
+                                        playerList.add(noun2);
+                                        FileManager.updateLocationItems(player1.getPlayerLocation(), locationList);
+                                        FileManager.savePlayerItems(playerList);
+                                        player1.setPlayerInventory(playerList);
+                                        gamePanel.inventoryListModel.addElement(noun2);
+                                        JOptionPane.showMessageDialog(gamePanel, noun2 + " has been added to your inventory.", "", JOptionPane.PLAIN_MESSAGE);
+                                        String result1 = String.join(",", FileManager.getLocationItems(tempLocation));
+                                        String itemText1 = seeItems + "\n" + result1;
+                                        gamePanel.seeItem.setText(itemText1 + "\n");
+                                    } else {
+                                        System.out.println(locationList);
+                                        JOptionPane.showMessageDialog(gamePanel, "I can't get that! There's no " + noun2 + " for me to pick up!", "", JOptionPane.PLAIN_MESSAGE);
+
+                                    }
+
+                                    break;
+
+                                case "drop":
+                                    if (playerList.contains(noun2)) {
+                                        locationList.add(noun2);
+                                        playerList.remove(noun2);
+                                        FileManager.updateLocationItems(player1.getPlayerLocation(), locationList);
+                                        FileManager.savePlayerItems(playerList);
+                                        player1.setPlayerInventory(playerList);
+                                        gamePanel.inventoryListModel.removeElement(noun2);
+                                    } else {
+                                        JOptionPane.showMessageDialog(gamePanel,"Sorry, I can't drop what I don't have.", "", JOptionPane.PLAIN_MESSAGE);
+                                    }
+                                    break;
+                                case "use":
+                                    JOptionPane.showMessageDialog(gamePanel,"Nothing happens...", "", JOptionPane.PLAIN_MESSAGE);
+                                    break;
+                                case "talk":
+                                    JOptionPane.showMessageDialog(gamePanel, player1.talk(noun2), "", JOptionPane.PLAIN_MESSAGE);
+                                    break;
+                                case "go":
+                                    goDirection(noun2);
+                                    break;
+                                case "quit":
+                                    FileManager.saveGame(player1.getPlayerName(), player1.getPlayerLocation(), player1.getPlayerZone(), player1.getPlayerInventory());
+                                    System.exit(0);
+                                    break;
+                                case "":
+                                    break;
+                                default:
+                                    JOptionPane.showMessageDialog(gamePanel, "I didn't understand that command. for help click help button on the top or type help.", "", JOptionPane.PLAIN_MESSAGE);
+                            }
+
+
+                        });
 
                     } else if (FileManager.getLocationItems(tempLocation).isEmpty()) {
                         gamePanel.seeItem.setText("");
@@ -488,6 +483,7 @@ public class Input {
         FileManager.saveGame(player1.getPlayerName(), player1.getPlayerLocation(), player1.getPlayerZone(), player1.getPlayerInventory());
 
     }
+
     static void introduction() {
         FileManager.getAssetFile("introduction.txt");
         System.out.println("Press Enter to continue...");
@@ -497,29 +493,26 @@ public class Input {
         FileManager.getAssetFile("game-start.txt");
     }
 
-
     static void playerCreator(){
         /*
          *Takes in your name and saves the save file with default values.
          */
         System.out.print("Enter your name:");
-        ANSWER = scanner.nextLine().strip();
-        player1.setPlayerName(ANSWER);
+        userInput = scanner.nextLine().strip();
+        player1.setPlayerName(userInput);
         FileManager.saveGame(player1.getPlayerName(), player1.getPlayerLocation(), player1.getPlayerZone(), player1.getPlayerInventory());
-
     }
 
-    public static void inputCommandsLogic() {
-        /*
-         * THIS big boy is the main interaction point for the user with the game. It takes user commands in as verb x noun.
-         * For example, you can type "get the dog" and the method will store [get, the, dog]
-         * We then switch over the word in position 0 for matches to our commands list ("get") and then execute the "noun"
-         * which is really just the word stored in position .length-1. With input validation provided for the verb by the switch statement
-         * and for the noun by some robust if->else or for loops, we can prevent the player from breaking the program with an
-         * unknown command. -MS
-         */
+    /*
+     * THIS big boy is the main interaction point for the user with the game. It takes user commands in as verb x noun.
+     * For example, you can type "get the dog" text parser will return [get, dog]
+     * TODO: This might be able to go away, will comment out for now
+     */
+
+    /*public static void inputCommandsLogic() {
         ArrayList<String> locationList = FileManager.getLocationItems(player1.getPlayerLocation());
         ArrayList<String> playerList = FileManager.getPlayerItems();
+
         if (!locationList.isEmpty()) {
             System.out.println("You see the following items lying around: ");
             for (String item : locationList) {
@@ -527,12 +520,13 @@ public class Input {
             }
             System.out.println("|");
         }
-        System.out.print("\nWhat would you like to do?");
 
-        ANSWER = scanner.nextLine().strip().toLowerCase();
-        String[] answerWords = ANSWER.split(" ");
-        String verb = answerWords[0];
-        String noun2 = answerWords[answerWords.length - 1];
+        // Get user input and parse
+        System.out.print("\nWhat would you like to do?");
+        userInput = scanner.nextLine();
+        //String[] answerWords = ANSWER.split(" ");
+        String verb = TextParser.getVerb(userInput);
+        ArrayList<String> nouns = TextParser.getNouns(userInput);
 
         switch (verb) {
             case "map":
@@ -546,32 +540,32 @@ public class Input {
             case "go":
                 boolean didMove = false;
                 for (Directions dir : Directions.values()) {
-                    if (dir.name().equals(noun2.toUpperCase())) {
-                        player1.move(noun2);
+                    if (dir.name().equals(nouns.get(0).toUpperCase())) {
+                        player1.move(nouns.get(0));
                         didMove = true;
                     }
                 }
                 if (!didMove) {
-                    System.out.println("you were unable to move " + noun2 + ".");
+                    System.out.println("you were unable to move " + nouns.get(0) + ".");
                 }
                 FileManager.saveGame(player1.getPlayerName(), player1.getPlayerLocation(), player1.getPlayerZone(), player1.getPlayerInventory());
                 break;
             case "get":
-                if (locationList.contains(noun2)) {
-                    locationList.remove(noun2);
-                    playerList.add(noun2);
+                if (locationList.contains(nouns.get(0))) {
+                    locationList.remove(nouns.get(0));
+                    playerList.add(nouns.get(0));
                     FileManager.updateLocationItems(player1.getPlayerLocation(), locationList);
                     FileManager.savePlayerItems(playerList);
                     player1.setPlayerInventory(playerList);
                     System.out.println("Your inventory has: " + playerList);
                 } else {
-                    System.out.println("I can't get that! There's no " + noun2 + " for me to pick up!");
+                    System.out.println("I can't get that! There's no " + nouns.get(0) + " for me to pick up!");
                 }
                 break;
             case "drop":
-                if (playerList.contains(noun2)) {
-                    locationList.add(noun2);
-                    playerList.remove(noun2);
+                if (playerList.contains(nouns.get(0))) {
+                    locationList.add(nouns.get(0));
+                    playerList.remove(nouns.get(0));
                     FileManager.updateLocationItems(player1.getPlayerLocation(), locationList);
                     FileManager.savePlayerItems(playerList);
                     player1.setPlayerInventory(playerList);
@@ -580,11 +574,11 @@ public class Input {
                 }
                 break;
             case "use":
-                //do final stuff
+                //TODO: Currently use does nothing
                 System.out.println("Nothing happens...");
                 break;
             case "talk":
-                System.out.println(player1.talk(noun2));
+                System.out.println(player1.talk(nouns.get(0)));
                 break;
             case "help":
                 System.out.println("Your current location is " + player1.getPlayerLocation());
@@ -592,7 +586,7 @@ public class Input {
                 inputCommandsLogic();
                 break;
             case "music":
-                switch (noun2) {
+                switch (nouns.get(0)) {
                     case "on":
                         int loop = 3;
                         SoundFX.MUSIC1.loopPlay(loop);
@@ -628,7 +622,7 @@ public class Input {
 
         }
         FileManager.saveGame(player1.getPlayerName(), player1.getPlayerLocation(), player1.getPlayerZone(), player1.getPlayerInventory());
-    }
+    }*/
 
     public static boolean sceneOneAction() {
         boolean sceneOnePass = FileManager.sceneReader("sceneOnePassed");
@@ -730,10 +724,10 @@ public class Input {
             while (raftHP > 0 && !rapidsComplete) {
                 System.out.println("Rapids rush up to meet you in the middle of the river!\n Which way will you paddle to avoid them?");
                 System.out.print("type 'paddle left' or 'paddle right': ");
-                ANSWER = scanner.nextLine().strip().toLowerCase();
+                userInput = scanner.nextLine().strip().toLowerCase();
                 boolean complete = false;
                 while (!complete) {
-                    switch (ANSWER) {
+                    switch (userInput) {
                         case "paddle left":
                             System.out.println("You paddle left. A tree branch in the river snags your raft! It takes some damage.");
                             raftHP--;
@@ -745,15 +739,15 @@ public class Input {
                             break;
                         default:
                             System.out.println("You can't do that right now! Type 'paddle right' or 'paddle left'");
-                            ANSWER = scanner.nextLine().strip().toLowerCase();
+                            userInput = scanner.nextLine().strip().toLowerCase();
                     }
                 }
                 System.out.println("The river curves left\n You need to choose to hug the inner bank of center the raft in the river.");
                 System.out.print("type 'hug the inner bank' or 'center the raft': ");
-                ANSWER = scanner.nextLine().strip().toLowerCase();
+                userInput = scanner.nextLine().strip().toLowerCase();
                 complete = false;
                 while (!complete) {
-                    switch (ANSWER) {
+                    switch (userInput) {
                         case "hug the inner bank":
                             System.out.println("A rock in the shallow inner bank scrapes your raft! ");
                             raftHP-=2;
@@ -765,15 +759,15 @@ public class Input {
                             break;
                         default:
                             System.out.println("You can't do that right now! Type 'hug the inner bank' or 'center the raft'");
-                            ANSWER = scanner.nextLine().strip().toLowerCase();
+                            userInput = scanner.nextLine().strip().toLowerCase();
                     }
                 }
                 System.out.println("Ahead, thorny branches almost cover the water.\n They will snag you unless you find a way to avoid them!");
                 System.out.print("type 'duck under branches' or 'use paddle on branches': ");
-                ANSWER = scanner.nextLine().strip().toLowerCase();
+                userInput = scanner.nextLine().strip().toLowerCase();
                 complete = false;
                 while (!complete) {
-                    switch (ANSWER) {
+                    switch (userInput) {
                         case "duck under branches":
                             System.out.println("The branches puncture holes in your raft!");
                             raftHP-=3;
@@ -786,7 +780,7 @@ public class Input {
                             break;
                         default:
                             System.out.println("You can't do that right now! Type 'duck under branches' or 'use paddle on branches'");
-                            ANSWER = scanner.nextLine().strip().toLowerCase();
+                            userInput = scanner.nextLine().strip().toLowerCase();
                     }
                 }
             }
