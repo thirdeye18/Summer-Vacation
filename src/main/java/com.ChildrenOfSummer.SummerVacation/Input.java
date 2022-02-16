@@ -288,43 +288,42 @@ public class Input {
                         gamePanel.userInputEnterButton.addActionListener(e->{
                             ArrayList<String> locationList = FileManager.getLocationItems(player1.getPlayerLocation());
                             ArrayList<String> playerList = FileManager.getPlayerItems();
-                            ANSWER = gamePanel.userInput.getText();
-                            String[] answerWords = ANSWER.split(" ");
-                            String verb = answerWords[0].toLowerCase();
-                            String noun2 = answerWords[answerWords.length - 1].toLowerCase();
+                            userInput = gamePanel.userInput.getText();
+                            String verb = TextParser.getVerb(userInput);
+                            ArrayList<String> nouns = TextParser.getNouns(userInput);
                             gamePanel.userInput.setText("");
                             switch (verb) {
                                 case "inventory":
                                     JOptionPane.showMessageDialog(gamePanel, "Your inventory has: " + playerList, "", JOptionPane.PLAIN_MESSAGE);
                                     break;
                                 case "get":
-                                    if (locationList.contains(noun2)) {
-                                        locationList.remove(noun2);
-                                        playerList.add(noun2);
+                                    if (locationList.contains(nouns.get(0))) {
+                                        locationList.remove(nouns.get(0));
+                                        playerList.add(nouns.get(0));
                                         FileManager.updateLocationItems(player1.getPlayerLocation(), locationList);
                                         FileManager.savePlayerItems(playerList);
                                         player1.setPlayerInventory(playerList);
-                                        gamePanel.inventoryListModel.addElement(noun2);
-                                        JOptionPane.showMessageDialog(gamePanel, noun2 + " has been added to your inventory.", "", JOptionPane.PLAIN_MESSAGE);
+                                        gamePanel.inventoryListModel.addElement(nouns.get(0));
+                                        JOptionPane.showMessageDialog(gamePanel, nouns.get(0) + " has been added to your inventory.", "", JOptionPane.PLAIN_MESSAGE);
                                         String result1 = String.join(",", FileManager.getLocationItems(tempLocation));
                                         String itemText1 = seeItems + "\n" + result1;
                                         gamePanel.seeItem.setText(itemText1 + "\n");
                                     } else {
                                         System.out.println(locationList);
-                                        JOptionPane.showMessageDialog(gamePanel, "I can't get that! There's no " + noun2 + " for me to pick up!", "", JOptionPane.PLAIN_MESSAGE);
+                                        JOptionPane.showMessageDialog(gamePanel, "I can't get that! There's no " + nouns.get(0) + " for me to pick up!", "", JOptionPane.PLAIN_MESSAGE);
 
                                     }
 
                                     break;
 
                                 case "drop":
-                                    if (playerList.contains(noun2)) {
-                                        locationList.add(noun2);
-                                        playerList.remove(noun2);
+                                    if (playerList.contains(nouns.get(0))) {
+                                        locationList.add(nouns.get(0));
+                                        playerList.remove(nouns.get(0));
                                         FileManager.updateLocationItems(player1.getPlayerLocation(), locationList);
                                         FileManager.savePlayerItems(playerList);
                                         player1.setPlayerInventory(playerList);
-                                        gamePanel.inventoryListModel.removeElement(noun2);
+                                        gamePanel.inventoryListModel.removeElement(nouns.get(0));
                                     } else {
                                         JOptionPane.showMessageDialog(gamePanel,"Sorry, I can't drop what I don't have.", "", JOptionPane.PLAIN_MESSAGE);
                                     }
@@ -333,10 +332,10 @@ public class Input {
                                     JOptionPane.showMessageDialog(gamePanel,"Nothing happens...", "", JOptionPane.PLAIN_MESSAGE);
                                     break;
                                 case "talk":
-                                    JOptionPane.showMessageDialog(gamePanel, player1.talk(noun2), "", JOptionPane.PLAIN_MESSAGE);
+                                    JOptionPane.showMessageDialog(gamePanel, player1.talk(nouns.get(0)), "", JOptionPane.PLAIN_MESSAGE);
                                     break;
                                 case "go":
-                                    goDirection(noun2);
+                                    goDirection(nouns.get(0));
                                     break;
                                 case "quit":
                                     FileManager.saveGame(player1.getPlayerName(), player1.getPlayerLocation(), player1.getPlayerZone(), player1.getPlayerInventory());
