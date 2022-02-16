@@ -184,9 +184,6 @@ public class Input {
             gamePanel.inventoryPanel.setVisible(true);
 
                 }
-
-
-
         );
 
         gamePanel.explorePlayerHouseButton.addActionListener(e->{
@@ -199,7 +196,6 @@ public class Input {
                     FileManager.sceneWriter(true, "sceneTwoPassed");
                     JOptionPane.showMessageDialog(null,"You arrived and completed task", "", JOptionPane.PLAIN_MESSAGE);
                 }
-
         );
 
         gamePanel.exploreHayFieldButton.addActionListener(e->{
@@ -213,7 +209,6 @@ public class Input {
                     FileManager.sceneWriter(true, "sceneThreePassed");
                     JOptionPane.showMessageDialog(null,"You arrived and completed task", "", JOptionPane.PLAIN_MESSAGE);
                 }
-
         );
         gamePanel.hayfieldNextButton.addActionListener(e-> gamePanel.taskThrowRockWithEnoughInventory()
 
@@ -224,6 +219,7 @@ public class Input {
         boolean didMove = false;
         Map<String, ArrayList<String>> locations = JsonHandler.jsonToMapStringList("LocationsSimple.json", "json");
         String parsedDirection = direction.substring(0, 1).toUpperCase() + direction.substring(1);
+
         for (Directions dir : Directions.values()) {
             if (dir.name().equals(direction.toUpperCase())) {
                 String tempLocation = FileManager.getNewLocation(player1.getPlayerZone(), player1.getPlayerLocation(), direction);
@@ -254,7 +250,7 @@ public class Input {
                             gamePanel.userInput.setText("");
                             switch (verb) {
                                 case "inventory":
-                                    JOptionPane.showMessageDialog(null, "Your inventory has: " + playerList, "", JOptionPane.PLAIN_MESSAGE);
+                                    JOptionPane.showMessageDialog(gamePanel, "Your inventory has: " + playerList, "", JOptionPane.PLAIN_MESSAGE);
                                     break;
                                 case "get":
                                     if (locationList.contains(noun2)) {
@@ -264,13 +260,13 @@ public class Input {
                                         FileManager.savePlayerItems(playerList);
                                         player1.setPlayerInventory(playerList);
                                         gamePanel.inventoryListModel.addElement(noun2);
-                                        JOptionPane.showMessageDialog(null, noun2 + " has been added to your inventory.", "", JOptionPane.PLAIN_MESSAGE);
+                                        JOptionPane.showMessageDialog(gamePanel, noun2 + " has been added to your inventory.", "", JOptionPane.PLAIN_MESSAGE);
                                         String result1 = String.join(",", FileManager.getLocationItems(tempLocation));
                                         String itemText1 = seeItems + "\n" + result1;
                                         gamePanel.seeItem.setText(itemText1 + "\n");
                                     } else {
                                         System.out.println(locationList);
-                                        JOptionPane.showMessageDialog(null, "I can't get that! There's no " + noun2 + " for me to pick up!", "", JOptionPane.PLAIN_MESSAGE);
+                                        JOptionPane.showMessageDialog(gamePanel, "I can't get that! There's no " + noun2 + " for me to pick up!", "", JOptionPane.PLAIN_MESSAGE);
 
                                     }
 
@@ -285,14 +281,14 @@ public class Input {
                                         player1.setPlayerInventory(playerList);
                                         gamePanel.inventoryListModel.removeElement(noun2);
                                     } else {
-                                        JOptionPane.showMessageDialog(null,"Sorry, I can't drop what I don't have.", "", JOptionPane.PLAIN_MESSAGE);
+                                        JOptionPane.showMessageDialog(gamePanel,"Sorry, I can't drop what I don't have.", "", JOptionPane.PLAIN_MESSAGE);
                                     }
                                     break;
                                 case "use":
-                                    JOptionPane.showMessageDialog(null,"Nothing happens...", "", JOptionPane.PLAIN_MESSAGE);
+                                    JOptionPane.showMessageDialog(gamePanel,"Nothing happens...", "", JOptionPane.PLAIN_MESSAGE);
                                     break;
                                 case "talk":
-                                    JOptionPane.showMessageDialog(null, player1.talk(noun2), "", JOptionPane.PLAIN_MESSAGE);
+                                    JOptionPane.showMessageDialog(gamePanel, player1.talk(noun2), "", JOptionPane.PLAIN_MESSAGE);
                                     break;
                                 case "go":
                                     goDirection(noun2);
@@ -301,8 +297,10 @@ public class Input {
                                     FileManager.saveGame(player1.getPlayerName(), player1.getPlayerLocation(), player1.getPlayerZone(), player1.getPlayerInventory());
                                     System.exit(0);
                                     break;
+                                case "":
+                                    break;
                                 default:
-                                    JOptionPane.showMessageDialog(null, "I didn't understand that command. for help click help button on the top or type help.", "", JOptionPane.PLAIN_MESSAGE);
+                                    JOptionPane.showMessageDialog(gamePanel, "I didn't understand that command. for help click help button on the top or type help.", "", JOptionPane.PLAIN_MESSAGE);
                             }
 
 
