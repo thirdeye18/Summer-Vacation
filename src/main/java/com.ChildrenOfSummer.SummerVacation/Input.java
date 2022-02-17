@@ -73,6 +73,7 @@ public class Input {
 
 
         gamePanel.newGameButton.addActionListener(e -> {
+            gamePanel.titleBackground.setVisible(false);
             gamePanel.playerNameScreen();
             player1.setPlayerInventory(empty);
             player1.setPlayerName("default");
@@ -83,6 +84,7 @@ public class Input {
         gamePanel.quitGameButton.addActionListener(e->System.exit(0));
 
         gamePanel.playerPageEnterGameButton.addActionListener(e-> {
+
             gamePanel.introScreen();
             userInput = gamePanel.userName.getText();
             player1.setPlayerName(userInput);
@@ -162,18 +164,6 @@ public class Input {
         });
 
         gamePanel.useButton.addActionListener(e -> JOptionPane.showMessageDialog(null,"Nothing happens...", "", JOptionPane.PLAIN_MESSAGE));
-
-        gamePanel.loadGameButton.addActionListener(e -> {
-            JSONObject saveFile = FileManager.loadGame();
-            String name = (String) saveFile.get("name");
-            String location = (String) saveFile.get("location");
-            String zone = (String) saveFile.get("zone");
-            ArrayList<String> inventory = (ArrayList<String>) saveFile.get("inventory");
-            player1.setPlayerInventory(inventory);
-            player1.setPlayerName(name);
-            player1.setPlayerLocation(location);
-            player1.setPlayerZone(zone);
-        });
 
 
         gamePanel.exploreAirportButton.addActionListener(e ->
