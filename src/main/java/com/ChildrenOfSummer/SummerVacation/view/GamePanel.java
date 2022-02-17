@@ -37,10 +37,10 @@ public class GamePanel extends JFrame {
     public JButton userInputEnterButton;
     public JButton mapButton;
     public JButton helpButton;
-    public JButton northButton;
-    public JButton southButton;
-    public JButton eastButton;
-    public JButton westButton;
+    public JButton northButton = new JButton("", new ImageIcon("Assets/img/N.png"));
+    public JButton southButton = new JButton("", new ImageIcon("Assets/img/S.png"));
+    public JButton eastButton = new JButton("", new ImageIcon("Assets/img/E.png"));
+    public JButton westButton = new JButton("", new ImageIcon("Assets/img/W.png"));
     public JButton dropButton;
     public JButton useButton;
     public JButton exploreAirportButton;
@@ -146,7 +146,7 @@ public class GamePanel extends JFrame {
         mainLocationDescPanel = createJPanel(20,330,540,140,Color.red,true);
         userInputPanel = createJPanel(20,480,300,60,Color.green,true);
         headerContentPanel = createJPanel(0,0,800,30, Color.yellow,true);
-        directionButtonPanel = createJPanel(630,300,100,120,Color.yellow,true);
+        directionButtonPanel = createJPanel(600,290,144,144,Color.yellow,true);
         inventoryPanel = createJPanel(620,50,120,250,Color.yellow,true);
         largeTextAreaPanel = createJPanel(20,60,740,420,Color.white,true);
         exploreButtonPanel = createJPanel(600,450,180,40,Color.white,true);
@@ -170,10 +170,6 @@ public class GamePanel extends JFrame {
         userInputEnterButton = createJButton("ENTER",150,50,false,Color.white,Color.black);
         mapButton = createJButton("MAP",100,30,false,Color.white,Color.black);
         helpButton = createJButton("HELP",100,30,false,Color.white,Color.black);
-        northButton = createJButton("Go North",100,20,false,Color.white,Color.black);
-        southButton = createJButton("Go South",100,20,false,Color.white,Color.black);
-        westButton = createJButton("Go West",100,20,false,Color.white,Color.black);
-        eastButton = createJButton("Go East",100,20,false,Color.white,Color.black);
         useButton = createJButton("use item",100,20,false,Color.white,Color.black);
         dropButton = createJButton("drop item",100,20,false,Color.white,Color.black);
         exploreAirportButton = createJButton("GO TO AIRPORT",180,40,false,Color.red,Color.white);
@@ -363,11 +359,39 @@ public class GamePanel extends JFrame {
 
         // Direction buttons -North/South/West/East
         con.add(directionButtonPanel);
+        directionButtonPanel.setLayout(new BorderLayout());
 
-        directionButtonPanel.add(northButton);
-        directionButtonPanel.add(southButton);
-        directionButtonPanel.add(westButton);
-        directionButtonPanel.add(eastButton);
+
+        northButton.setPreferredSize(new Dimension(36,54));
+        northButton.setBorderPainted(false);
+        northButton.setContentAreaFilled(false);
+        northButton.setFocusPainted(false);
+        northButton.setOpaque(false);
+
+
+
+        southButton.setPreferredSize(new Dimension(36,54));
+        southButton.setBorderPainted(false);
+        southButton.setContentAreaFilled(false);
+        southButton.setFocusPainted(false);
+        southButton.setOpaque(false);
+
+        eastButton.setPreferredSize(new Dimension(54,36));
+        eastButton.setBorderPainted(false);
+        eastButton.setContentAreaFilled(false);
+        eastButton.setFocusPainted(false);
+        eastButton.setOpaque(false);
+
+        westButton.setPreferredSize(new Dimension(54,36));
+        westButton.setBorderPainted(false);
+        westButton.setContentAreaFilled(false);
+        westButton.setFocusPainted(false);
+        westButton.setOpaque(false);
+
+        directionButtonPanel.add(northButton,BorderLayout.NORTH);
+        directionButtonPanel.add(southButton,BorderLayout.SOUTH);
+        directionButtonPanel.add(eastButton, BorderLayout.EAST);
+        directionButtonPanel.add(westButton,BorderLayout.WEST);
 
 
 
