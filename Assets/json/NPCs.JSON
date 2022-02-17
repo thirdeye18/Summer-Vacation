@@ -279,21 +279,18 @@
       "locations": {
         "Monday": "Sara's House",
         "Tuesday": "Sara's House",
-        "Wednesday": "Bill's Produce",
+        "Wednesday": "Sara's House",
         "Thursday": "Sara's House",
-        "Friday": "Bill's Produce",
+        "Friday": "Sara's House",
         "Saturday": "Sara's House",
         "Sunday": "Sara's House"
       }
     },
     {
       "dialogue": {
-        "1": "Oh Hi dear! I don't know where Sara is! Sorry!",
-        "2": "Could you be a hero to me and help with these groceries?",
-        "3": "I never thought twins would be this much work.",
-        "4": "Shopping days are my only chance to get away from the twins...",
-        "5": "What should I buy this week?",
-        "6": "Maybe Godfrey will take us out to dinner this evening!"
+        "1": "Are you looking for Sara? She said that she was going to warehouse to look for something. Can you please tell her to return home on time?",
+        "2": "Are you looking for Sara? She said that she was going to warehouse to look for something. Can you please tell her to return home on time?"
+
       }
     }
   ],
@@ -364,12 +361,8 @@
     },
     {
       "dialogue": {
-        "1": "Hey dude!",
-        "2": "My mom is always embarrassing me",
-        "3": "Let's go explore!",
-        "4": "Farmer Augustus is creepy huh?",
-        "5": "Do you really think Farmer Augustus is a Russian? Aren't they the bad guys?",
-        "6": "I'm not scared or a-a-anything..."
+        "1": "Farmer Augustus is creepy huh? Do you really think Farmer Augustus is a Russian? Aren't they the bad guys?",
+        "2": "Let's go to your house. I need to talk to you about something important"
       }
     },
     {
@@ -435,13 +428,13 @@
     },
     {
       "locations": {
-        "Monday": "Warehouse",
-        "Tuesday": "Player's House",
-        "Wednesday": "Sara's House",
-        "Thursday": "New House3",
-        "Friday": "Sara's House",
-        "Saturday": "Old House2",
-        "Sunday": "Old Airport"
+        "Monday": "Old House South",
+        "Tuesday": "Old House South",
+        "Wednesday": "Old House South",
+        "Thursday": "Old House South",
+        "Friday": "Old House South",
+        "Saturday": "Old House South",
+        "Sunday": "Old House South"
       }
     },
     {

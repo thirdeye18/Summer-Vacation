@@ -1,17 +1,15 @@
 package com.ChildrenOfSummer.SummerVacation;
 
-import com.ChildrenOfSummer.SummerVacation.Util.Directions;
-import com.ChildrenOfSummer.SummerVacation.Util.JsonHandler;
-import com.ChildrenOfSummer.SummerVacation.Util.SoundFX;
-import com.ChildrenOfSummer.SummerVacation.Util.TextParser;
+import com.ChildrenOfSummer.SummerVacation.Util.*;
 import com.ChildrenOfSummer.SummerVacation.view.GamePanel;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import javax.swing.*;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Scanner;
+import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.*;
 
 public class Input {
     private static Scanner scanner = new Scanner(System.in);   //takes direct input currently from the user and passes it to the program
@@ -19,6 +17,7 @@ public class Input {
     private static ArrayList<String> empty = new ArrayList<>();
     private static Player player1 = Player.getInstance("default", "Player's House", "Suburb", empty);
     private static GamePanel gamePanel = new GamePanel();
+    private static String itemText;
 
     public static boolean startMenu() {
         /*
@@ -72,6 +71,7 @@ public class Input {
     //set up listeners
     private static void setupListeners(){
 
+
         gamePanel.newGameButton.addActionListener(e -> {
             gamePanel.playerNameScreen();
             player1.setPlayerInventory(empty);
@@ -79,7 +79,6 @@ public class Input {
             player1.setPlayerLocation("Player's House");
             player1.setPlayerZone("Suburb");
         });
-
 
         gamePanel.quitGameButton.addActionListener(e->System.exit(0));
 
@@ -100,9 +99,16 @@ public class Input {
             frame.add(label);
             frame.pack();
             frame.setVisible(true);
+            gamePanel.mapButton.setEnabled(false);
+            frame.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosing(WindowEvent e) {
+                    gamePanel.mapButton.setEnabled(true);
+                }
+            });
         });
         gamePanel.helpButton.addActionListener(e -> {
-            JFrame frame = new JFrame("Map");
+            JFrame frame = new JFrame("Help");
             frame.setSize(400,400);
             frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
             ImageIcon helpIcon = new ImageIcon("Assets/img/help.PNG");
@@ -110,7 +116,15 @@ public class Input {
             frame.add(label1);
             frame.pack();
             frame.setVisible(true);
+            gamePanel.helpButton.setEnabled(false);
+            frame.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosing(WindowEvent e) {
+                    gamePanel.helpButton.setEnabled(true);
+                }
+            });
         });
+
         gamePanel.musicButton.addActionListener(e -> {
             if (gamePanel.musicButton.isSelected()){
                 gamePanel.musicButton.setText("Music On");
@@ -126,6 +140,7 @@ public class Input {
         gamePanel.southButton.addActionListener(e -> goDirection("south"));
         gamePanel.eastButton.addActionListener(e -> goDirection("east"));
         gamePanel.westButton.addActionListener(e -> goDirection("west"));
+
 
         gamePanel.dropButton.addActionListener(e -> {
             ArrayList<String> locationList = FileManager.getLocationItems(player1.getPlayerLocation());
@@ -285,6 +300,7 @@ public class Input {
                         String result = String.join(",", FileManager.getLocationItems(tempLocation));
                         String itemText = seeItems + "\n" + result;
                         gamePanel.seeItem.setText(itemText + "\n");
+
                         gamePanel.userInputEnterButton.addActionListener(e->{
                             ArrayList<String> locationList = FileManager.getLocationItems(player1.getPlayerLocation());
                             ArrayList<String> playerList = FileManager.getPlayerItems();
@@ -309,7 +325,6 @@ public class Input {
                                         String itemText1 = seeItems + "\n" + result1;
                                         gamePanel.seeItem.setText(itemText1 + "\n");
                                     } else {
-                                        System.out.println(locationList);
                                         JOptionPane.showMessageDialog(gamePanel, "I can't get that! There's no " + nouns.get(0) + " for me to pick up!", "", JOptionPane.PLAIN_MESSAGE);
 
                                     }
@@ -333,6 +348,8 @@ public class Input {
                                     break;
                                 case "talk":
                                     JOptionPane.showMessageDialog(gamePanel, player1.talk(nouns.get(0)), "", JOptionPane.PLAIN_MESSAGE);
+                                    String a = TextToSpeech.talkNpc(player1.talk(nouns.get(0)));
+                                    System.out.println(a);
                                     break;
                                 case "go":
                                     goDirection(nouns.get(0));
@@ -369,6 +386,7 @@ public class Input {
                         switch (npcNames.size()) {
                             case 3:
                                 gamePanel.seePeople.setText("You see " + nameThree + ", " + nameTwo + ", and " + name + ".");
+
                                 break;
                             case 2:
                                 gamePanel.seePeople.setText("You see " + name + " and " + nameTwo + ".");
@@ -440,6 +458,7 @@ public class Input {
                     String result = String.join(",", FileManager.getLocationItems(tempLocation));
                     String itemText = seeItems + "\n" + result;
                     gamePanel.seeItem.setText(itemText+"\n");
+
                 }
                 else if(FileManager.getLocationItems(tempLocation).isEmpty()){
                     gamePanel.seeItem.setText("");
