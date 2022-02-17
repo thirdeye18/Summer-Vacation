@@ -2,22 +2,16 @@ package com.ChildrenOfSummer.SummerVacation.view;
 
 import com.ChildrenOfSummer.SummerVacation.FileManager;
 import com.ChildrenOfSummer.SummerVacation.Player;
-import com.ChildrenOfSummer.SummerVacation.Util.Directions;
-import com.ChildrenOfSummer.SummerVacation.Util.JsonHandler;
-import com.ChildrenOfSummer.SummerVacation.Util.SoundFX;
 import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Locale;
-import java.util.Map;
 
 
 public class GamePanel extends JFrame {
 
-    public JTextField userName = new JTextField("", 20);
+    public JTextField userName = new JTextField("", 30);
     public JTextField userInput = new JTextField(10);
     private JTextArea textArea = new JTextArea(20, 20);
     private JTextArea askUserName = new JTextArea();
@@ -37,10 +31,10 @@ public class GamePanel extends JFrame {
     public JButton userInputEnterButton;
     public JButton mapButton;
     public JButton helpButton;
-    public JButton northButton;
-    public JButton southButton;
-    public JButton eastButton;
-    public JButton westButton;
+    public JButton northButton = new JButton("", new ImageIcon("Assets/img/N.png"));
+    public JButton southButton = new JButton("", new ImageIcon("Assets/img/S.png"));
+    public JButton eastButton = new JButton("", new ImageIcon("Assets/img/E.png"));
+    public JButton westButton = new JButton("", new ImageIcon("Assets/img/W.png"));
     public JButton dropButton;
     public JButton useButton;
     public JButton exploreAirportButton;
@@ -84,6 +78,7 @@ public class GamePanel extends JFrame {
     public DefaultListModel inventoryListModel;
     public JList inventoryList;
     public JScrollPane scroll;
+    public JLabel titleBackground,gameBackground;
     //from Input class
     public static String ANSWER;
     private static ArrayList<String> empty = new ArrayList<>();
@@ -102,19 +97,25 @@ public class GamePanel extends JFrame {
         setFrameConfigs();
         con = getContentPane();
 
+
         setAllButtons();
         setAllPanels();
         // ---- LABELS ADDED TO PANELS ----
-        titleNameLabel = new JLabel("SUMMER VACATION");
 
-        titleNamePanel.add(titleNameLabel);
+        ImageIcon background=new ImageIcon("Assets/img/bg.jpeg");
+        Image img=background.getImage();
+        Image temp=img.getScaledInstance(800,600,Image.SCALE_SMOOTH);
+        background=new ImageIcon(temp);
+        titleBackground = new JLabel(background);
+        titleBackground.setLayout(null);
+        titleBackground.setBounds(0,0,800,600);
+
+
+        titleBackground.add(newGameButtonPanel);
         newGameButtonPanel.add(newGameButton);
-        newGameButtonPanel.add(loadGameButton);
         newGameButtonPanel.add(quitGameButton);
 
-
-        con.add(titleNamePanel);
-        con.add(newGameButtonPanel);
+        con.add(titleBackground);
         con.add(askForNamePanel);
         con.add(playerPageFooterPanel);
         con.add(introScreenEnterGameButtonPanel);
@@ -128,7 +129,9 @@ public class GamePanel extends JFrame {
         setSize(800, 600);
         setResizable(false);        // enable the resize of the frame
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        getContentPane().setBackground(Color.black);
+        setLayout(new BorderLayout());
+        setContentPane(new JLabel(new ImageIcon("Assets/img/bg2.png")));
+
         setLayout(null);
         setVisible(true);
     }
@@ -136,49 +139,44 @@ public class GamePanel extends JFrame {
 
     //set all panels
     private void setAllPanels() {
-        titleNamePanel = createJPanel(100,100,600,150,Color.blue, true);
-        newGameButtonPanel = createJPanel(300,400,200,150,Color.yellow,true);
-        askForNamePanel = createJPanel(100,100,600,250,Color.blue,true);
-        playerPageFooterPanel = createJPanel(500,500,100,30,Color.red,true);
-        introScreenEnterGameButtonPanel = createJPanel(600,420,160,50,Color.yellow,true);
-        mainTextPanel = createJPanel(20,60,740,350,Color.yellow,true);
-        locationImgPanel = createJPanel(20,30,540,300,Color.blue,true);
-        mainLocationDescPanel = createJPanel(20,330,540,140,Color.red,true);
-        userInputPanel = createJPanel(20,480,300,60,Color.green,true);
-        headerContentPanel = createJPanel(0,0,800,30, Color.yellow,true);
-        directionButtonPanel = createJPanel(630,300,100,120,Color.yellow,true);
-        inventoryPanel = createJPanel(620,50,120,250,Color.yellow,true);
-        largeTextAreaPanel = createJPanel(20,60,740,420,Color.white,true);
-        exploreButtonPanel = createJPanel(600,450,180,40,Color.white,true);
-        explorePlayerHouseButtonPanel = createJPanel(600,450,180,40,Color.white,true);
-        exploreHayFieldButtonPanel = createJPanel(600,450,180,40,Color.white,true);
-        taskScreenNextButtonPanel = createJPanel(600,420,180,40,Color.yellow,true);
-        hayfieldNextButtonPanel = createJPanel(600,420,180,40,Color.yellow,true);
-        findSaraButtonPanel = createJPanel(600,450,180,40,Color.white,true);
-        findSuppliesButtonPanel = createJPanel(600,450,180,40,Color.white,true);
-        exploreOldHouseSouthButtonPanel = createJPanel(600,450,180,40,Color.white,true);
-        exploreRiverButtonPanel = createJPanel(600,450,180,40,Color.white,true);
-        goToIslandButtonPanel = createJPanel(600,450,180,40,Color.white,true);
+        titleNamePanel = createJPanel(100,100,600,150,Color.black, true);
+        newGameButtonPanel = createJPanel(300,400,200,150,new Color(0,0,0,0),true);
+        askForNamePanel = createJPanel(100,100,600,120,Color.black,true);
+        playerPageFooterPanel = createJPanel(500,500,100,30,Color.black,true);
+        introScreenEnterGameButtonPanel = createJPanel(600,420,160,50,new Color(0,0,0,0),true);
+        mainTextPanel = createJPanel(20,60,740,350,Color.black,true);
+        locationImgPanel = createJPanel(20,30,540,300,Color.black,true);
+        mainLocationDescPanel = createJPanel(20,330,540,140,Color.black,true);
+        userInputPanel = createJPanel(20,480,300,60,Color.black,true);
+        headerContentPanel = createJPanel(0,0,800,30, Color.black,true);
+        directionButtonPanel = createJPanel(600,290,144,144,Color.black,true);
+        inventoryPanel = createJPanel(620,50,120,250,Color.black,true);
+        largeTextAreaPanel = createJPanel(20,60,740,420,Color.black,true);
+        exploreButtonPanel = createJPanel(600,450,180,40,Color.black,true);
+        explorePlayerHouseButtonPanel = createJPanel(600,450,180,40,Color.black,true);
+        exploreHayFieldButtonPanel = createJPanel(600,450,180,40,Color.black,true);
+        taskScreenNextButtonPanel = createJPanel(600,420,180,40,Color.black,true);
+        hayfieldNextButtonPanel = createJPanel(600,420,180,40,Color.black,true);
+        findSaraButtonPanel = createJPanel(600,450,180,40,Color.black,true);
+        findSuppliesButtonPanel = createJPanel(600,450,180,40,Color.black,true);
+        exploreOldHouseSouthButtonPanel = createJPanel(600,450,180,40,Color.black,true);
+        exploreRiverButtonPanel = createJPanel(600,450,180,40,Color.black,true);
+        goToIslandButtonPanel = createJPanel(600,450,180,40,Color.black,true);
     }
 
     private void setAllButtons() {
-        newGameButton = createJButton("New Game",150,50,false,Color.white,Color.black);
-        loadGameButton = createJButton("Load Game",150,50,false,Color.white,Color.black);
-        quitGameButton = createJButton("Quit Game",150,50,false,Color.white,Color.black);
+        newGameButton = createJButton("New Game",100,50,false,Color.white,Color.black);
+        quitGameButton = createJButton("Quit Game",100,50,false,Color.white,Color.black);
         playerPageEnterGameButton = createJButton("ENTER GAME",150,40,false, Color.white,Color.black);
         introScreenNextButton = createJButton("NEXT",150,40,false,Color.white,Color.black);
         userInputEnterButton = createJButton("ENTER",150,50,false,Color.white,Color.black);
         mapButton = createJButton("MAP",100,30,false,Color.white,Color.black);
         helpButton = createJButton("HELP",100,30,false,Color.white,Color.black);
-        northButton = createJButton("Go North",100,20,false,Color.white,Color.black);
-        southButton = createJButton("Go South",100,20,false,Color.white,Color.black);
-        westButton = createJButton("Go West",100,20,false,Color.white,Color.black);
-        eastButton = createJButton("Go East",100,20,false,Color.white,Color.black);
         useButton = createJButton("use item",100,20,false,Color.white,Color.black);
         dropButton = createJButton("drop item",100,20,false,Color.white,Color.black);
-        exploreAirportButton = createJButton("GO TO AIRPORT",180,40,false,Color.red,Color.white);
-        explorePlayerHouseButton = createJButton("GO TO Player's House",180,40,false,Color.red,Color.white);
-        exploreHayFieldButton = createJButton("GO TO Hay Field",180,40,false,Color.red,Color.white);
+        exploreAirportButton = createJButton("GO TO AIRPORT",180,40,false,Color.white,Color.black);
+        explorePlayerHouseButton = createJButton("GO TO Player's House",180,40,false,Color.white,Color.black);
+        exploreHayFieldButton = createJButton("GO TO Hay Field",180,40,false,Color.white,Color.black);
         arriveSpecialSceneNextButton = createJButton("NEXT",100,30,false,Color.white,Color.black);
         taskScreenNextButton = createJButton("GO TO TASK",180,40,false,Color.white,Color.black);
         hayfieldNextButton = createJButton("GO hay field",180,40,false,Color.white,Color.black);
@@ -204,12 +202,16 @@ public class GamePanel extends JFrame {
         playerPageFooterPanel.setVisible(true);
         introScreenEnterGameButtonPanel.setVisible(true);
 
-        askUserName.setText("Please enter your name: ");
+        askUserName.setText("\nPlease enter your name: \n");
         askUserName.setBackground(Color.black);
         askUserName.setForeground(Color.white);
+        askUserName.setFont(new Font("Serif", Font.ITALIC, 24));
         askUserName.setEditable(false);
+        userName.setPreferredSize(new Dimension(100,30));
         askForNamePanel.add(askUserName);
         askForNamePanel.add(userName);
+
+
 
 
         playerPageFooterPanel.add(musicButton);
@@ -262,9 +264,9 @@ public class GamePanel extends JFrame {
         ImageIcon currentZoneImg = new ImageIcon(zoneImgFileName);
         locationImgLabel.setIcon(currentZoneImg);
         locationDesc.setForeground(Color.white);
-        locationDesc.setBackground(Color.blue);
+        locationDesc.setBackground(Color.black);
         locationDesc.setEditable(false);
-        seeItem.setBackground(Color.green);
+        seeItem.setBackground(Color.black);
         seeItem.setForeground(Color.white);
         seeItem.setEditable(false);
 
@@ -272,7 +274,7 @@ public class GamePanel extends JFrame {
 
 
 
-        seePeople.setBackground(Color.pink);
+        seePeople.setBackground(Color.black);
         seePeople.setForeground(Color.white);
         seePeople.setEditable(false);
         con.add(locationImgPanel);
@@ -363,11 +365,39 @@ public class GamePanel extends JFrame {
 
         // Direction buttons -North/South/West/East
         con.add(directionButtonPanel);
+        directionButtonPanel.setLayout(new BorderLayout());
 
-        directionButtonPanel.add(northButton);
-        directionButtonPanel.add(southButton);
-        directionButtonPanel.add(westButton);
-        directionButtonPanel.add(eastButton);
+
+        northButton.setPreferredSize(new Dimension(36,54));
+        northButton.setBorderPainted(false);
+        northButton.setContentAreaFilled(false);
+        northButton.setFocusPainted(false);
+        northButton.setOpaque(false);
+
+
+
+        southButton.setPreferredSize(new Dimension(36,54));
+        southButton.setBorderPainted(false);
+        southButton.setContentAreaFilled(false);
+        southButton.setFocusPainted(false);
+        southButton.setOpaque(false);
+
+        eastButton.setPreferredSize(new Dimension(54,36));
+        eastButton.setBorderPainted(false);
+        eastButton.setContentAreaFilled(false);
+        eastButton.setFocusPainted(false);
+        eastButton.setOpaque(false);
+
+        westButton.setPreferredSize(new Dimension(54,36));
+        westButton.setBorderPainted(false);
+        westButton.setContentAreaFilled(false);
+        westButton.setFocusPainted(false);
+        westButton.setOpaque(false);
+
+        directionButtonPanel.add(northButton,BorderLayout.NORTH);
+        directionButtonPanel.add(southButton,BorderLayout.SOUTH);
+        directionButtonPanel.add(eastButton, BorderLayout.EAST);
+        directionButtonPanel.add(westButton,BorderLayout.WEST);
 
 
 
@@ -376,7 +406,8 @@ public class GamePanel extends JFrame {
         con.add(inventoryPanel);
 
         inventoryTextField.setText("**Your inventory**");
-        inventoryTextField.setBackground(Color.yellow);
+        inventoryTextField.setBackground(Color.black);
+        inventoryTextField.setForeground(Color.white);
         inventoryPanel.add(inventoryTextField);
 
         inventoryListModel = new DefaultListModel();
