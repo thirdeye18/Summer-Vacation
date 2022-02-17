@@ -81,7 +81,7 @@ public class JsonHandler {
             path = SAVE_PATH + filename;
         }
 
-        // direct file to JSON string conversion, don't necessary to cast from obj
+        // direct file to JSON string conversion, not necessary to cast from obj
         try {
             if (Files.exists(Path.of(path))) {
                 jsonString = FileUtils.readFileToString(new File(path));
@@ -102,6 +102,68 @@ public class JsonHandler {
             pe.printStackTrace();
         }
         return null;
+    }
+
+    /*
+     * Same as parser above, but for Map<String, List<int>>
+     * Make sure to check the returned value prior to using to prevent null pointer exception.
+     */
+
+    public static Map<String, ArrayList<Integer>> jsonMapCoordinates(String filename, String fileLocation) {
+        String jsonString = null;
+        String path = getPath(filename, fileLocation);
+
+        // direct file to JSON string conversion, not necessary to cast from obj?
+        try {
+            if (path != null && Files.exists(Path.of(path))) {
+                jsonString = FileUtils.readFileToString(new File(path));
+            }
+            else {
+                System.out.println(path + " not found.");
+            }
+        } catch (IOException e) {
+            System.out.println("File could not be loaded!");
+            e.printStackTrace();
+        }
+
+        try {
+            return (Map<String, ArrayList<Integer>>)parser.parse(jsonString);
+        }
+        catch(ParseException pe) {
+            System.out.println("position: " + pe.getPosition());
+            pe.printStackTrace();
+        }
+        return null;
+    }
+
+    /*
+     * creates path variable based on the passed fileLocation and fileName.
+     * This will return null when passed an invalid fileLocation.
+     * Make sure to check the returned value prior to using to prevent null pointer exception.
+     */
+
+    public static String getPath(String filename, String fileLocation) {
+        String path = null;
+
+        // adjust path based on file type
+        switch (fileLocation.toLowerCase()) {
+            case "config":
+                path = CONFIG_PATH + filename;
+                break;
+            case "json":
+                path = JSON_PATH + filename;
+                break;
+            case "default":
+                path = DEFAULT_PATH + filename;
+                break;
+            case "save":
+                path = SAVE_PATH + filename;
+                break;
+            default:
+                System.out.println("Invalid file type!");
+        }
+
+        return path;
     }
 
     public static void loadDefaults(){
