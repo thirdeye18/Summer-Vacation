@@ -177,7 +177,7 @@ public class Input {
                         JOptionPane.showMessageDialog(null, "It looks like you have planks in your bag! You may need something to make a ladder by combining something " +
                                 "with the planks! Come back once you got the item!", "", JOptionPane.PLAIN_MESSAGE);
                     } else if (FileManager.getPlayerItems().contains("rope") && FileManager.getPlayerItems().contains("planks")) {
-                        gamePanel.arriveSpecialScene("scene-one.txt");
+                        gamePanel.arriveSpecialScene("scene-one");
                     } else {
                         JOptionPane.showMessageDialog(null, "With no items to help you, you and your friends are caught by security! You're grounded!\nGame Over!", "", JOptionPane.PLAIN_MESSAGE);
                         System.exit(0);
@@ -208,7 +208,7 @@ public class Input {
         gamePanel.explorePlayerHouseButton.addActionListener(e->{
                     gamePanel.clearZoneViewPanel();
                     gamePanel.explorePlayerHouseButtonPanel.setVisible(false);
-                    gamePanel.taskScreen("scene-two.txt");
+                    gamePanel.taskScreen("scene-two");
                     gamePanel.taskScreenNextButtonPanel.setVisible(true);
                     gamePanel.taskScreenNextButtonPanel.add(gamePanel.taskScreenNextButton);
                     gamePanel.con.add(gamePanel.taskScreenNextButtonPanel);
@@ -220,7 +220,7 @@ public class Input {
         gamePanel.exploreHayFieldButton.addActionListener(e->{
                     gamePanel.clearZoneViewPanel();
                     gamePanel.explorePlayerHouseButtonPanel.setVisible(false);
-                    gamePanel.taskScreen("scene-three.txt");
+                    gamePanel.taskScreen("scene-three");
                     gamePanel.con.add(gamePanel.hayfieldNextButtonPanel);
                     gamePanel.hayfieldNextButtonPanel.setVisible(true);
                     gamePanel.hayfieldNextButtonPanel.add(gamePanel.hayfieldNextButton);
@@ -248,7 +248,7 @@ public class Input {
         );
         gamePanel.exploreOldHouseSouthButton.addActionListener(e->{
                     gamePanel.clearZoneViewPanel();
-                    gamePanel.taskScreen("scene-four.txt");
+                    gamePanel.taskScreen("scene-four");
                     gamePanel.exploreOldHouseSouthButtonPanel.setVisible(false);
                     FileManager.sceneWriter(true, "sceneFourPassed");
                     gamePanel.findSuppliesButtonPanel.setVisible(true);
