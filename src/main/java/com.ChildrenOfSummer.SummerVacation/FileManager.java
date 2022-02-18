@@ -71,7 +71,7 @@ public class FileManager {
         try (Stream<String> stream = Files.lines(path)) {
             stream.forEach(s -> sb.append(s).append("\n"));
         } catch (IOException e) {
-            System.out.println("File not found.");
+            //System.out.println("File not found.");
         }
         return sb.toString();
     }
@@ -170,7 +170,7 @@ public class FileManager {
                 }
             }
         }
-        System.out.println(descriptionText);
+
 
         return descriptionText;
     }

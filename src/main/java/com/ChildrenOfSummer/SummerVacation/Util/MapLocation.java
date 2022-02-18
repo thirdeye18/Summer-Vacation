@@ -28,7 +28,7 @@ public class MapLocation extends Canvas {
         // Pull location from save data
         JSONObject saveData = JsonHandler.loadGame();
         String currentLocation = (String) saveData.get("location");
-        System.out.println(currentLocation);
+
 
         // get the 2 images for map and marker
         Image image1 = t.getImage("./Assets/map/map.png");
