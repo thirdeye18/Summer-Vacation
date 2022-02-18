@@ -37,14 +37,5 @@ public class MapLocation extends Canvas {
 
     }
 
-    public static void main(String[] args) {
-        MapLocation map = new MapLocation();
-        JFrame mapFrame = new JFrame("Map");
-        mapFrame.add(map);
-        mapFrame.setSize(725, 325);
-        mapFrame.setVisible(true);//making the frame visible
-        mapFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    }
-
 }
 
