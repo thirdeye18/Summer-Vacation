@@ -27,7 +27,7 @@ Commands through the text box
 [Sushma](https://github.com/spakhre) || [Zoe](https://github.com/zoeji569) || [Justin](https://github.com/thirdeye18/)
 
 >## Release Version
->Build 2.2
+>Build 2.3
 
 Java runtime environment is required. [Dowload it here](https://www.java.com/en/)
 
