@@ -1,6 +1,7 @@
 package com.ChildrenOfSummer.SummerVacation.view;
 
 import com.ChildrenOfSummer.SummerVacation.FileManager;
+import com.ChildrenOfSummer.SummerVacation.Input;
 import com.ChildrenOfSummer.SummerVacation.Player;
 import org.json.simple.JSONArray;
 
@@ -42,6 +43,7 @@ public class GamePanel extends JFrame {
     public JButton arriveSpecialSceneNextButton;
     public static JButton taskScreenNextButton;
     public JButton explorePlayerHouseButton;
+    public JButton goTOHayFieldNextButton;
     public JButton exploreHayFieldButton;
     public JButton hayfieldNextButton;
     public JButton findSaraButton;
@@ -66,6 +68,7 @@ public class GamePanel extends JFrame {
     public JPanel exploreButtonPanel;
     public static JPanel taskScreenNextButtonPanel;
     public JPanel explorePlayerHouseButtonPanel;
+    public JPanel goToHayFieldNextButtonPanel;
     public JPanel exploreHayFieldButtonPanel;
     public JPanel hayfieldNextButtonPanel;
     public JPanel findSaraButtonPanel;
@@ -151,10 +154,11 @@ public class GamePanel extends JFrame {
         userInputPanel = createJPanel(20,480,300,60,Color.black,true);
         headerContentPanel = createJPanel(0,0,800,30, new Color(0,0,0,0),true);
         directionButtonPanel = createJPanel(600,290,144,144,Color.black,true);
-        inventoryPanel = createJPanel(620,50,120,250,Color.black,true);
+        inventoryPanel = createJPanel(620,50,120,200,Color.black,true);
         largeTextAreaPanel = createJPanel(20,60,740,420,Color.black,true);
         exploreButtonPanel = createJPanel(600,450,180,40,new Color(0,0,0,0),true);
         explorePlayerHouseButtonPanel = createJPanel(600,450,180,40,new Color(0,0,0,0),true);
+        goToHayFieldNextButtonPanel = createJPanel(600,450,180,40,new Color(0,0,0,0),true);
         exploreHayFieldButtonPanel = createJPanel(600,450,180,40,new Color(0,0,0,0),true);
         taskScreenNextButtonPanel = createJPanel(600,420,180,40,new Color(0,0,0,0),true);
         hayfieldNextButtonPanel = createJPanel(600,420,180,40,new Color(0,0,0,0),true);
@@ -176,11 +180,12 @@ public class GamePanel extends JFrame {
         helpButton = createJButton("HELP",80,30,false,Color.white,Color.black);
         useButton = createJButton("use item",100,20,false,Color.white,Color.black);
         dropButton = createJButton("drop item",100,20,false,Color.white,Color.black);
-        exploreAirportButton = createJButton("GO TO AIRPORT",180,40,false,Color.white,Color.black);
+        exploreAirportButton = createJButton("GO TO AIRPORT",180,30,false,Color.white,Color.black);
         explorePlayerHouseButton = createJButton("GO TO Player's House",180,40,false,Color.white,Color.black);
         exploreHayFieldButton = createJButton("GO TO Hay Field",180,40,false,Color.white,Color.black);
         arriveSpecialSceneNextButton = createJButton("NEXT",100,30,false,Color.white,Color.black);
-        taskScreenNextButton = createJButton("GO TO TASK",180,40,false,Color.white,Color.black);
+        taskScreenNextButton = createJButton("Go Player's House",180,40,false,Color.white,Color.black);
+        goTOHayFieldNextButton = createJButton("Go Hay Field",180,40,false,Color.white,Color.black);
         hayfieldNextButton = createJButton("GO hay field",180,40,false,Color.white,Color.black);
         findSaraButton = createJButton("Look for Sara",180,40,false,Color.white,Color.black);
         findSuppliesButton = createJButton("Go Find Supplies",180,40,false,Color.white,Color.black);
@@ -292,7 +297,9 @@ public class GamePanel extends JFrame {
         seePeople.setForeground(Color.white);
         seePeople.setEditable(false);
         con.add(locationImgPanel);
+
         locationImgPanel.add(locationImgLabel);
+        Input.clickPic();
 
 
 
@@ -386,6 +393,7 @@ public class GamePanel extends JFrame {
         directionButtonPanel.setLayout(new BorderLayout());
 
 
+
         northButton.setPreferredSize(new Dimension(36,54));
         northButton.setBorderPainted(false);
         northButton.setContentAreaFilled(false);
@@ -440,8 +448,8 @@ public class GamePanel extends JFrame {
         JScrollPane pane = new JScrollPane(inventoryList);
 
         inventoryPanel.add(pane, BorderLayout.NORTH);
-        inventoryPanel.add(useButton, BorderLayout.WEST);
-        inventoryPanel.add(dropButton, BorderLayout.EAST);
+//        inventoryPanel.add(useButton, BorderLayout.WEST);
+//        inventoryPanel.add(dropButton, BorderLayout.EAST);
 
     }
 
@@ -537,17 +545,23 @@ public class GamePanel extends JFrame {
 
 
     public void taskThrowRockWithEnoughInventory() {
+        if(player1.getPlayerInventory().contains("rock")){
         mainLocationDescPanel.setVisible(false);
         userInputPanel.setVisible(false);
         directionButtonPanel.setVisible(false);
         inventoryPanel.setVisible(false);
+        locationImgPanel.setVisible(false);
         // String text =FileManager.txtFileToString("scene-one.txt");
 
         int reply1 = JOptionPane.showConfirmDialog(null, "You can throw a rock to escape. Do you want to?", "", JOptionPane.YES_NO_OPTION);
         if (reply1 == JOptionPane.YES_OPTION){
+            FileManager.getPlayerItems().remove("rock");
+            inventoryListModel.removeElement("rock");
             JOptionPane.showMessageDialog(null,"You've escaped from the farmer.","",JOptionPane.PLAIN_MESSAGE);
             taskScreen("scene-three-end");
+            FileManager.sceneWriter(true, "sceneThreePassed");
             hayfieldNextButtonPanel.setVisible(false);
+//            locationImgPanel.setVisible(false);
             con.add(findSaraButtonPanel);
             findSaraButtonPanel.add(findSaraButton);
         }
@@ -558,6 +572,20 @@ public class GamePanel extends JFrame {
 
         largeTextAreaPanel.add(largeTextArea);
         con.add(largeTextAreaPanel);
+        }
+        else{
+            JOptionPane.showMessageDialog(null,"You should explore the map to find something to throw at the farmer to distract him. \nA rock, maybe?", "", JOptionPane.PLAIN_MESSAGE);
+            mainTextPanel.setVisible(false);
+            mainLocationDescPanel.setVisible(false);
+            taskScreenNextButtonPanel.setVisible(false);
+            largeTextAreaPanel.setVisible(false);
+            locationImgPanel.setVisible(true);
+            mainLocationDescPanel.setVisible(true);
+            userInputPanel.setVisible(true);
+            directionButtonPanel.setVisible(true);
+            inventoryPanel.setVisible(true);
+            goToIslandButtonPanel.setVisible(false);
+        }
     }
     public static void taskPaddleRiverWithEnoughInventory() {
         if (player1.getPlayerInventory().contains("paddle")&&player1.getPlayerInventory().contains("raft") &&player1.getPlayerInventory().contains("shovel")){
@@ -587,7 +615,7 @@ public class GamePanel extends JFrame {
                 JOptionPane.showMessageDialog(null,"You paddle right. A massive boulder stops your progress... \nAfter dislodging your raft you are free.","",JOptionPane.PLAIN_MESSAGE);
             }
 
-            Object[] innerOrCenter = { "hug the inner bank", "center the raft" };
+            Object[] innerOrCenter = {"hug the inner bank", "center the raft"};
             int reply2 = JOptionPane.showOptionDialog(null, "The river curves left\nYou need to choose to hug the inner bank of center the raft in the river.",
                     "", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, innerOrCenter, innerOrCenter[0]);
             if (reply2 == JOptionPane.YES_OPTION){
@@ -602,6 +630,11 @@ public class GamePanel extends JFrame {
                     "", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, duckOrPaddle, duckOrPaddle[0]);
             if (reply3 == JOptionPane.YES_OPTION){
                 JOptionPane.showMessageDialog(null,"The branches puncture holes in your raft!","",JOptionPane.PLAIN_MESSAGE);
+                clearZoneViewPanel();
+                taskScreen("win-text");
+                FileManager.sceneWriter(true, "sceneFivePassed");
+                JOptionPane.showMessageDialog(null,"You won the game!", "", JOptionPane.PLAIN_MESSAGE);
+                exploreRiverButtonPanel.setVisible(false);
             }
             else{
                 JOptionPane.showMessageDialog(null,"You push the thorny branches out of the way of your raft.","",JOptionPane.PLAIN_MESSAGE);
@@ -609,11 +642,12 @@ public class GamePanel extends JFrame {
                 taskScreen("win-text");
                 FileManager.sceneWriter(true, "sceneFivePassed");
                 JOptionPane.showMessageDialog(null,"You won the game!", "", JOptionPane.PLAIN_MESSAGE);
+                exploreRiverButtonPanel.setVisible(false);
 //                largeTextAreaPanel.add(largeTextArea);
 //                con.add(largeTextAreaPanel);
 //                largeTextArea.setText(FileManager.txtFileToString("win-text.txt"));
 //                goToIslandButtonPanel.setVisible(false);
-                System.exit(0);
+  //              System.exit(0);
             }
 
         }

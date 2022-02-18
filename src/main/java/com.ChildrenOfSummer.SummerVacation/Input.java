@@ -6,7 +6,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.*;
@@ -165,16 +166,38 @@ public class Input {
             }
         });
 
-        gamePanel.useButton.addActionListener(e -> JOptionPane.showMessageDialog(null,"Nothing happens...", "", JOptionPane.PLAIN_MESSAGE));
+        gamePanel.myCurrentTaskButton.addActionListener(e -> {
+
+                    if (!FileManager.sceneReader("sceneOnePassed")) {
+                        JOptionPane.showMessageDialog(null, "Go to Airport, remember to collect something before go there. \nGood luck!", "", JOptionPane.PLAIN_MESSAGE);
+                    } else if (FileManager.sceneReader("sceneOnePassed") && !FileManager.sceneReader("sceneTwoPassed")) {
+                        JOptionPane.showMessageDialog(null, "Go to Player's House", "", JOptionPane.PLAIN_MESSAGE);
+                    } else if (FileManager.sceneReader("sceneOnePassed") && FileManager.sceneReader("sceneTwoPassed") && !FileManager.sceneReader("sceneThreePassed")) {
+                        JOptionPane.showMessageDialog(null, "Go to Hay Field", "", JOptionPane.PLAIN_MESSAGE);
+                    }
+                    else if (FileManager.sceneReader("sceneOnePassed") && FileManager.sceneReader("sceneTwoPassed") && FileManager.sceneReader("sceneThreePassed")
+                    && !FileManager.sceneReader("sceneFourPassed")){
+                        JOptionPane.showMessageDialog(null, "Look for Sara", "", JOptionPane.PLAIN_MESSAGE);
+                    }
+                    else if (FileManager.sceneReader("sceneOnePassed") && FileManager.sceneReader("sceneTwoPassed") && FileManager.sceneReader("sceneThreePassed")
+                            && FileManager.sceneReader("sceneFourPassed") && !FileManager.sceneReader("sceneFivePassed")){
+                        JOptionPane.showMessageDialog(null, "Go to river", "", JOptionPane.PLAIN_MESSAGE);
+                    }
+
+                }
+
+        );
+
+       // gamePanel.useButton.addActionListener(e -> JOptionPane.showMessageDialog(null,"Nothing happens...", "", JOptionPane.PLAIN_MESSAGE));
 
 
         gamePanel.exploreAirportButton.addActionListener(e ->
                 {
                     if (FileManager.getPlayerItems().contains("rope") && !FileManager.getPlayerItems().contains("planks")) {
-                        JOptionPane.showMessageDialog(null, "It looks like you have a rope in your bag! You may need something to make a ladder by combining something " +
+                        JOptionPane.showMessageDialog(null, "It looks like you have a rope in your bag! \nYou may need something to make a ladder by combining something " +
                                 "with the rope! Come back once you got the item!", "", JOptionPane.PLAIN_MESSAGE);
                     } else if (FileManager.getPlayerItems().contains("planks") && !FileManager.getPlayerItems().contains("rope")) {
-                        JOptionPane.showMessageDialog(null, "It looks like you have planks in your bag! You may need something to make a ladder by combining something " +
+                        JOptionPane.showMessageDialog(null, "It looks like you have planks in your bag! \nYou may need something to make a ladder by combining something " +
                                 "with the planks! Come back once you got the item!", "", JOptionPane.PLAIN_MESSAGE);
                     } else if (FileManager.getPlayerItems().contains("rope") && FileManager.getPlayerItems().contains("planks")) {
                         gamePanel.arriveSpecialScene("scene-one");
@@ -209,13 +232,25 @@ public class Input {
                     gamePanel.clearZoneViewPanel();
                     gamePanel.explorePlayerHouseButtonPanel.setVisible(false);
                     gamePanel.taskScreen("scene-two");
-                    gamePanel.taskScreenNextButtonPanel.setVisible(true);
-                    gamePanel.taskScreenNextButtonPanel.add(gamePanel.taskScreenNextButton);
-                    gamePanel.con.add(gamePanel.taskScreenNextButtonPanel);
+                    gamePanel.taskScreenNextButtonPanel.setVisible(false);
+                    gamePanel.goToHayFieldNextButtonPanel.add(gamePanel.goTOHayFieldNextButton);
+                    gamePanel.con.add(gamePanel.goToHayFieldNextButtonPanel);
                     FileManager.sceneWriter(true, "sceneTwoPassed");
-                    JOptionPane.showMessageDialog(null,"You arrived and completed task", "", JOptionPane.PLAIN_MESSAGE);
+
                 }
         );
+
+        gamePanel.goTOHayFieldNextButton.addActionListener(e->{
+            gamePanel.mainTextPanel.setVisible(false);
+            gamePanel.taskScreenNextButtonPanel.setVisible(false);
+            gamePanel.largeTextAreaPanel.setVisible(false);
+            gamePanel.locationImgPanel.setVisible(true);
+            gamePanel.mainLocationDescPanel.setVisible(true);
+            gamePanel.userInputPanel.setVisible(true);
+            gamePanel.directionButtonPanel.setVisible(true);
+            gamePanel.inventoryPanel.setVisible(true);
+            gamePanel.goToHayFieldNextButtonPanel.setVisible(false);
+        });
 
         gamePanel.exploreHayFieldButton.addActionListener(e->{
                     gamePanel.clearZoneViewPanel();
@@ -225,12 +260,12 @@ public class Input {
                     gamePanel.hayfieldNextButtonPanel.setVisible(true);
                     gamePanel.hayfieldNextButtonPanel.add(gamePanel.hayfieldNextButton);
                     gamePanel.exploreHayFieldButtonPanel.setVisible(false);
-                    FileManager.sceneWriter(true, "sceneThreePassed");
-                    JOptionPane.showMessageDialog(null,"You arrived and completed task", "", JOptionPane.PLAIN_MESSAGE);
+
+
                 }
         );
-        gamePanel.hayfieldNextButton.addActionListener(e-> gamePanel.taskThrowRockWithEnoughInventory()
-
+        gamePanel.hayfieldNextButton.addActionListener(e->
+                gamePanel.taskThrowRockWithEnoughInventory()
         );
 
         gamePanel.findSaraButton.addActionListener(e->{
@@ -276,7 +311,53 @@ public class Input {
 
         );
 
+
     }
+
+    public static void clickPic(){
+        JPopupMenu popMenu = new JPopupMenu();
+        JMenuItem item1 = new JMenuItem("talk");
+        item1.addActionListener(e->{
+        if(FileManager.getNPCsName(player1.getPlayerLocation()).size()> 0){
+            // npc name
+            JSONArray NPCname = FileManager.getNPCsName(player1.getPlayerLocation());
+
+            //npc dialogue
+            String dialogue = FileManager.getNPCsDialog((String) NPCname.get(0),1);
+            System.out.println(dialogue);
+
+            String a = TextToSpeech.talkNpc(dialogue);
+
+        System.out.println(a);}
+        else{
+        String a = TextToSpeech.talkNpc("There was no one to talk to");
+        }
+        });
+
+        popMenu.add(item1);
+
+        gamePanel.locationImgLabel.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {}
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if(SwingUtilities.isRightMouseButton(e)){
+                    popMenu.show(gamePanel.locationImgLabel,e.getX(),e.getY());
+                }
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {}
+
+            @Override
+            public void mouseEntered(MouseEvent e) {}
+
+            @Override
+            public void mouseExited(MouseEvent e) {}
+        });
+    }
+
 
     public static void goDirection(String direction){
         boolean didMove = false;
