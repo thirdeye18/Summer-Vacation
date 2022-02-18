@@ -399,7 +399,6 @@ public class Input {
                                         gamePanel.seeItem.setText(itemText1 + "\n");
                                     } else {
                                         JOptionPane.showMessageDialog(gamePanel, "I can't get that! There's no " + nouns.get(0) + " for me to pick up!", "", JOptionPane.PLAIN_MESSAGE);
-
                                     }
 
                                     break;
@@ -415,10 +414,9 @@ public class Input {
                                     FileManager.saveGame(player1.getPlayerName(), player1.getPlayerLocation(), player1.getPlayerZone(), player1.getPlayerInventory());
                                     System.exit(0);
                                     break;
-                                case "":
-                                    break;
                                 default:
                                     JOptionPane.showMessageDialog(gamePanel, "I didn't understand that command. for help click help button on the top or type help.", "", JOptionPane.PLAIN_MESSAGE);
+                                    break;
                             }
 
 
