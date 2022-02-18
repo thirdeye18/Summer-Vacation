@@ -6,11 +6,14 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
 import java.util.*;
+import java.util.List;
 
 public class Input {
     private static Scanner scanner = new Scanner(System.in);   //takes direct input currently from the user and passes it to the program
@@ -33,7 +36,7 @@ public class Input {
 
 
         while (!newGame) {  //loop until new game option selected, error msg for invalid input
-            }
+        }
         return newGame;
     }
 
@@ -64,22 +67,38 @@ public class Input {
         });
 
         gamePanel.mapButton.addActionListener(e -> {
-            JFrame frame = new JFrame("Map");
-            frame.setSize(400,400);
-            frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-            ImageIcon mapIcon = new ImageIcon("Assets/img/map.PNG");
-            JLabel label = new JLabel(mapIcon);
-            frame.add(label);
-            frame.pack();
-            frame.setVisible(true);
+            // This creates the map
+            MapLocation map = new MapLocation();
+            JFrame mapFrame = new JFrame("Map");    // create new JFrame for map
+            mapFrame.add(map);  // add the map to the
+            mapFrame.setSize(725, 325);
+            mapFrame.setVisible(true);
+            mapFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
             gamePanel.mapButton.setEnabled(false);
-            frame.addWindowListener(new WindowAdapter() {
+            mapFrame.addWindowListener(new WindowAdapter() {
                 @Override
                 public void windowClosing(WindowEvent e) {
                     gamePanel.mapButton.setEnabled(true);
                 }
             });
+
+//            JFrame frame = new JFrame("Map");
+//            frame.setSize(400,400);
+//            frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+//            ImageIcon mapIcon = new ImageIcon("Assets/map/map.png");
+//            JLabel label = new JLabel(mapIcon);
+//            frame.add(label);
+//            frame.pack();
+//            frame.setVisible(true);
+//            gamePanel.mapButton.setEnabled(false);
+//            frame.addWindowListener(new WindowAdapter() {
+//                @Override
+//                public void windowClosing(WindowEvent e) {
+//                    gamePanel.mapButton.setEnabled(true);
+//                }
+//            });
         });
+
         gamePanel.helpButton.addActionListener(e -> {
             JFrame frame = new JFrame("Help");
             frame.setSize(400,400);
@@ -148,7 +167,7 @@ public class Input {
                         JOptionPane.showMessageDialog(null, "Go to Hay Field", "", JOptionPane.PLAIN_MESSAGE);
                     }
                     else if (FileManager.sceneReader("sceneOnePassed") && FileManager.sceneReader("sceneTwoPassed") && FileManager.sceneReader("sceneThreePassed")
-                    && !FileManager.sceneReader("sceneFourPassed")){
+                            && !FileManager.sceneReader("sceneFourPassed")){
                         JOptionPane.showMessageDialog(null, "Look for Sara", "", JOptionPane.PLAIN_MESSAGE);
                     }
                     else if (FileManager.sceneReader("sceneOnePassed") && FileManager.sceneReader("sceneTwoPassed") && FileManager.sceneReader("sceneThreePassed")
@@ -288,20 +307,20 @@ public class Input {
         JPopupMenu popMenu = new JPopupMenu();
         JMenuItem item1 = new JMenuItem("talk");
         item1.addActionListener(e->{
-        if(FileManager.getNPCsName(player1.getPlayerLocation()).size()> 0){
-            // npc name
-            JSONArray NPCname = FileManager.getNPCsName(player1.getPlayerLocation());
+            if(FileManager.getNPCsName(player1.getPlayerLocation()).size()> 0){
+                // npc name
+                JSONArray NPCname = FileManager.getNPCsName(player1.getPlayerLocation());
 
-            //npc dialogue
-            String dialogue = FileManager.getNPCsDialog((String) NPCname.get(0),1);
-            System.out.println(dialogue);
+                //npc dialogue
+                String dialogue = FileManager.getNPCsDialog((String) NPCname.get(0),1);
+                System.out.println(dialogue);
 
-            String a = TextToSpeech.talkNpc(dialogue);
+                String a = TextToSpeech.talkNpc(dialogue);
 
-        System.out.println(a);}
-        else{
-        String a = TextToSpeech.talkNpc("There was no one to talk to");
-        }
+                System.out.println(a);}
+            else{
+                String a = TextToSpeech.talkNpc("There was no one to talk to");
+            }
         });
 
         popMenu.add(item1);
@@ -416,7 +435,7 @@ public class Input {
                                 name = npcNames.get(0);
                         }
                         switch (npcNames.size()) {
-                           case 1:
+                            case 1:
                                 gamePanel.seePeople.setText("You see:\n " + name + ".");
                                 break;
                         }

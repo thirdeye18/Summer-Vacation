@@ -21,21 +21,7 @@ public class JsonHandler {
 
     public static JSONObject getJsonObject(String filename, String fileType) {
         JSONObject jsonObj = null;
-        String path;
-
-        // adjust path based on file type
-        if(fileType.equalsIgnoreCase("default")) {
-            path = DEFAULT_PATH + filename;
-        }
-        else if(fileType.equalsIgnoreCase("config")) {
-            path = CONFIG_PATH + filename;
-        }
-        else if(fileType.equalsIgnoreCase("json")) {
-            path = JSON_PATH + filename;
-        }
-        else {
-            path = SAVE_PATH + filename;
-        }
+        String path = getPath(filename, fileType);
 
         try {
             if (Files.exists(Path.of(path))) {
@@ -63,23 +49,8 @@ public class JsonHandler {
      */
 
     public static Map<String, ArrayList<String>> jsonToMapStringList(String filename, String fileLocation) {
-        String path;
+        String path = getPath(filename, fileLocation);
         String jsonString = null;
-
-        // adjust path based on file type
-        // TODO: organize json files better
-        if(fileLocation.equalsIgnoreCase("default")) {
-            path = DEFAULT_PATH + filename;
-        }
-        else if(fileLocation.equalsIgnoreCase("config")) {
-            path = CONFIG_PATH + filename;
-        }
-        else if(fileLocation.equalsIgnoreCase("json")) {
-            path = JSON_PATH + filename;
-        }
-        else {
-            path = SAVE_PATH + filename;
-        }
 
         // direct file to JSON string conversion, not necessary to cast from obj
         try {
@@ -191,5 +162,14 @@ public class JsonHandler {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    /*
+     * needed this to load the player information to use in the MapLocation function
+     */
+
+    public static JSONObject loadGame(){
+        //loads Player.JSON for parsing by save method and other load methods outside this class -MS
+        return getJsonObject("Player.json", "json");
     }
 }
