@@ -29,6 +29,7 @@ public class GamePanel extends JFrame {
     public JButton playerPageEnterGameButton;
     public JButton introScreenNextButton;
     public JButton userInputEnterButton;
+    public JButton myCurrentTaskButton;
     public JButton mapButton;
     public JButton helpButton;
     public JButton northButton = new JButton("", new ImageIcon("Assets/img/N.png"));
@@ -170,8 +171,9 @@ public class GamePanel extends JFrame {
         playerPageEnterGameButton = createJButton("ENTER GAME",150,40,false, Color.white,Color.black);
         introScreenNextButton = createJButton("NEXT",150,40,false,Color.white,Color.black);
         userInputEnterButton = createJButton("ENTER",150,50,false,Color.white,Color.black);
-        mapButton = createJButton("MAP",100,30,false,Color.white,Color.black);
-        helpButton = createJButton("HELP",100,30,false,Color.white,Color.black);
+        myCurrentTaskButton = createJButton("Current Task?",120,30,false,Color.white,Color.black);
+        mapButton = createJButton("MAP",80,30,false,Color.white,Color.black);
+        helpButton = createJButton("HELP",80,30,false,Color.white,Color.black);
         useButton = createJButton("use item",100,20,false,Color.white,Color.black);
         dropButton = createJButton("drop item",100,20,false,Color.white,Color.black);
         exploreAirportButton = createJButton("GO TO AIRPORT",180,40,false,Color.white,Color.black);
@@ -364,6 +366,9 @@ public class GamePanel extends JFrame {
 
         // Headers - include map/help buttons
         con.add(headerContentPanel);
+
+        // Current task button
+        headerContentPanel.add(myCurrentTaskButton);
 
         // map button
         headerContentPanel.add(mapButton);
