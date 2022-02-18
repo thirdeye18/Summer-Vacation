@@ -89,7 +89,9 @@ public class Input {
             userInput = gamePanel.userName.getText();
             player1.setPlayerName(userInput);
             FileManager.saveGame(player1.getPlayerName(), player1.getPlayerLocation(), player1.getPlayerZone(), player1.getPlayerInventory());
-            gamePanel.textField.setText("Hi "+ userInput +"\n"+FileManager.txtFileToString("introduction.txt"));
+            gamePanel.textField.setText("Hi "+ userInput +",\n"+"It's 2 weeks into summer vacation, you and your friend Sara are extremely bored.\n" +
+                    "In this town, there isn't much to do for fun.\n" +
+                    "Yesterday before splitting up Sara said \"we should go to the abandoned airport tomorrow!\"\n                   **New Task**\n                EXPLORE THE AIRPORT");
         });
 
         gamePanel.mapButton.addActionListener(e -> {
@@ -404,25 +406,26 @@ public class Input {
                 }
 
                 didMove = true;
-                String currentZone = player1.getPlayerZone().toLowerCase();
-                String zoneImgFileName = "Assets/zone-png/" + currentZone + ".jpg";
-                ImageIcon currentZoneImg = new ImageIcon(zoneImgFileName);
-                gamePanel.locationImgLabel.setIcon(currentZoneImg);
+                String currentLocation = player1.getPlayerLocation();
+                String zoneImgFileName = "Assets/location-art/"+currentLocation+".png";
+                ImageIcon currentLocationImg = new ImageIcon(zoneImgFileName);
+                gamePanel.locationImgLabel.setIcon(currentLocationImg);
                 gamePanel.locationDesc.setText(FileManager.getLocationDescription(player1.getPlayerLocation(), player1.getPlayerZone()));
-                if ((tempLocation.equalsIgnoreCase("player's house")) && FileManager.sceneReader("sceneOnePassed") && !FileManager.sceneReader("sceneTwoPassed")) {
+                if (tempLocation.equalsIgnoreCase("player's house") && FileManager.sceneReader("sceneOnePassed") && !FileManager.sceneReader("sceneTwoPassed")) {
                     gamePanel.directionButtonPanel.setVisible(false);
                     gamePanel.con.add(gamePanel.explorePlayerHouseButtonPanel);
                     gamePanel.explorePlayerHouseButtonPanel.add(gamePanel.explorePlayerHouseButton);
 
                 }
-                if ((tempLocation.equalsIgnoreCase("hay field")) && FileManager.sceneReader("sceneOnePassed") && FileManager.sceneReader("sceneTwoPassed") && !FileManager.sceneReader("sceneThreePassed")) {
+                if (tempLocation.equalsIgnoreCase("hay field") && FileManager.sceneReader("sceneOnePassed") &&
+                        FileManager.sceneReader("sceneTwoPassed") && !FileManager.sceneReader("sceneThreePassed")) {
                     gamePanel.directionButtonPanel.setVisible(false);
                     gamePanel.exploreHayFieldButtonPanel.setVisible(true);
                     gamePanel.con.add(gamePanel.exploreHayFieldButtonPanel);
                     gamePanel.exploreHayFieldButtonPanel.add(gamePanel.exploreHayFieldButton);
 
                 }
-                if ((tempLocation.equalsIgnoreCase("old house south")) && FileManager.sceneReader("sceneOnePassed") && FileManager.sceneReader("sceneTwoPassed")
+                if (tempLocation.equalsIgnoreCase("old house south") && FileManager.sceneReader("sceneOnePassed") && FileManager.sceneReader("sceneTwoPassed")
                         && FileManager.sceneReader("sceneThreePassed")&&!FileManager.sceneReader("sceneFourPassed")) {
                     gamePanel.directionButtonPanel.setVisible(false);
                     gamePanel.exploreOldHouseSouthButtonPanel.setVisible(true);
@@ -430,8 +433,9 @@ public class Input {
                     gamePanel.exploreOldHouseSouthButtonPanel.add(gamePanel.exploreOldHouseSouthButton);
 
 
+
                 }
-                if ((tempLocation.equalsIgnoreCase("river")) && FileManager.sceneReader("sceneOnePassed") && FileManager.sceneReader("sceneTwoPassed")
+                if (tempLocation.equalsIgnoreCase("river")&& FileManager.sceneReader("sceneOnePassed") && FileManager.sceneReader("sceneTwoPassed")
                         && FileManager.sceneReader("sceneThreePassed")&&FileManager.sceneReader("sceneFourPassed")&&!FileManager.sceneReader("sceneFivePassed")) {
                     gamePanel.directionButtonPanel.setVisible(false);
                     gamePanel.exploreRiverButtonPanel.setVisible(true);
