@@ -358,7 +358,7 @@ public class GamePanel extends JFrame {
         }
 
 
-locationDesc.setPreferredSize(new Dimension(540,80));
+        locationDesc.setPreferredSize(new Dimension(540,80));
         seeItem.setFont(new Font("Arial", Font.PLAIN,13));
         seePeople.setFont(new Font("Arial", Font.PLAIN,13));
 
@@ -562,32 +562,32 @@ locationDesc.setPreferredSize(new Dimension(540,80));
 
     public void taskThrowRockWithEnoughInventory() {
         if(player1.getPlayerInventory().contains("rock")){
-        mainLocationDescPanel.setVisible(false);
-        userInputPanel.setVisible(false);
-        directionButtonPanel.setVisible(false);
-        inventoryPanel.setVisible(false);
-        locationImgPanel.setVisible(false);
-        // String text =FileManager.txtFileToString("scene-one.txt");
+            mainLocationDescPanel.setVisible(false);
+            userInputPanel.setVisible(false);
+            directionButtonPanel.setVisible(false);
+            inventoryPanel.setVisible(false);
+            locationImgPanel.setVisible(false);
+            // String text =FileManager.txtFileToString("scene-one.txt");
 
-        int reply1 = JOptionPane.showConfirmDialog(null, "You can throw a rock to escape. Do you want to?", "", JOptionPane.YES_NO_OPTION);
-        if (reply1 == JOptionPane.YES_OPTION){
-            FileManager.getPlayerItems().remove("rock");
-            inventoryListModel.removeElement("rock");
-            JOptionPane.showMessageDialog(null,"You've escaped from the farmer.","",JOptionPane.PLAIN_MESSAGE);
-            taskScreen("scene-three-end");
-            FileManager.sceneWriter(true, "sceneThreePassed");
-            hayfieldNextButtonPanel.setVisible(false);
+            int reply1 = JOptionPane.showConfirmDialog(null, "You can throw a rock to escape. Do you want to?", "", JOptionPane.YES_NO_OPTION);
+            if (reply1 == JOptionPane.YES_OPTION){
+                FileManager.getPlayerItems().remove("rock");
+                inventoryListModel.removeElement("rock");
+                JOptionPane.showMessageDialog(null,"You've escaped from the farmer.","",JOptionPane.PLAIN_MESSAGE);
+                taskScreen("scene-three-end");
+                FileManager.sceneWriter(true, "sceneThreePassed");
+                hayfieldNextButtonPanel.setVisible(false);
 //            locationImgPanel.setVisible(false);
-            con.add(findSaraButtonPanel);
-            findSaraButtonPanel.add(findSaraButton);
-        }
-        else{
-            JOptionPane.showMessageDialog(null,"You got caught! Game Over.","",JOptionPane.PLAIN_MESSAGE);
-        }
+                con.add(findSaraButtonPanel);
+                findSaraButtonPanel.add(findSaraButton);
+            }
+            else{
+                JOptionPane.showMessageDialog(null,"You got caught! Game Over.","",JOptionPane.PLAIN_MESSAGE);
+            }
 
 
-        largeTextAreaPanel.add(largeTextArea);
-        con.add(largeTextAreaPanel);
+            largeTextAreaPanel.add(largeTextArea);
+            con.add(largeTextAreaPanel);
         }
         else{
             JOptionPane.showMessageDialog(null,"You should explore the map to find something to throw at the farmer to distract him. \nA rock, maybe?", "", JOptionPane.PLAIN_MESSAGE);
@@ -659,11 +659,7 @@ locationDesc.setPreferredSize(new Dimension(540,80));
                 FileManager.sceneWriter(true, "sceneFivePassed");
                 JOptionPane.showMessageDialog(null,"You won the game!", "", JOptionPane.PLAIN_MESSAGE);
                 exploreRiverButtonPanel.setVisible(false);
-//                largeTextAreaPanel.add(largeTextArea);
-//                con.add(largeTextAreaPanel);
-//                largeTextArea.setText(FileManager.txtFileToString("win-text.txt"));
-//                goToIslandButtonPanel.setVisible(false);
-  //              System.exit(0);
+                System.exit(0);
             }
 
         }
