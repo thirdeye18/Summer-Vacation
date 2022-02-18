@@ -33,39 +33,7 @@ public class Input {
 
 
         while (!newGame) {  //loop until new game option selected, error msg for invalid input
-
-            FileManager.menuFiles();    //display menu text
-            String startMenuChoice = TextParser.getVerb(scanner.nextLine());    //.strip().toLowerCase();
-            switch (startMenuChoice) {
-                case "start":
-                    player1.setPlayerInventory(empty);
-                    player1.setPlayerName("default");
-                    player1.setPlayerLocation("Player's House");
-                    player1.setPlayerZone("Suburb");
-                    playerCreator();
-                    FileManager.loadDefaults();
-                    return true;
-
-                case "continue":
-                    JSONObject saveFile = FileManager.loadGame();
-                    String name = (String) saveFile.get("name");
-                    String location = (String) saveFile.get("location");
-                    String zone = (String) saveFile.get("zone");
-                    ArrayList<String> inventory = (ArrayList<String>) saveFile.get("inventory");
-                    player1.setPlayerInventory(inventory);
-                    player1.setPlayerName(name);
-                    player1.setPlayerLocation(location);
-                    player1.setPlayerZone(zone);
-                    return false;
-
-                case "quit":
-                    System.exit(0);
-
-                default:
-                    System.out.println("invalid!\n Please type 'new game' for new game, 'load game' to load your save or 'quit' to quit.\n");
             }
-
-        }
         return newGame;
     }
 
@@ -136,11 +104,9 @@ public class Input {
             ImageIcon musicOff = new ImageIcon("Assets/img/off.png");
 
             if (gamePanel.musicButton.isSelected()){
-//                gamePanel.musicButton.setText("Music Off");
                 gamePanel.musicButton.setIcon(musicOff);
                 SoundFX.MUSIC1.stopPlay();
             }else {
-//                gamePanel.musicButton.setText("Music ON");
                 gamePanel.musicButton.setIcon(musicOn);
                 int loop = 3;
                 SoundFX.MUSIC1.loopPlay(loop);
@@ -193,8 +159,6 @@ public class Input {
                 }
 
         );
-
-       // gamePanel.useButton.addActionListener(e -> JOptionPane.showMessageDialog(null,"Nothing happens...", "", JOptionPane.PLAIN_MESSAGE));
 
 
         gamePanel.exploreAirportButton.addActionListener(e ->
@@ -420,22 +384,6 @@ public class Input {
                                     }
 
                                     break;
-
-                                case "drop":
-                                    if (playerList.contains(nouns.get(0))) {
-                                        locationList.add(nouns.get(0));
-                                        playerList.remove(nouns.get(0));
-                                        FileManager.updateLocationItems(player1.getPlayerLocation(), locationList);
-                                        FileManager.savePlayerItems(playerList);
-                                        player1.setPlayerInventory(playerList);
-                                        gamePanel.inventoryListModel.removeElement(nouns.get(0));
-                                    } else {
-                                        JOptionPane.showMessageDialog(gamePanel,"Sorry, I can't drop what I don't have.", "", JOptionPane.PLAIN_MESSAGE);
-                                    }
-                                    break;
-                                case "use":
-                                    JOptionPane.showMessageDialog(gamePanel,"Nothing happens...", "", JOptionPane.PLAIN_MESSAGE);
-                                    break;
                                 case "talk":
                                     JOptionPane.showMessageDialog(gamePanel, player1.talk(nouns.get(0)), "", JOptionPane.PLAIN_MESSAGE);
                                     String a = TextToSpeech.talkNpc(player1.talk(nouns.get(0)));
@@ -462,26 +410,13 @@ public class Input {
                     }
                     //display available people in current location
                     if (!npcNames.isEmpty()) {
-                        String nameThree = null;
-                        String nameTwo = null;
                         String name = null;
                         switch (npcNames.size()) {
-                            case 3:
-                                nameThree = npcNames.get(2);
-                            case 2:
-                                nameTwo = npcNames.get(1);
                             case 1:
                                 name = npcNames.get(0);
                         }
                         switch (npcNames.size()) {
-                            case 3:
-                                gamePanel.seePeople.setText("You see:\n " + nameThree + ", " + nameTwo + ", and " + name + ".");
-
-                                break;
-                            case 2:
-                                gamePanel.seePeople.setText("You see:\n " + name + " and " + nameTwo + ".");
-                                break;
-                            case 1:
+                           case 1:
                                 gamePanel.seePeople.setText("You see:\n " + name + ".");
                                 break;
                         }
@@ -534,59 +469,6 @@ public class Input {
 
         }
 
-        for (ArrayList<String> locArr : locations.values()) {
-            if(locArr.contains(parsedDirection.toLowerCase())) {
-                String tempLocation = FileManager.getNewLocation(player1.getPlayerZone(), player1.getPlayerLocation(), parsedDirection);
-                player1.setPlayerLocation(parsedDirection);
-                player1.setPlayerZone(FileManager.getNewZone(player1.getPlayerLocation()));
-                FileManager.getLocationDescription(player1.getPlayerLocation(), player1.getPlayerZone());
-                JSONArray NPCname= FileManager.getNPCsName(player1.getPlayerLocation());
-                ArrayList<String> npcNames = (ArrayList<String>) NPCname;
-
-                //display available items for current location
-                if (!FileManager.getLocationItems(parsedDirection).isEmpty()) {
-                    System.out.println(FileManager.getLocationItems(tempLocation));
-                    String seeItems="You see the following items lying around: ";
-                    String result = String.join(",", FileManager.getLocationItems(tempLocation));
-                    String itemText = seeItems + "\n" + result;
-                    gamePanel.seeItem.setText(itemText+"\n");
-
-                }
-                else if(FileManager.getLocationItems(tempLocation).isEmpty()){
-                    gamePanel.seeItem.setText("");
-                }
-                //display available people in current location
-                if(!npcNames.isEmpty()){
-                    String nameThree = null;
-                    String nameTwo = null;
-                    String name = null;
-                    switch (npcNames.size()){
-                        case 3:
-                            nameThree = npcNames.get(2);
-                        case 2:
-                            nameTwo = npcNames.get(1);
-                        case 1:
-                            name = npcNames.get(0);
-                    }
-                    switch (npcNames.size()){
-                        case 3:
-                            gamePanel.seePeople.setText("You see:\n" + nameThree + ", " + nameTwo + ", and " + name + ".");
-                            break;
-                        case 2:
-                            gamePanel.seePeople.setText("You see:\n" + name + " and " + nameTwo + ".");
-                            break;
-                        case 1:
-                            gamePanel.seePeople.setText("You see:\n"+name+".");
-                            break;
-                    }
-                }
-                else{
-                    gamePanel.seePeople.setText("");
-                }
-                didMove = true;
-            }
-        }
-
         if (!didMove) {
             JOptionPane.showMessageDialog(null,"you were unable to move " + direction + ".","",JOptionPane.PLAIN_MESSAGE);
         }
@@ -594,145 +476,6 @@ public class Input {
 
     }
 
-    static void introduction() {
-        FileManager.getAssetFile("introduction.txt");
-        System.out.println("Press Enter to continue...");
-        scanner.nextLine();
-        System.out.print("\033[H\033[2J");
-        FileManager.getZoneArtFile("zone2.txt");
-        FileManager.getAssetFile("game-start.txt");
-    }
-
-    static void playerCreator(){
-        /*
-         *Takes in your name and saves the save file with default values.
-         */
-        System.out.print("Enter your name:");
-        userInput = scanner.nextLine().strip();
-        player1.setPlayerName(userInput);
-        FileManager.saveGame(player1.getPlayerName(), player1.getPlayerLocation(), player1.getPlayerZone(), player1.getPlayerInventory());
-    }
-
-    /*
-     * THIS big boy is the main interaction point for the user with the game. It takes user commands in as verb x noun.
-     * For example, you can type "get the dog" text parser will return [get, dog]
-     * TODO: This might be able to go away, will comment out for now
-     */
-
-    /*public static void inputCommandsLogic() {
-        ArrayList<String> locationList = FileManager.getLocationItems(player1.getPlayerLocation());
-        ArrayList<String> playerList = FileManager.getPlayerItems();
-
-        if (!locationList.isEmpty()) {
-            System.out.println("You see the following items lying around: ");
-            for (String item : locationList) {
-                System.out.print("|" + item);
-            }
-            System.out.println("|");
-        }
-
-        // Get user input and parse
-        System.out.print("\nWhat would you like to do?");
-        userInput = scanner.nextLine();
-        //String[] answerWords = ANSWER.split(" ");
-        String verb = TextParser.getVerb(userInput);
-        ArrayList<String> nouns = TextParser.getNouns(userInput);
-
-        switch (verb) {
-            case "map":
-                FileManager.getAssetFile("map.txt");
-                System.out.println("\nYour current location is " + player1.getPlayerLocation());
-                inputCommandsLogic();
-                break;
-            case "inventory":
-                System.out.println("Your inventory has: " + playerList);
-                break;
-            case "go":
-                boolean didMove = false;
-                for (Directions dir : Directions.values()) {
-                    if (dir.name().equals(nouns.get(0).toUpperCase())) {
-                        player1.move(nouns.get(0));
-                        didMove = true;
-                    }
-                }
-                if (!didMove) {
-                    System.out.println("you were unable to move " + nouns.get(0) + ".");
-                }
-                FileManager.saveGame(player1.getPlayerName(), player1.getPlayerLocation(), player1.getPlayerZone(), player1.getPlayerInventory());
-                break;
-            case "get":
-                if (locationList.contains(nouns.get(0))) {
-                    locationList.remove(nouns.get(0));
-                    playerList.add(nouns.get(0));
-                    FileManager.updateLocationItems(player1.getPlayerLocation(), locationList);
-                    FileManager.savePlayerItems(playerList);
-                    player1.setPlayerInventory(playerList);
-                    System.out.println("Your inventory has: " + playerList);
-                } else {
-                    System.out.println("I can't get that! There's no " + nouns.get(0) + " for me to pick up!");
-                }
-                break;
-            case "drop":
-                if (playerList.contains(nouns.get(0))) {
-                    locationList.add(nouns.get(0));
-                    playerList.remove(nouns.get(0));
-                    FileManager.updateLocationItems(player1.getPlayerLocation(), locationList);
-                    FileManager.savePlayerItems(playerList);
-                    player1.setPlayerInventory(playerList);
-                } else {
-                    System.out.println("I can't drop what I don't have!");
-                }
-                break;
-            case "use":
-                //TODO: Currently use does nothing
-                System.out.println("Nothing happens...");
-                break;
-            case "talk":
-                System.out.println(player1.talk(nouns.get(0)));
-                break;
-            case "help":
-                System.out.println("Your current location is " + player1.getPlayerLocation());
-                FileManager.getAssetFile("help.txt");
-                inputCommandsLogic();
-                break;
-            case "music":
-                switch (nouns.get(0)) {
-                    case "on":
-                        int loop = 3;
-                        SoundFX.MUSIC1.loopPlay(loop);
-                        System.out.println("Back ground music turned on~~~~~");
-                        break;
-                    case "off":
-                        SoundFX.MUSIC1.stopPlay();
-                        System.out.println("Back ground music stopped~~~~~");
-                        break;
-                    default: System.out.println("Not a valid response\n [on] [off]");
-                }
-
-                break;
-            case "quit":
-                FileManager.saveGame(player1.getPlayerName(), player1.getPlayerLocation(), player1.getPlayerZone(), player1.getPlayerInventory());
-                System.out.println("Press 1 to quit to menu or 2 to exit game:");
-                int choice = scanner.nextInt();
-                switch (choice){
-                    case 2:
-                        System.exit(0);
-                        break;
-                    case 1:
-                        GameEngine.execute();
-                        break;
-                    default:
-                        System.out.println("Invalid choice");
-                        inputCommandsLogic();
-                }
-
-            default:
-                System.out.println("I didn't understand that command. for help type help.");
-                inputCommandsLogic();
-
-        }
-        FileManager.saveGame(player1.getPlayerName(), player1.getPlayerLocation(), player1.getPlayerZone(), player1.getPlayerInventory());
-    }*/
 
     public static boolean sceneOneAction() {
         boolean sceneOnePass = FileManager.sceneReader("sceneOnePassed");

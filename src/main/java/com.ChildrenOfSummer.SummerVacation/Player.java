@@ -120,24 +120,13 @@ public class Player {
             }
             FileManager.getLocationDescription(playerLocation, playerZone);
             if(!npcNames.isEmpty()){
-                String nameThree = null;
-                String nameTwo = null;
                 String name = null;
                 switch (npcNames.size()){
-                    case 3:
-                        nameThree = npcNames.get(2);
-                    case 2:
-                        nameTwo = npcNames.get(1);
                     case 1:
                         name = npcNames.get(0);
                 }
                 switch (npcNames.size()){
-                    case 3:
-                        System.out.println("You see " + nameThree + ", " + nameTwo + ", and " + name + ".");
-                    break;
-                    case 2:
-                        System.out.println("You see " + name + " and " + nameTwo + ".");
-                    break;
+
                     case 1:
                         System.out.println("You see "+name+".");
                     break;
@@ -148,10 +137,6 @@ public class Player {
     }
 
 
-
-    void wakeUp(){
-        GameClock.wakeUpTime();
-    }
 
     public String talk(String npcName){
         int number = randomNumberGenerator();
