@@ -475,14 +475,14 @@ public class Input {
                         }
                         switch (npcNames.size()) {
                             case 3:
-                                gamePanel.seePeople.setText("You see " + nameThree + ", " + nameTwo + ", and " + name + ".");
+                                gamePanel.seePeople.setText("You see:\n " + nameThree + ", " + nameTwo + ", and " + name + ".");
 
                                 break;
                             case 2:
-                                gamePanel.seePeople.setText("You see " + name + " and " + nameTwo + ".");
+                                gamePanel.seePeople.setText("You see:\n " + name + " and " + nameTwo + ".");
                                 break;
                             case 1:
-                                gamePanel.seePeople.setText("You see " + name + ".");
+                                gamePanel.seePeople.setText("You see:\n " + name + ".");
                                 break;
                         }
 
@@ -570,13 +570,13 @@ public class Input {
                     }
                     switch (npcNames.size()){
                         case 3:
-                            gamePanel.seePeople.setText("You see " + nameThree + ", " + nameTwo + ", and " + name + ".");
+                            gamePanel.seePeople.setText("You see:\n" + nameThree + ", " + nameTwo + ", and " + name + ".");
                             break;
                         case 2:
-                            gamePanel.seePeople.setText("You see " + name + " and " + nameTwo + ".");
+                            gamePanel.seePeople.setText("You see:\n" + name + " and " + nameTwo + ".");
                             break;
                         case 1:
-                            gamePanel.seePeople.setText("You see "+name+".");
+                            gamePanel.seePeople.setText("You see:\n"+name+".");
                             break;
                     }
                 }
