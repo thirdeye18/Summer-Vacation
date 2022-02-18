@@ -15,7 +15,7 @@ public class GameEngine {
     public static void execute() {
         FileManager.loadDefaults();
         if (Input.startMenu()) {
-            Input.introduction();
+            //Input.introduction();
 
         } else {
             sceneOnePassed = FileManager.sceneReader("sceneOnePassed");

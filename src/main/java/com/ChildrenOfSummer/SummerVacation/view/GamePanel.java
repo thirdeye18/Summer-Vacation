@@ -3,6 +3,7 @@ package com.ChildrenOfSummer.SummerVacation.view;
 import com.ChildrenOfSummer.SummerVacation.FileManager;
 import com.ChildrenOfSummer.SummerVacation.Input;
 import com.ChildrenOfSummer.SummerVacation.Player;
+import com.ChildrenOfSummer.SummerVacation.Util.SoundFX;
 import org.json.simple.JSONArray;
 
 import javax.swing.*;
@@ -87,6 +88,8 @@ public class GamePanel extends JFrame {
     public static String ANSWER;
     private static ArrayList<String> empty = new ArrayList<>();
     private static Player player1 = Player.getInstance("default", "Player's House", "Suburb", empty);
+    ImageIcon on = new ImageIcon("Assets/json/on.png");
+    ImageIcon off = new ImageIcon("Assets/json/off.png");
     String locationDescJson = FileManager.getLocationDescription(player1.getPlayerLocation(), player1.getPlayerZone());
 
 
@@ -192,7 +195,7 @@ public class GamePanel extends JFrame {
         exploreOldHouseSouthButton = createJButton("Explore Old house South",180,40,false,Color.white,Color.black);
         exploreRiverButton = createJButton("Explore River",180,40,false,Color.white,Color.black);
         goToIslandButton = createJButton("Go To Island",180,40,false,Color.white,Color.black);
-        musicButton = new JToggleButton("Music Off");
+        musicButton = new JToggleButton("Music ON");
     }
     public void createGameScreen() {
         titleNamePanel.setVisible(true);
@@ -223,6 +226,8 @@ public class GamePanel extends JFrame {
 
         playerPageFooterPanel.add(musicButton);
         introScreenEnterGameButtonPanel.add(playerPageEnterGameButton);
+        int loop = 3;
+        SoundFX.MUSIC1.loopPlay(loop);
 
 
         // Zoe notes: task --add function to playerPageEnterGameButton,

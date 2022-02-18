@@ -132,12 +132,12 @@ public class Input {
 
         gamePanel.musicButton.addActionListener(e -> {
             if (gamePanel.musicButton.isSelected()){
-                gamePanel.musicButton.setText("Music On");
+                gamePanel.musicButton.setText("Music Off");
+                SoundFX.MUSIC1.stopPlay();
+            }else {
+                gamePanel.musicButton.setText("Music ON");
                 int loop = 3;
                 SoundFX.MUSIC1.loopPlay(loop);
-            }else {
-                gamePanel.musicButton.setText("Music off");
-                SoundFX.MUSIC1.stopPlay();
             }
         });
 
