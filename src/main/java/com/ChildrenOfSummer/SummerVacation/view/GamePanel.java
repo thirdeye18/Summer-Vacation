@@ -8,6 +8,7 @@ import org.json.simple.JSONArray;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 
@@ -83,13 +84,13 @@ public class GamePanel extends JFrame {
     public DefaultListModel inventoryListModel;
     public JList inventoryList;
     public JScrollPane scroll;
-    public JLabel titleBackground,gameBackground;
+    public JLabel titleBackground,gameBackground, musicLabel;
     //from Input class
     public static String ANSWER;
     private static ArrayList<String> empty = new ArrayList<>();
     private static Player player1 = Player.getInstance("default", "Player's House", "Suburb", empty);
-    ImageIcon on = new ImageIcon("Assets/json/on.png");
-    ImageIcon off = new ImageIcon("Assets/json/off.png");
+    ImageIcon musicOn = new ImageIcon("Assets/img/on.png");
+    ImageIcon musicOff = new ImageIcon("Assets/img/off.png");
     String locationDescJson = FileManager.getLocationDescription(player1.getPlayerLocation(), player1.getPlayerZone());
 
 
@@ -149,7 +150,7 @@ public class GamePanel extends JFrame {
         titleNamePanel = createJPanel(100,100,600,150,Color.black, true);
         newGameButtonPanel = createJPanel(300,400,200,150,new Color(0,0,0,0),true);
         askForNamePanel = createJPanel(100,100,600,120,Color.black,true);
-        playerPageFooterPanel = createJPanel(500,500,100,30,Color.black,true);
+        playerPageFooterPanel = createJPanel(500,480,40,50,new Color(0,0,0,0),true);
         introScreenEnterGameButtonPanel = createJPanel(600,420,160,50,new Color(0,0,0,0),true);
         mainTextPanel = createJPanel(20,60,740,350,Color.black,true);
         locationImgPanel = createJPanel(20,30,540,300,Color.black,true);
@@ -195,7 +196,7 @@ public class GamePanel extends JFrame {
         exploreOldHouseSouthButton = createJButton("Explore Old house South",180,40,false,Color.white,Color.black);
         exploreRiverButton = createJButton("Explore River",180,40,false,Color.white,Color.black);
         goToIslandButton = createJButton("Go To Island",180,40,false,Color.white,Color.black);
-        musicButton = new JToggleButton("Music ON");
+        musicButton = new JToggleButton();
     }
     public void createGameScreen() {
         titleNamePanel.setVisible(true);
@@ -225,6 +226,7 @@ public class GamePanel extends JFrame {
 
 
         playerPageFooterPanel.add(musicButton);
+        musicButton.setIcon(musicOn);
         introScreenEnterGameButtonPanel.add(playerPageEnterGameButton);
         int loop = 3;
         SoundFX.MUSIC1.loopPlay(loop);
