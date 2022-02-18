@@ -15,7 +15,7 @@ public class GameEngine {
     public static void execute() {
         FileManager.loadDefaults();
         if (Input.startMenu()) {
-            Input.introduction();
+            //Input.introduction();
 
         } else {
             sceneOnePassed = FileManager.sceneReader("sceneOnePassed");
@@ -80,7 +80,8 @@ public class GameEngine {
         JSONObject saveFile;
         String playerLocation;
         do {
-            Input.inputCommandsLogic();
+            // TODO: this is the only current place still using Input.inputCommandsLogic, pretty sure can go
+            //Input.inputCommandsLogic();
             saveFile = FileManager.loadGame();
             playerLocation = (String) saveFile.get("location");
         } while (!playerLocation.equals(location));

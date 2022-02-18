@@ -1,26 +1,27 @@
 package com.ChildrenOfSummer.SummerVacation;
 
-import com.ChildrenOfSummer.SummerVacation.Util.Directions;
-import com.ChildrenOfSummer.SummerVacation.Util.JsonHandler;
-import com.ChildrenOfSummer.SummerVacation.Util.SoundFX;
-import com.ChildrenOfSummer.SummerVacation.Util.TextParser;
+import com.ChildrenOfSummer.SummerVacation.Util.*;
 import com.ChildrenOfSummer.SummerVacation.view.GamePanel;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import javax.swing.*;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Scanner;
+import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
+import java.util.*;
+import java.util.List;
 
 public class Input {
     private static Scanner scanner = new Scanner(System.in);   //takes direct input currently from the user and passes it to the program
-    private static String ANSWER;
+    private static String userInput;
     private static ArrayList<String> empty = new ArrayList<>();
     private static Player player1 = Player.getInstance("default", "Player's House", "Suburb", empty);
     private static GamePanel gamePanel = new GamePanel();
-    // private static final Clip clip = FileManager.getMusic(null);
-
+    private static String itemText;
 
     public static boolean startMenu() {
         /*
@@ -35,45 +36,16 @@ public class Input {
 
 
         while (!newGame) {  //loop until new game option selected, error msg for invalid input
-
-            FileManager.menuFiles();    //display menu text
-            String startMenuChoice = TextParser.getVerb(scanner.nextLine());    //.strip().toLowerCase();
-            switch (startMenuChoice) {
-                case "start":
-                    player1.setPlayerInventory(empty);
-                    player1.setPlayerName("default");
-                    player1.setPlayerLocation("Player's House");
-                    player1.setPlayerZone("Suburb");
-                    playerCreator();
-                    FileManager.loadDefaults();
-                    return true;
-
-                case "continue":
-                    JSONObject saveFile = FileManager.loadGame();
-                    String name = (String) saveFile.get("name");
-                    String location = (String) saveFile.get("location");
-                    String zone = (String) saveFile.get("zone");
-                    ArrayList<String> inventory = (ArrayList<String>) saveFile.get("inventory");
-                    player1.setPlayerInventory(inventory);
-                    player1.setPlayerName(name);
-                    player1.setPlayerLocation(location);
-                    player1.setPlayerZone(zone);
-                    return false;
-
-                case "quit":
-                    System.exit(0);
-
-                default:
-                    System.out.println("invalid!\n Please type 'new game' for new game, 'load game' to load your save or 'quit' to quit.\n");
-            }
-
         }
         return newGame;
     }
+
     //set up listeners
     private static void setupListeners(){
 
+
         gamePanel.newGameButton.addActionListener(e -> {
+            gamePanel.titleBackground.setVisible(false);
             gamePanel.playerNameScreen();
             player1.setPlayerInventory(empty);
             player1.setPlayerName("default");
@@ -81,29 +53,54 @@ public class Input {
             player1.setPlayerZone("Suburb");
         });
 
-
         gamePanel.quitGameButton.addActionListener(e->System.exit(0));
 
         gamePanel.playerPageEnterGameButton.addActionListener(e-> {
+
             gamePanel.introScreen();
-            ANSWER = gamePanel.userName.getText();
-            player1.setPlayerName(ANSWER);
+            userInput = gamePanel.userName.getText();
+            player1.setPlayerName(userInput);
             FileManager.saveGame(player1.getPlayerName(), player1.getPlayerLocation(), player1.getPlayerZone(), player1.getPlayerInventory());
-            gamePanel.textField.setText("Hi "+ ANSWER+"\n"+FileManager.txtFileToString("introduction.txt"));
+            gamePanel.textField.setText("Hi "+ userInput +",\n"+"It's 2 weeks into summer vacation, you and your friend Sara are extremely bored.\n" +
+                    "In this town, there isn't much to do for fun.\n" +
+                    "Yesterday before splitting up Sara said \"we should go to the abandoned airport tomorrow!\"\n                   **New Task**\n                EXPLORE THE AIRPORT");
         });
 
         gamePanel.mapButton.addActionListener(e -> {
-            JFrame frame = new JFrame("Map");
-            frame.setSize(400,400);
-            frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-            ImageIcon mapIcon = new ImageIcon("Assets/img/map.PNG");
-            JLabel label = new JLabel(mapIcon);
-            frame.add(label);
-            frame.pack();
-            frame.setVisible(true);
+            // This creates the map
+            MapLocation map = new MapLocation();
+            JFrame mapFrame = new JFrame("Map");    // create new JFrame for map
+            mapFrame.add(map);  // add the map to the
+            mapFrame.setSize(725, 325);
+            mapFrame.setVisible(true);
+            mapFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+            gamePanel.mapButton.setEnabled(false);
+            mapFrame.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosing(WindowEvent e) {
+                    gamePanel.mapButton.setEnabled(true);
+                }
+            });
+
+//            JFrame frame = new JFrame("Map");
+//            frame.setSize(400,400);
+//            frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+//            ImageIcon mapIcon = new ImageIcon("Assets/map/map.png");
+//            JLabel label = new JLabel(mapIcon);
+//            frame.add(label);
+//            frame.pack();
+//            frame.setVisible(true);
+//            gamePanel.mapButton.setEnabled(false);
+//            frame.addWindowListener(new WindowAdapter() {
+//                @Override
+//                public void windowClosing(WindowEvent e) {
+//                    gamePanel.mapButton.setEnabled(true);
+//                }
+//            });
         });
+
         gamePanel.helpButton.addActionListener(e -> {
-            JFrame frame = new JFrame("Map");
+            JFrame frame = new JFrame("Help");
             frame.setSize(400,400);
             frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
             ImageIcon helpIcon = new ImageIcon("Assets/img/help.PNG");
@@ -111,15 +108,27 @@ public class Input {
             frame.add(label1);
             frame.pack();
             frame.setVisible(true);
+            gamePanel.helpButton.setEnabled(false);
+            frame.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosing(WindowEvent e) {
+                    gamePanel.helpButton.setEnabled(true);
+                }
+            });
         });
+
         gamePanel.musicButton.addActionListener(e -> {
+
+            ImageIcon musicOn = new ImageIcon("Assets/img/on.png");
+            ImageIcon musicOff = new ImageIcon("Assets/img/off.png");
+
             if (gamePanel.musicButton.isSelected()){
-                gamePanel.musicButton.setText("Music On");
+                gamePanel.musicButton.setIcon(musicOff);
+                SoundFX.MUSIC1.stopPlay();
+            }else {
+                gamePanel.musicButton.setIcon(musicOn);
                 int loop = 3;
                 SoundFX.MUSIC1.loopPlay(loop);
-            }else {
-                gamePanel.musicButton.setText("Music off");
-                SoundFX.MUSIC1.stopPlay();
             }
         });
 
@@ -127,6 +136,7 @@ public class Input {
         gamePanel.southButton.addActionListener(e -> goDirection("south"));
         gamePanel.eastButton.addActionListener(e -> goDirection("east"));
         gamePanel.westButton.addActionListener(e -> goDirection("west"));
+
 
         gamePanel.dropButton.addActionListener(e -> {
             ArrayList<String> locationList = FileManager.getLocationItems(player1.getPlayerLocation());
@@ -140,108 +150,86 @@ public class Input {
                 FileManager.savePlayerItems(playerList);
                 player1.setPlayerInventory(playerList);
                 gamePanel.inventoryListModel.removeElementAt(index);
+
             }
             else{
                 JOptionPane.showMessageDialog(null, "Nothing selected, please select one item to drop", "", JOptionPane.PLAIN_MESSAGE);
             }
         });
 
-        gamePanel.useButton.addActionListener(e -> {
-            JOptionPane.showMessageDialog(null,"Nothing happens...", "", JOptionPane.PLAIN_MESSAGE);
-        });
+        gamePanel.myCurrentTaskButton.addActionListener(e -> {
 
-        gamePanel.loadGameButton.addActionListener(e -> {
-            JSONObject saveFile = FileManager.loadGame();
-            String name = (String) saveFile.get("name");
-            String location = (String) saveFile.get("location");
-            String zone = (String) saveFile.get("zone");
-            ArrayList<String> inventory = (ArrayList<String>) saveFile.get("inventory");
-            player1.setPlayerInventory(inventory);
-            player1.setPlayerName(name);
-            player1.setPlayerLocation(location);
-            player1.setPlayerZone(zone);
-        });
-
-
-
-        gamePanel.userInputEnterButton.addActionListener(e->{
-
-            ArrayList<String> locationList = FileManager.getLocationItems(player1.getPlayerLocation());
-            ArrayList<String> playerList = FileManager.getPlayerItems();
-            ANSWER = gamePanel.userInput.getText();
-            String[] answerWords = ANSWER.split(" ");
-            String verb = answerWords[0].toLowerCase();
-            String noun2 = answerWords[answerWords.length - 1].toLowerCase();
-            switch (verb) {
-                case "inventory":
-                    JOptionPane.showMessageDialog(null, "Your inventory has: " + playerList, "", JOptionPane.PLAIN_MESSAGE);
-                    break;
-                case "get":
-                    if (locationList.contains(noun2)) {
-
-                        locationList.remove(noun2);
-                        playerList.add(noun2);
-                        FileManager.updateLocationItems(player1.getPlayerLocation(), locationList);
-                        FileManager.savePlayerItems(playerList);
-                        player1.setPlayerInventory(playerList);
-                        gamePanel.inventoryListModel.addElement(noun2);
-
-                        JOptionPane.showMessageDialog(null, noun2 + " has been added to your inventory.", "", JOptionPane.PLAIN_MESSAGE);
-                    } else {
-                        System.out.println(locationList);
-                        JOptionPane.showMessageDialog(null, "I can't get that! There's no " + noun2 + " for me to pick up!", "", JOptionPane.PLAIN_MESSAGE);
-
+                    if (!FileManager.sceneReader("sceneOnePassed")) {
+                        JOptionPane.showMessageDialog(null, "Go to Airport, remember to collect something before go there. \nGood luck!", "", JOptionPane.PLAIN_MESSAGE);
+                    } else if (FileManager.sceneReader("sceneOnePassed") && !FileManager.sceneReader("sceneTwoPassed")) {
+                        JOptionPane.showMessageDialog(null, "Go to Player's House", "", JOptionPane.PLAIN_MESSAGE);
+                    } else if (FileManager.sceneReader("sceneOnePassed") && FileManager.sceneReader("sceneTwoPassed") && !FileManager.sceneReader("sceneThreePassed")) {
+                        JOptionPane.showMessageDialog(null, "Go to Hay Field", "", JOptionPane.PLAIN_MESSAGE);
+                    }
+                    else if (FileManager.sceneReader("sceneOnePassed") && FileManager.sceneReader("sceneTwoPassed") && FileManager.sceneReader("sceneThreePassed")
+                            && !FileManager.sceneReader("sceneFourPassed")){
+                        JOptionPane.showMessageDialog(null, "Look for Sara", "", JOptionPane.PLAIN_MESSAGE);
+                    }
+                    else if (FileManager.sceneReader("sceneOnePassed") && FileManager.sceneReader("sceneTwoPassed") && FileManager.sceneReader("sceneThreePassed")
+                            && FileManager.sceneReader("sceneFourPassed") && !FileManager.sceneReader("sceneFivePassed")){
+                        JOptionPane.showMessageDialog(null, "Go to river", "", JOptionPane.PLAIN_MESSAGE);
                     }
 
-                    break;
+                }
 
-                case "drop":
-                    if (playerList.contains(noun2)) {
-                        locationList.add(noun2);
-                        playerList.remove(noun2);
-                        FileManager.updateLocationItems(player1.getPlayerLocation(), locationList);
-                        FileManager.savePlayerItems(playerList);
-                        player1.setPlayerInventory(playerList);
-                        gamePanel.inventoryListModel.removeElement(noun2);
-                    } else {
-                        JOptionPane.showMessageDialog(null,"Sorry, I can't drop what I don't have.", "", JOptionPane.PLAIN_MESSAGE);
-                    }
-                    break;
-                case "use":
-                    JOptionPane.showMessageDialog(null,"Nothing happens...", "", JOptionPane.PLAIN_MESSAGE);
-                    break;
-                case "talk":
-                    JOptionPane.showMessageDialog(null, player1.talk(noun2), "", JOptionPane.PLAIN_MESSAGE);
-                    break;
-                case "go":
-                    goDirection(noun2);
-                    break;
-                case "quit":
-                    FileManager.saveGame(player1.getPlayerName(), player1.getPlayerLocation(), player1.getPlayerZone(), player1.getPlayerInventory());
-                    System.exit(0);
-                    break;
-                default:
-                    JOptionPane.showMessageDialog(null, "I didn't understand that command. for help click help button on the top or type help.", "", JOptionPane.PLAIN_MESSAGE);
-            }
+        );
 
 
-        });
         gamePanel.exploreAirportButton.addActionListener(e ->
-        {
-            gamePanel.arriveSpecialScene("scene-one.txt");
-        });
+                {
+                    if (FileManager.getPlayerItems().contains("rope") && !FileManager.getPlayerItems().contains("planks")) {
+                        JOptionPane.showMessageDialog(null, "It looks like you have a rope in your bag! \nYou may need something to make a ladder by combining something " +
+                                "with the rope! Come back once you got the item!", "", JOptionPane.PLAIN_MESSAGE);
+                    } else if (FileManager.getPlayerItems().contains("planks") && !FileManager.getPlayerItems().contains("rope")) {
+                        JOptionPane.showMessageDialog(null, "It looks like you have planks in your bag! \nYou may need something to make a ladder by combining something " +
+                                "with the planks! Come back once you got the item!", "", JOptionPane.PLAIN_MESSAGE);
+                    } else if (FileManager.getPlayerItems().contains("rope") && FileManager.getPlayerItems().contains("planks")) {
+                        gamePanel.arriveSpecialScene("scene-one");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "With no items to help you, you and your friends are caught by security! You're grounded!\nGame Over!", "", JOptionPane.PLAIN_MESSAGE);
+                        System.exit(0);
+                    }
+                }
+
+        );
+
 
         gamePanel.arriveSpecialSceneNextButton.addActionListener(e ->
         {
-            if (FileManager.getPlayerItems().contains("rope") && FileManager.getPlayerItems().contains("planks")) {
-                gamePanel.taskEscapeWithEnoughInventory();
-            } else {
-                JOptionPane.showMessageDialog(null,"With no items to help you, you and your friends are caught by security! You're grounded!\nGame Over!","",JOptionPane.PLAIN_MESSAGE);
-                System.exit(0);
-            }
+            gamePanel.taskEscapeWithEnoughInventory();
         });
 
         gamePanel.taskScreenNextButton.addActionListener(e->{
+                    gamePanel.mainTextPanel.setVisible(false);
+                    gamePanel.taskScreenNextButtonPanel.setVisible(false);
+                    gamePanel.largeTextAreaPanel.setVisible(false);
+                    gamePanel.locationImgPanel.setVisible(true);
+                    gamePanel.mainLocationDescPanel.setVisible(true);
+                    gamePanel.userInputPanel.setVisible(true);
+                    gamePanel.directionButtonPanel.setVisible(true);
+                    gamePanel.inventoryPanel.setVisible(true);
+
+                }
+        );
+
+        gamePanel.explorePlayerHouseButton.addActionListener(e->{
+                    gamePanel.clearZoneViewPanel();
+                    gamePanel.explorePlayerHouseButtonPanel.setVisible(false);
+                    gamePanel.taskScreen("scene-two");
+                    gamePanel.taskScreenNextButtonPanel.setVisible(false);
+                    gamePanel.goToHayFieldNextButtonPanel.add(gamePanel.goTOHayFieldNextButton);
+                    gamePanel.con.add(gamePanel.goToHayFieldNextButtonPanel);
+                    FileManager.sceneWriter(true, "sceneTwoPassed");
+
+                }
+        );
+
+        gamePanel.goTOHayFieldNextButton.addActionListener(e->{
             gamePanel.mainTextPanel.setVisible(false);
             gamePanel.taskScreenNextButtonPanel.setVisible(false);
             gamePanel.largeTextAreaPanel.setVisible(false);
@@ -250,45 +238,115 @@ public class Input {
             gamePanel.userInputPanel.setVisible(true);
             gamePanel.directionButtonPanel.setVisible(true);
             gamePanel.inventoryPanel.setVisible(true);
-
-                }
-
-
-
-        );
-
-        gamePanel.explorePlayerHouseButton.addActionListener(e->{
-            gamePanel.clearZoneViewPanel();
-            gamePanel.explorePlayerHouseButtonPanel.setVisible(false);
-            gamePanel.taskScreen("scene-two.txt");
-            gamePanel.taskScreenNextButtonPanel.setVisible(true);
-            gamePanel.taskScreenNextButtonPanel.add(gamePanel.taskScreenNextButton);
-            gamePanel.con.add(gamePanel.taskScreenNextButtonPanel);
-                    FileManager.sceneWriter(true, "sceneTwoPassed");
-                    JOptionPane.showMessageDialog(null,"You arrived and completed task", "", JOptionPane.PLAIN_MESSAGE);
-                }
-
-        );
+            gamePanel.goToHayFieldNextButtonPanel.setVisible(false);
+        });
 
         gamePanel.exploreHayFieldButton.addActionListener(e->{
-            gamePanel.clearZoneViewPanel();
-            gamePanel.explorePlayerHouseButtonPanel.setVisible(false);
-            gamePanel.taskScreen("scene-three.txt");
-            gamePanel.con.add(gamePanel.hayfieldNextButtonPanel);
-            gamePanel.hayfieldNextButtonPanel.setVisible(true);
-            gamePanel.hayfieldNextButtonPanel.add(gamePanel.hayfieldNextButton);
-            gamePanel.exploreHayFieldButtonPanel.setVisible(false);
-                    FileManager.sceneWriter(true, "sceneThreePassed");
-                    JOptionPane.showMessageDialog(null,"You arrived and completed task", "", JOptionPane.PLAIN_MESSAGE);
+                    gamePanel.clearZoneViewPanel();
+                    gamePanel.explorePlayerHouseButtonPanel.setVisible(false);
+                    gamePanel.taskScreen("scene-three");
+                    gamePanel.con.add(gamePanel.hayfieldNextButtonPanel);
+                    gamePanel.hayfieldNextButtonPanel.setVisible(true);
+                    gamePanel.hayfieldNextButtonPanel.add(gamePanel.hayfieldNextButton);
+                    gamePanel.exploreHayFieldButtonPanel.setVisible(false);
+
+
+                }
+        );
+        gamePanel.hayfieldNextButton.addActionListener(e->
+                gamePanel.taskThrowRockWithEnoughInventory()
+        );
+
+        gamePanel.findSaraButton.addActionListener(e->{
+                    gamePanel.mainTextPanel.setVisible(false);
+                    gamePanel.taskScreenNextButtonPanel.setVisible(false);
+                    gamePanel.largeTextAreaPanel.setVisible(false);
+                    gamePanel.locationImgPanel.setVisible(true);
+                    gamePanel.mainLocationDescPanel.setVisible(true);
+                    gamePanel.userInputPanel.setVisible(true);
+                    gamePanel.directionButtonPanel.setVisible(true);
+                    gamePanel.inventoryPanel.setVisible(true);
+                    gamePanel.findSaraButtonPanel.setVisible(false);
                 }
 
         );
-        gamePanel.hayfieldNextButton.addActionListener(e->{
-            gamePanel.taskThrowRockWithEnoughInventory();
+        gamePanel.exploreOldHouseSouthButton.addActionListener(e->{
+                    gamePanel.clearZoneViewPanel();
+                    gamePanel.taskScreen("scene-four");
+                    gamePanel.exploreOldHouseSouthButtonPanel.setVisible(false);
+                    FileManager.sceneWriter(true, "sceneFourPassed");
+                    gamePanel.findSuppliesButtonPanel.setVisible(true);
+                    gamePanel.con.add(gamePanel.findSuppliesButtonPanel);
+                    gamePanel.findSuppliesButtonPanel.add(gamePanel.findSuppliesButton);
                 }
 
         );
+        gamePanel.findSuppliesButton.addActionListener(e->{
+                    gamePanel.mainTextPanel.setVisible(false);
+                    gamePanel.taskScreenNextButtonPanel.setVisible(false);
+                    gamePanel.largeTextAreaPanel.setVisible(false);
+                    gamePanel.locationImgPanel.setVisible(true);
+                    gamePanel.mainLocationDescPanel.setVisible(true);
+                    gamePanel.userInputPanel.setVisible(true);
+                    gamePanel.directionButtonPanel.setVisible(true);
+                    gamePanel.inventoryPanel.setVisible(true);
+                    gamePanel.findSuppliesButtonPanel.setVisible(false);
+                }
+
+        );
+        gamePanel.exploreRiverButton.addActionListener(e->{
+                    GamePanel.taskPaddleRiverWithEnoughInventory();
+                }
+
+        );
+
+
     }
+
+    public static void clickPic(){
+        JPopupMenu popMenu = new JPopupMenu();
+        JMenuItem item1 = new JMenuItem("talk");
+        item1.addActionListener(e->{
+            if(FileManager.getNPCsName(player1.getPlayerLocation()).size()> 0){
+                // npc name
+                JSONArray NPCname = FileManager.getNPCsName(player1.getPlayerLocation());
+
+                //npc dialogue
+                String dialogue = FileManager.getNPCsDialog((String) NPCname.get(0),1);
+                System.out.println(dialogue);
+
+                String a = TextToSpeech.talkNpc(dialogue);
+
+                System.out.println(a);}
+            else{
+                String a = TextToSpeech.talkNpc("There was no one to talk to");
+            }
+        });
+
+        popMenu.add(item1);
+
+        gamePanel.locationImgLabel.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {}
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if(SwingUtilities.isRightMouseButton(e)){
+                    popMenu.show(gamePanel.locationImgLabel,e.getX(),e.getY());
+                }
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {}
+
+            @Override
+            public void mouseEntered(MouseEvent e) {}
+
+            @Override
+            public void mouseExited(MouseEvent e) {}
+        });
+    }
+
 
     public static void goDirection(String direction){
         boolean didMove = false;
@@ -310,36 +368,73 @@ public class Input {
                     //display available items for current location
                     if (!FileManager.getLocationItems(tempLocation).isEmpty()) {
                         System.out.println(FileManager.getLocationItems(tempLocation));
+                        System.out.println(gamePanel.inventoryList);
                         String seeItems = "You see the following items lying around: ";
                         String result = String.join(",", FileManager.getLocationItems(tempLocation));
                         String itemText = seeItems + "\n" + result;
                         gamePanel.seeItem.setText(itemText + "\n");
+
+                        gamePanel.userInputEnterButton.addActionListener(e->{
+                            ArrayList<String> locationList = FileManager.getLocationItems(player1.getPlayerLocation());
+                            ArrayList<String> playerList = FileManager.getPlayerItems();
+                            userInput = gamePanel.userInput.getText();
+                            String verb = TextParser.getVerb(userInput);
+                            ArrayList<String> nouns = TextParser.getNouns(userInput);
+                            gamePanel.userInput.setText("");
+                            switch (verb) {
+                                case "inventory":
+                                    JOptionPane.showMessageDialog(gamePanel, "Your inventory has: " + playerList, "", JOptionPane.PLAIN_MESSAGE);
+                                    break;
+                                case "get":
+                                    if (locationList.contains(nouns.get(0))) {
+                                        locationList.remove(nouns.get(0));
+                                        playerList.add(nouns.get(0));
+                                        FileManager.updateLocationItems(player1.getPlayerLocation(), locationList);
+                                        FileManager.savePlayerItems(playerList);
+                                        player1.setPlayerInventory(playerList);
+                                        gamePanel.inventoryListModel.addElement(nouns.get(0));
+                                        JOptionPane.showMessageDialog(gamePanel, nouns.get(0) + " has been added to your inventory.", "", JOptionPane.PLAIN_MESSAGE);
+                                        String result1 = String.join(",", FileManager.getLocationItems(tempLocation));
+                                        String itemText1 = seeItems + "\n" + result1;
+                                        gamePanel.seeItem.setText(itemText1 + "\n");
+                                    } else {
+                                        JOptionPane.showMessageDialog(gamePanel, "I can't get that! There's no " + nouns.get(0) + " for me to pick up!", "", JOptionPane.PLAIN_MESSAGE);
+                                    }
+
+                                    break;
+                                case "talk":
+                                    JOptionPane.showMessageDialog(gamePanel, player1.talk(nouns.get(0)), "", JOptionPane.PLAIN_MESSAGE);
+                                    String a = TextToSpeech.talkNpc(player1.talk(nouns.get(0)));
+                                    System.out.println(a);
+                                    break;
+                                case "go":
+                                    goDirection(nouns.get(0));
+                                    break;
+                                case "quit":
+                                    FileManager.saveGame(player1.getPlayerName(), player1.getPlayerLocation(), player1.getPlayerZone(), player1.getPlayerInventory());
+                                    System.exit(0);
+                                    break;
+                                default:
+                                    JOptionPane.showMessageDialog(gamePanel, "I didn't understand that command. for help click help button on the top or type help.", "", JOptionPane.PLAIN_MESSAGE);
+                                    break;
+                            }
+
+
+                        });
 
                     } else if (FileManager.getLocationItems(tempLocation).isEmpty()) {
                         gamePanel.seeItem.setText("");
                     }
                     //display available people in current location
                     if (!npcNames.isEmpty()) {
-                        String nameThree = null;
-                        String nameTwo = null;
                         String name = null;
                         switch (npcNames.size()) {
-                            case 3:
-                                nameThree = npcNames.get(2);
-                            case 2:
-                                nameTwo = npcNames.get(1);
                             case 1:
                                 name = npcNames.get(0);
                         }
                         switch (npcNames.size()) {
-                            case 3:
-                                gamePanel.seePeople.setText("You see " + nameThree + ", " + nameTwo + ", and " + name + ".");
-                                break;
-                            case 2:
-                                gamePanel.seePeople.setText("You see " + name + " and " + nameTwo + ".");
-                                break;
                             case 1:
-                                gamePanel.seePeople.setText("You see " + name + ".");
+                                gamePanel.seePeople.setText("You see:\n " + name + ".");
                                 break;
                         }
 
@@ -350,78 +445,45 @@ public class Input {
                 }
 
                 didMove = true;
-                String currentZone = player1.getPlayerZone().toLowerCase();
-                String zoneImgFileName = "Assets/zone-png/" + currentZone + ".jpg";
-                ImageIcon currentZoneImg = new ImageIcon(zoneImgFileName);
-                gamePanel.locationImgLabel.setIcon(currentZoneImg);
+                String currentLocation = player1.getPlayerLocation();
+                String zoneImgFileName = "Assets/location-art/"+currentLocation+".png";
+                ImageIcon currentLocationImg = new ImageIcon(zoneImgFileName);
+                gamePanel.locationImgLabel.setIcon(currentLocationImg);
                 gamePanel.locationDesc.setText(FileManager.getLocationDescription(player1.getPlayerLocation(), player1.getPlayerZone()));
-                if ((tempLocation.equalsIgnoreCase("player's house")) && FileManager.sceneReader("sceneOnePassed") && !FileManager.sceneReader("sceneTwoPassed")) {
+                if (tempLocation.equalsIgnoreCase("player's house") && FileManager.sceneReader("sceneOnePassed") && !FileManager.sceneReader("sceneTwoPassed")) {
                     gamePanel.directionButtonPanel.setVisible(false);
                     gamePanel.con.add(gamePanel.explorePlayerHouseButtonPanel);
                     gamePanel.explorePlayerHouseButtonPanel.add(gamePanel.explorePlayerHouseButton);
 
                 }
-                if ((tempLocation.equalsIgnoreCase("hay field")) && FileManager.sceneReader("sceneOnePassed") && FileManager.sceneReader("sceneTwoPassed") && !FileManager.sceneReader("sceneThreePassed")) {
+                if (tempLocation.equalsIgnoreCase("hay field") && FileManager.sceneReader("sceneOnePassed") &&
+                        FileManager.sceneReader("sceneTwoPassed") && !FileManager.sceneReader("sceneThreePassed")) {
                     gamePanel.directionButtonPanel.setVisible(false);
                     gamePanel.exploreHayFieldButtonPanel.setVisible(true);
                     gamePanel.con.add(gamePanel.exploreHayFieldButtonPanel);
                     gamePanel.exploreHayFieldButtonPanel.add(gamePanel.exploreHayFieldButton);
 
                 }
+                if (tempLocation.equalsIgnoreCase("old house south") && FileManager.sceneReader("sceneOnePassed") && FileManager.sceneReader("sceneTwoPassed")
+                        && FileManager.sceneReader("sceneThreePassed")&&!FileManager.sceneReader("sceneFourPassed")) {
+                    gamePanel.directionButtonPanel.setVisible(false);
+                    gamePanel.exploreOldHouseSouthButtonPanel.setVisible(true);
+                    gamePanel.con.add(gamePanel.exploreOldHouseSouthButtonPanel);
+                    gamePanel.exploreOldHouseSouthButtonPanel.add(gamePanel.exploreOldHouseSouthButton);
+
+
+
+                }
+                if (tempLocation.equalsIgnoreCase("river")&& FileManager.sceneReader("sceneOnePassed") && FileManager.sceneReader("sceneTwoPassed")
+                        && FileManager.sceneReader("sceneThreePassed")&&FileManager.sceneReader("sceneFourPassed")&&!FileManager.sceneReader("sceneFivePassed")) {
+                    gamePanel.directionButtonPanel.setVisible(false);
+                    gamePanel.exploreRiverButtonPanel.setVisible(true);
+                    gamePanel.con.add(gamePanel.exploreRiverButtonPanel);
+                    gamePanel.exploreRiverButtonPanel.add(gamePanel.exploreRiverButton);
+
+                }
             }
 
-        }
-
-        for (ArrayList<String> locArr : locations.values()) {
-            if(locArr.contains(parsedDirection.toLowerCase())) {
-                String tempLocation = FileManager.getNewLocation(player1.getPlayerZone(), player1.getPlayerLocation(), parsedDirection);
-                player1.setPlayerLocation(parsedDirection);
-                player1.setPlayerZone(FileManager.getNewZone(player1.getPlayerLocation()));
-                FileManager.getLocationDescription(player1.getPlayerLocation(), player1.getPlayerZone());
-                JSONArray NPCname= FileManager.getNPCsName(player1.getPlayerLocation());
-                ArrayList<String> npcNames = (ArrayList<String>) NPCname;
-
-                //display available items for current location
-                if (!FileManager.getLocationItems(parsedDirection).isEmpty()) {
-                    System.out.println(FileManager.getLocationItems(tempLocation));
-                    String seeItems="You see the following items lying around: ";
-                    String result = String.join(",", FileManager.getLocationItems(tempLocation));
-                    String itemText = seeItems + "\n" + result;
-                    gamePanel.seeItem.setText(itemText+"\n");
-                }
-                else if(FileManager.getLocationItems(tempLocation).isEmpty()){
-                    gamePanel.seeItem.setText("");
-                }
-                //display available people in current location
-                if(!npcNames.isEmpty()){
-                    String nameThree = null;
-                    String nameTwo = null;
-                    String name = null;
-                    switch (npcNames.size()){
-                        case 3:
-                            nameThree = npcNames.get(2);
-                        case 2:
-                            nameTwo = npcNames.get(1);
-                        case 1:
-                            name = npcNames.get(0);
-                    }
-                    switch (npcNames.size()){
-                        case 3:
-                            gamePanel.seePeople.setText("You see " + nameThree + ", " + nameTwo + ", and " + name + ".");
-                            break;
-                        case 2:
-                            gamePanel.seePeople.setText("You see " + name + " and " + nameTwo + ".");
-                            break;
-                        case 1:
-                            gamePanel.seePeople.setText("You see "+name+".");
-                            break;
-                    }
-                }
-                else{
-                    gamePanel.seePeople.setText("");
-                }
-                didMove = true;
-            }
         }
 
         if (!didMove) {
@@ -430,147 +492,7 @@ public class Input {
         FileManager.saveGame(player1.getPlayerName(), player1.getPlayerLocation(), player1.getPlayerZone(), player1.getPlayerInventory());
 
     }
-    static void introduction() {
-        FileManager.getAssetFile("introduction.txt");
-        System.out.println("Press Enter to continue...");
-        scanner.nextLine();
-        System.out.print("\033[H\033[2J");
-        FileManager.getZoneArtFile("zone2.txt");
-        FileManager.getAssetFile("game-start.txt");
-    }
 
-
-    static void playerCreator(){
-        /*
-         *Takes in your name and saves the save file with default values.
-         */
-        System.out.print("Enter your name:");
-        ANSWER = scanner.nextLine().strip();
-        player1.setPlayerName(ANSWER);
-        FileManager.saveGame(player1.getPlayerName(), player1.getPlayerLocation(), player1.getPlayerZone(), player1.getPlayerInventory());
-
-    }
-
-    public static void inputCommandsLogic() {
-        /*
-         * THIS big boy is the main interaction point for the user with the game. It takes user commands in as verb x noun.
-         * For example, you can type "get the dog" and the method will store [get, the, dog]
-         * We then switch over the word in position 0 for matches to our commands list ("get") and then execute the "noun"
-         * which is really just the word stored in position .length-1. With input validation provided for the verb by the switch statement
-         * and for the noun by some robust if->else or for loops, we can prevent the player from breaking the program with an
-         * unknown command. -MS
-         */
-        ArrayList<String> locationList = FileManager.getLocationItems(player1.getPlayerLocation());
-        ArrayList<String> playerList = FileManager.getPlayerItems();
-        if (!locationList.isEmpty()) {
-            System.out.println("You see the following items lying around: ");
-            for (String item : locationList) {
-                System.out.print("|" + item);
-            }
-            System.out.println("|");
-        }
-        System.out.print("\nWhat would you like to do?");
-
-        ANSWER = scanner.nextLine().strip().toLowerCase();
-        String[] answerWords = ANSWER.split(" ");
-        String verb = answerWords[0];
-        String noun2 = answerWords[answerWords.length - 1];
-
-        switch (verb) {
-            case "map":
-                FileManager.getAssetFile("map.txt");
-                System.out.println("\nYour current location is " + player1.getPlayerLocation());
-                inputCommandsLogic();
-                break;
-            case "inventory":
-                System.out.println("Your inventory has: " + playerList);
-                break;
-            case "go":
-                boolean didMove = false;
-                for (Directions dir : Directions.values()) {
-                    if (dir.name().equals(noun2.toUpperCase())) {
-                        player1.move(noun2);
-                        didMove = true;
-                    }
-                }
-                if (!didMove) {
-                    System.out.println("you were unable to move " + noun2 + ".");
-                }
-                FileManager.saveGame(player1.getPlayerName(), player1.getPlayerLocation(), player1.getPlayerZone(), player1.getPlayerInventory());
-                break;
-            case "get":
-                if (locationList.contains(noun2)) {
-                    locationList.remove(noun2);
-                    playerList.add(noun2);
-                    FileManager.updateLocationItems(player1.getPlayerLocation(), locationList);
-                    FileManager.savePlayerItems(playerList);
-                    player1.setPlayerInventory(playerList);
-                    System.out.println("Your inventory has: " + playerList);
-                } else {
-                    System.out.println("I can't get that! There's no " + noun2 + " for me to pick up!");
-                }
-                break;
-            case "drop":
-                if (playerList.contains(noun2)) {
-                    locationList.add(noun2);
-                    playerList.remove(noun2);
-                    FileManager.updateLocationItems(player1.getPlayerLocation(), locationList);
-                    FileManager.savePlayerItems(playerList);
-                    player1.setPlayerInventory(playerList);
-                } else {
-                    System.out.println("I can't drop what I don't have!");
-                }
-                break;
-            case "use":
-                //do final stuff
-                System.out.println("Nothing happens...");
-                break;
-            case "talk":
-                System.out.println(player1.talk(noun2));
-                break;
-            case "help":
-                System.out.println("Your current location is " + player1.getPlayerLocation());
-                FileManager.getAssetFile("help.txt");
-                inputCommandsLogic();
-                break;
-            case "music":
-                switch (noun2) {
-                    case "on":
-                        int loop = 3;
-                        SoundFX.MUSIC1.loopPlay(loop);
-                        System.out.println("Back ground music turned on~~~~~");
-                        break;
-                    case "off":
-                        SoundFX.MUSIC1.stopPlay();
-                        System.out.println("Back ground music stopped~~~~~");
-                        break;
-                    default: System.out.println("Not a valid response\n [on] [off]");
-                }
-
-                break;
-            case "quit":
-                FileManager.saveGame(player1.getPlayerName(), player1.getPlayerLocation(), player1.getPlayerZone(), player1.getPlayerInventory());
-                System.out.println("Press 1 to quit to menu or 2 to exit game:");
-                int choice = scanner.nextInt();
-                switch (choice){
-                    case 2:
-                        System.exit(0);
-                        break;
-                    case 1:
-                        GameEngine.execute();
-                        break;
-                    default:
-                        System.out.println("Invalid choice");
-                        inputCommandsLogic();
-                }
-
-            default:
-                System.out.println("I didn't understand that command. for help type help.");
-                inputCommandsLogic();
-
-        }
-        FileManager.saveGame(player1.getPlayerName(), player1.getPlayerLocation(), player1.getPlayerZone(), player1.getPlayerInventory());
-    }
 
     public static boolean sceneOneAction() {
         boolean sceneOnePass = FileManager.sceneReader("sceneOnePassed");
@@ -672,10 +594,10 @@ public class Input {
             while (raftHP > 0 && !rapidsComplete) {
                 System.out.println("Rapids rush up to meet you in the middle of the river!\n Which way will you paddle to avoid them?");
                 System.out.print("type 'paddle left' or 'paddle right': ");
-                ANSWER = scanner.nextLine().strip().toLowerCase();
+                userInput = scanner.nextLine().strip().toLowerCase();
                 boolean complete = false;
                 while (!complete) {
-                    switch (ANSWER) {
+                    switch (userInput) {
                         case "paddle left":
                             System.out.println("You paddle left. A tree branch in the river snags your raft! It takes some damage.");
                             raftHP--;
@@ -687,15 +609,15 @@ public class Input {
                             break;
                         default:
                             System.out.println("You can't do that right now! Type 'paddle right' or 'paddle left'");
-                            ANSWER = scanner.nextLine().strip().toLowerCase();
+                            userInput = scanner.nextLine().strip().toLowerCase();
                     }
                 }
                 System.out.println("The river curves left\n You need to choose to hug the inner bank of center the raft in the river.");
                 System.out.print("type 'hug the inner bank' or 'center the raft': ");
-                ANSWER = scanner.nextLine().strip().toLowerCase();
+                userInput = scanner.nextLine().strip().toLowerCase();
                 complete = false;
                 while (!complete) {
-                    switch (ANSWER) {
+                    switch (userInput) {
                         case "hug the inner bank":
                             System.out.println("A rock in the shallow inner bank scrapes your raft! ");
                             raftHP-=2;
@@ -707,15 +629,15 @@ public class Input {
                             break;
                         default:
                             System.out.println("You can't do that right now! Type 'hug the inner bank' or 'center the raft'");
-                            ANSWER = scanner.nextLine().strip().toLowerCase();
+                            userInput = scanner.nextLine().strip().toLowerCase();
                     }
                 }
                 System.out.println("Ahead, thorny branches almost cover the water.\n They will snag you unless you find a way to avoid them!");
                 System.out.print("type 'duck under branches' or 'use paddle on branches': ");
-                ANSWER = scanner.nextLine().strip().toLowerCase();
+                userInput = scanner.nextLine().strip().toLowerCase();
                 complete = false;
                 while (!complete) {
-                    switch (ANSWER) {
+                    switch (userInput) {
                         case "duck under branches":
                             System.out.println("The branches puncture holes in your raft!");
                             raftHP-=3;
@@ -728,7 +650,7 @@ public class Input {
                             break;
                         default:
                             System.out.println("You can't do that right now! Type 'duck under branches' or 'use paddle on branches'");
-                            ANSWER = scanner.nextLine().strip().toLowerCase();
+                            userInput = scanner.nextLine().strip().toLowerCase();
                     }
                 }
             }

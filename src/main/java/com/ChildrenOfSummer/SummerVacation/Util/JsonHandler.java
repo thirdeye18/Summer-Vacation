@@ -21,21 +21,7 @@ public class JsonHandler {
 
     public static JSONObject getJsonObject(String filename, String fileType) {
         JSONObject jsonObj = null;
-        String path;
-
-        // adjust path based on file type
-        if(fileType.equalsIgnoreCase("default")) {
-            path = DEFAULT_PATH + filename;
-        }
-        else if(fileType.equalsIgnoreCase("config")) {
-            path = CONFIG_PATH + filename;
-        }
-        else if(fileType.equalsIgnoreCase("json")) {
-            path = JSON_PATH + filename;
-        }
-        else {
-            path = SAVE_PATH + filename;
-        }
+        String path = getPath(filename, fileType);
 
         try {
             if (Files.exists(Path.of(path))) {
@@ -63,25 +49,10 @@ public class JsonHandler {
      */
 
     public static Map<String, ArrayList<String>> jsonToMapStringList(String filename, String fileLocation) {
-        String path;
+        String path = getPath(filename, fileLocation);
         String jsonString = null;
 
-        // adjust path based on file type
-        // TODO: organize json files better
-        if(fileLocation.equalsIgnoreCase("default")) {
-            path = DEFAULT_PATH + filename;
-        }
-        else if(fileLocation.equalsIgnoreCase("config")) {
-            path = CONFIG_PATH + filename;
-        }
-        else if(fileLocation.equalsIgnoreCase("json")) {
-            path = JSON_PATH + filename;
-        }
-        else {
-            path = SAVE_PATH + filename;
-        }
-
-        // direct file to JSON string conversion, don't necessary to cast from obj
+        // direct file to JSON string conversion, not necessary to cast from obj
         try {
             if (Files.exists(Path.of(path))) {
                 jsonString = FileUtils.readFileToString(new File(path));
@@ -102,6 +73,68 @@ public class JsonHandler {
             pe.printStackTrace();
         }
         return null;
+    }
+
+    /*
+     * Same as parser above, but for Map<String, List<int>>
+     * Make sure to check the returned value prior to using to prevent null pointer exception.
+     */
+
+    public static Map<String, ArrayList<Integer>> jsonMapCoordinates(String filename, String fileLocation) {
+        String jsonString = null;
+        String path = getPath(filename, fileLocation);
+
+        // direct file to JSON string conversion, not necessary to cast from obj?
+        try {
+            if (path != null && Files.exists(Path.of(path))) {
+                jsonString = FileUtils.readFileToString(new File(path));
+            }
+            else {
+                System.out.println(path + " not found.");
+            }
+        } catch (IOException e) {
+            System.out.println("File could not be loaded!");
+            e.printStackTrace();
+        }
+
+        try {
+            return (Map<String, ArrayList<Integer>>)parser.parse(jsonString);
+        }
+        catch(ParseException pe) {
+            System.out.println("position: " + pe.getPosition());
+            pe.printStackTrace();
+        }
+        return null;
+    }
+
+    /*
+     * creates path variable based on the passed fileLocation and fileName.
+     * This will return null when passed an invalid fileLocation.
+     * Make sure to check the returned value prior to using to prevent null pointer exception.
+     */
+
+    public static String getPath(String filename, String fileLocation) {
+        String path = null;
+
+        // adjust path based on file type
+        switch (fileLocation.toLowerCase()) {
+            case "config":
+                path = CONFIG_PATH + filename;
+                break;
+            case "json":
+                path = JSON_PATH + filename;
+                break;
+            case "default":
+                path = DEFAULT_PATH + filename;
+                break;
+            case "save":
+                path = SAVE_PATH + filename;
+                break;
+            default:
+                System.out.println("Invalid file type!");
+        }
+
+        return path;
     }
 
     public static void loadDefaults(){
@@ -129,5 +162,14 @@ public class JsonHandler {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    /*
+     * needed this to load the player information to use in the MapLocation function
+     */
+
+    public static JSONObject loadGame(){
+        //loads Player.JSON for parsing by save method and other load methods outside this class -MS
+        return getJsonObject("Player.json", "json");
     }
 }
