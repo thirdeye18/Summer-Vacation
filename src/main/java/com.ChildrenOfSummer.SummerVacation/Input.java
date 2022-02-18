@@ -131,11 +131,17 @@ public class Input {
         });
 
         gamePanel.musicButton.addActionListener(e -> {
+
+            ImageIcon musicOn = new ImageIcon("Assets/img/on.png");
+            ImageIcon musicOff = new ImageIcon("Assets/img/off.png");
+
             if (gamePanel.musicButton.isSelected()){
-                gamePanel.musicButton.setText("Music Off");
+//                gamePanel.musicButton.setText("Music Off");
+                gamePanel.musicButton.setIcon(musicOff);
                 SoundFX.MUSIC1.stopPlay();
             }else {
-                gamePanel.musicButton.setText("Music ON");
+//                gamePanel.musicButton.setText("Music ON");
+                gamePanel.musicButton.setIcon(musicOn);
                 int loop = 3;
                 SoundFX.MUSIC1.loopPlay(loop);
             }
