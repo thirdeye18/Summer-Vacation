@@ -416,8 +416,8 @@ public class Input {
                                 name = npcNames.get(0);
                         }
                         switch (npcNames.size()) {
-                            case 1:
-                                gamePanel.seePeople.setText("You see " + name + ".");
+                           case 1:
+                                gamePanel.seePeople.setText("You see:\n " + name + ".");
                                 break;
                         }
 

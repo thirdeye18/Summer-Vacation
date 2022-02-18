@@ -178,7 +178,7 @@ public class GamePanel extends JFrame {
         quitGameButton = createJButton("Quit Game",100,50,false,Color.white,Color.black);
         playerPageEnterGameButton = createJButton("ENTER GAME",150,40,false, Color.white,Color.black);
         introScreenNextButton = createJButton("NEXT",150,40,false,Color.white,Color.black);
-        userInputEnterButton = createJButton("ENTER",150,50,false,Color.white,Color.black);
+        userInputEnterButton = createJButton("ENTER",150,60,false,Color.white,Color.black);
         myCurrentTaskButton = createJButton("Current Task?",120,30,false,Color.white,Color.black);
         mapButton = createJButton("MAP",80,30,false,Color.white,Color.black);
         helpButton = createJButton("HELP",80,30,false,Color.white,Color.black);
@@ -343,13 +343,13 @@ public class GamePanel extends JFrame {
             }
             switch (npcNames.size()){
                 case 3:
-                    seePeople.setText("You see " + nameThree + ", " + nameTwo + ", and " + name + ".");
+                    seePeople.setText("You see:\n " + nameThree + ", " + nameTwo + ", and " + name + ".");
                     break;
                 case 2:
-                    seePeople.setText("You see " + name + " and " + nameTwo + ".");
+                    seePeople.setText("You see:\n " + name + " and " + nameTwo + ".");
                     break;
                 case 1:
-                    seePeople.setText("You see "+name+".");
+                    seePeople.setText("You see:\n"+name+".");
                     break;
             }
         }
@@ -357,6 +357,10 @@ public class GamePanel extends JFrame {
             seePeople.setText("");
         }
 
+
+locationDesc.setPreferredSize(new Dimension(540,80));
+        seeItem.setFont(new Font("Arial", Font.PLAIN,13));
+        seePeople.setFont(new Font("Arial", Font.PLAIN,13));
 
 
         mainLocationDescPanel.add(locationDesc);  // add "you are in xxxx, to the north is xxxx..."
@@ -366,6 +370,7 @@ public class GamePanel extends JFrame {
         userInputPanel.setLayout(new GridLayout(3,1));
         // "What would you like to do?"
         askUserInput = new JTextArea("What would you like to do?");
+        askUserInput.setFont(new Font("Times New Roman",Font.ITALIC,15));
         askUserInput.setEnabled(false);
         askUserInput.setEditable(false);
         askUserInput.setBackground(Color.black);
@@ -375,6 +380,7 @@ public class GamePanel extends JFrame {
         //user input textfield
         userInput.setBackground(Color.black);
         userInput.setForeground(Color.white);
+        userInputEnterButton.setFont(new Font("Times New Roman", Font.BOLD,20));
 
         // add all three components to userInputPanel
         userInputPanel.add(askUserInput);
@@ -398,6 +404,7 @@ public class GamePanel extends JFrame {
         // Direction buttons -North/South/West/East
         con.add(directionButtonPanel);
         directionButtonPanel.setLayout(new BorderLayout());
+        directionButtonPanel.setOpaque(false);
 
 
 
@@ -438,7 +445,9 @@ public class GamePanel extends JFrame {
         // inventory panel
         con.add(inventoryPanel);
 
+
         inventoryTextField.setText("**Your inventory**");
+        inventoryTextField.setEditable(false);
         inventoryTextField.setBackground(Color.black);
         inventoryTextField.setForeground(Color.white);
         inventoryPanel.add(inventoryTextField);
