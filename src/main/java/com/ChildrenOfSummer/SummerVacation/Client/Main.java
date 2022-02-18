@@ -6,9 +6,9 @@ import com.ChildrenOfSummer.SummerVacation.Util.SoundFX;
 
 class Main {
     public static void main(String[] args) {
-        //GameEngine game = new GameEngine();
+        GameEngine game = new GameEngine();
         SoundFX.init(); //preload the sound files into memory
-        //game.execute();
+        game.execute();
         Input.startMenu();
     }
 }
