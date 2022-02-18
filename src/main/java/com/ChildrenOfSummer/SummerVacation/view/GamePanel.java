@@ -232,18 +232,22 @@ public class GamePanel extends JFrame {
         newGameButtonPanel.setVisible(false);
         askForNamePanel.setVisible(false);
         playerPageEnterGameButton.setVisible(false);
-        textField.setEditable(false);
-        mainTextPanel.add(textField);
+//        textField.setEditable(false);
+//        mainTextPanel.add(textField);
         con.add(mainTextPanel);
+        JLabel taskIntro = new JLabel();
 
-        mainTextPanel.add(textField);
-        textField.setBounds(20,60,740,350);
-        textField.setLineWrap(true);
-        textField.setWrapStyleWord(true);
-        textField.setForeground(Color.white);
-        textField.setBackground(new Color(0,0,0,0));
-        textField.setFont(new Font("Serif",Font.PLAIN, 24));
-        textField.setHighlighter(null);
+
+        mainTextPanel.add(taskIntro);
+        ImageIcon currentLocationImg = new ImageIcon("Assets/story/introduction.jpeg");
+        taskIntro.setIcon(currentLocationImg);
+        taskIntro.setBounds(20,60,740,350);
+//        textField.setLineWrap(true);
+//        textField.setWrapStyleWord(true);
+//        textField.setForeground(Color.white);
+//        textField.setBackground(new Color(0,0,0,0));
+//        textField.setFont(new Font("Serif",Font.PLAIN, 24));
+//        textField.setHighlighter(null);
         introScreenEnterGameButtonPanel.add(introScreenNextButton);
         introScreenNextButton.addActionListener(e -> zoneView());
     }
@@ -450,16 +454,21 @@ public class GamePanel extends JFrame {
         locationImgPanel.setVisible(false);
         exploreButtonPanel.setVisible(false);
         // String text =FileManager.txtFileToString("scene-one.txt");
-        String text = FileManager.txtFileToString(fileName);
-        largeTextArea.setText(text);
-        largeTextArea.setEditable(false);
+//        String text = FileManager.txtFileToString(fileName);
+//        largeTextArea.setText(text);
+//        largeTextArea.setEditable(false);
+        JLabel taskIntro = new JLabel();
+
+        ImageIcon currentLocationImg = new ImageIcon("Assets/story/"+fileName+".jpeg");
+        taskIntro.setIcon(currentLocationImg);
+        taskIntro.setBounds(20,60,740,350);
 
 
-        largeTextAreaPanel.add(largeTextArea);
-        largeTextArea.setLineWrap(true);
-        scroll = new JScrollPane(largeTextArea);
-        largeTextArea.setBounds(20,60,740,380);
-        largeTextAreaPanel.add(scroll);
+        largeTextAreaPanel.add(taskIntro);
+//        largeTextArea.setLineWrap(true);
+//        scroll = new JScrollPane(largeTextArea);
+//        largeTextArea.setBounds(20,60,740,380);
+//        largeTextAreaPanel.add(scroll);
         largeTextAreaPanel.add(arriveSpecialSceneNextButton);
         con.add(largeTextAreaPanel);
     }
@@ -509,7 +518,8 @@ public class GamePanel extends JFrame {
             FileManager.savePlayerItems(playerList);
             FileManager.sceneWriter(true, "sceneOnePassed");
             JOptionPane.showMessageDialog(null,"You've finished the first scene. You have gotten out of the airport!","",JOptionPane.PLAIN_MESSAGE);
-            taskScreen("scene-one-end.txt");
+
+            taskScreen("scene-one-end");
 
 
 
@@ -536,7 +546,7 @@ public class GamePanel extends JFrame {
         int reply1 = JOptionPane.showConfirmDialog(null, "You can throw a rock to escape. Do you want to?", "", JOptionPane.YES_NO_OPTION);
         if (reply1 == JOptionPane.YES_OPTION){
             JOptionPane.showMessageDialog(null,"You've escaped from the farmer.","",JOptionPane.PLAIN_MESSAGE);
-            taskScreen("scene-three-end.txt");
+            taskScreen("scene-three-end");
             hayfieldNextButtonPanel.setVisible(false);
             con.add(findSaraButtonPanel);
             findSaraButtonPanel.add(findSaraButton);
@@ -557,7 +567,7 @@ public class GamePanel extends JFrame {
             inventoryPanel.setVisible(false);
             clearZoneViewPanel();
             exploreOldHouseSouthButtonPanel.setVisible(false);
-            taskScreen("scene-five.txt");
+            taskScreen("scene-five");
             con.add(exploreRiverButtonPanel);
             exploreRiverButtonPanel.setVisible(true);
             goToIslandButtonPanel.add(goToIslandButton);
@@ -596,13 +606,13 @@ public class GamePanel extends JFrame {
             else{
                 JOptionPane.showMessageDialog(null,"You push the thorny branches out of the way of your raft.","",JOptionPane.PLAIN_MESSAGE);
                 clearZoneViewPanel();
-                taskScreen("win-text.txt");
+                taskScreen("win-text");
                 FileManager.sceneWriter(true, "sceneFivePassed");
                 JOptionPane.showMessageDialog(null,"You won the game!", "", JOptionPane.PLAIN_MESSAGE);
-                largeTextAreaPanel.add(largeTextArea);
-                con.add(largeTextAreaPanel);
-                largeTextArea.setText(FileManager.txtFileToString("win-text.txt"));
-                goToIslandButtonPanel.setVisible(false);
+//                largeTextAreaPanel.add(largeTextArea);
+//                con.add(largeTextAreaPanel);
+//                largeTextArea.setText(FileManager.txtFileToString("win-text.txt"));
+//                goToIslandButtonPanel.setVisible(false);
                 System.exit(0);
             }
 
@@ -663,15 +673,23 @@ public class GamePanel extends JFrame {
     }
 
     public static void taskScreen(String taskFileName){
+
         largeTextAreaPanel.setVisible(false);
         con.add(mainTextPanel);
+        mainTextPanel.removeAll();
+
         con.add(taskScreenNextButtonPanel);
 
         mainTextPanel.setVisible(true);
+        JLabel taskIntro = new JLabel();
+        mainTextPanel.add(taskIntro);
+        ImageIcon currentLocationImg = new ImageIcon("Assets/story/"+taskFileName+".jpeg");
+        taskIntro.setIcon(currentLocationImg);
+        taskIntro.setBounds(20,60,740,350);
 
         taskScreenNextButtonPanel.add(taskScreenNextButton);
-        textField.setText(FileManager.txtFileToString(taskFileName));
-        mainTextPanel.add(textField);
+
+        mainTextPanel.add(taskIntro);
 
     }
 
