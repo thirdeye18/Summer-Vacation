@@ -148,20 +148,20 @@ public class GamePanel extends JFrame {
         locationImgPanel = createJPanel(20,30,540,300,Color.black,true);
         mainLocationDescPanel = createJPanel(20,330,540,140,Color.black,true);
         userInputPanel = createJPanel(20,480,300,60,Color.black,true);
-        headerContentPanel = createJPanel(0,0,800,30, Color.black,true);
+        headerContentPanel = createJPanel(0,0,800,30, new Color(0,0,0,0),true);
         directionButtonPanel = createJPanel(600,290,144,144,Color.black,true);
         inventoryPanel = createJPanel(620,50,120,250,Color.black,true);
         largeTextAreaPanel = createJPanel(20,60,740,420,Color.black,true);
-        exploreButtonPanel = createJPanel(600,450,180,40,Color.black,true);
-        explorePlayerHouseButtonPanel = createJPanel(600,450,180,40,Color.black,true);
-        exploreHayFieldButtonPanel = createJPanel(600,450,180,40,Color.black,true);
-        taskScreenNextButtonPanel = createJPanel(600,420,180,40,Color.black,true);
-        hayfieldNextButtonPanel = createJPanel(600,420,180,40,Color.black,true);
-        findSaraButtonPanel = createJPanel(600,450,180,40,Color.black,true);
-        findSuppliesButtonPanel = createJPanel(600,450,180,40,Color.black,true);
-        exploreOldHouseSouthButtonPanel = createJPanel(600,450,180,40,Color.black,true);
-        exploreRiverButtonPanel = createJPanel(600,450,180,40,Color.black,true);
-        goToIslandButtonPanel = createJPanel(600,450,180,40,Color.black,true);
+        exploreButtonPanel = createJPanel(600,450,180,40,new Color(0,0,0,0),true);
+        explorePlayerHouseButtonPanel = createJPanel(600,450,180,40,new Color(0,0,0,0),true);
+        exploreHayFieldButtonPanel = createJPanel(600,450,180,40,new Color(0,0,0,0),true);
+        taskScreenNextButtonPanel = createJPanel(600,420,180,40,new Color(0,0,0,0),true);
+        hayfieldNextButtonPanel = createJPanel(600,420,180,40,new Color(0,0,0,0),true);
+        findSaraButtonPanel = createJPanel(600,450,180,40,new Color(0,0,0,0),true);
+        findSuppliesButtonPanel = createJPanel(600,450,180,40,new Color(0,0,0,0),true);
+        exploreOldHouseSouthButtonPanel = createJPanel(600,450,180,40,new Color(0,0,0,0),true);
+        exploreRiverButtonPanel = createJPanel(600,450,180,40,new Color(0,0,0,0),true);
+        goToIslandButtonPanel = createJPanel(600,450,180,40,new Color(0,0,0,0),true);
     }
 
     private void setAllButtons() {
@@ -235,6 +235,13 @@ public class GamePanel extends JFrame {
         con.add(mainTextPanel);
 
         mainTextPanel.add(textField);
+        textField.setBounds(20,60,740,350);
+        textField.setLineWrap(true);
+        textField.setWrapStyleWord(true);
+        textField.setForeground(Color.white);
+        textField.setBackground(new Color(0,0,0,0));
+        textField.setFont(new Font("Serif",Font.PLAIN, 24));
+        textField.setHighlighter(null);
         introScreenEnterGameButtonPanel.add(introScreenNextButton);
         introScreenNextButton.addActionListener(e -> zoneView());
     }
@@ -259,13 +266,14 @@ public class GamePanel extends JFrame {
         locationImgLabel = new JLabel();
         locationImgLabel.setBounds(20,120,540,300);
         locationImgLabel.setBackground(Color.BLUE);
-        String currentZone = player1.getPlayerZone().toLowerCase();
-        String zoneImgFileName = "Assets/zone-png/"+currentZone+".jpg";
-        ImageIcon currentZoneImg = new ImageIcon(zoneImgFileName);
-        locationImgLabel.setIcon(currentZoneImg);
+        String currentLocation = player1.getPlayerLocation();
+        String zoneImgFileName = "Assets/location-art/"+currentLocation+".png";
+        ImageIcon currentLocationImg = new ImageIcon(zoneImgFileName);
+        locationImgLabel.setIcon(currentLocationImg);
         locationDesc.setForeground(Color.white);
         locationDesc.setBackground(Color.black);
         locationDesc.setEditable(false);
+        locationDesc.setWrapStyleWord(true);
         seeItem.setBackground(Color.black);
         seeItem.setForeground(Color.white);
         seeItem.setEditable(false);
@@ -284,6 +292,7 @@ public class GamePanel extends JFrame {
 
         //get description from Locations.JSON
         locationDesc.append(locationDescJson);
+
 
         //display available items for current location
         if (!FileManager.getLocationItems(player1.getPlayerLocation()).isEmpty()) {
@@ -414,6 +423,8 @@ public class GamePanel extends JFrame {
         // for iteration 1 demo purpose
 
         inventoryList = new JList(inventoryListModel);
+        inventoryList.setBackground(Color.black);
+        inventoryList.setForeground(Color.white);
 
         inventoryList.setFixedCellWidth(80);
 
