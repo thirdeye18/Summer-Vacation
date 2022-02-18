@@ -31,6 +31,7 @@ Commands through the text box
 
 Java runtime environment is required. [Dowload it here](https://www.java.com/en/)
 
+
 ```Installation Instructions:
 1. Download the .zip file
 2. Extract the file
