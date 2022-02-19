@@ -416,8 +416,6 @@ public class Input {
                                     JOptionPane.showMessageDialog(gamePanel, "I didn't understand that command. for help click help button on the top or type help.", "", JOptionPane.PLAIN_MESSAGE);
                                     break;
                             }
-                            JOptionPane.showMessageDialog(gamePanel, " click help button on the top or type help.", "", JOptionPane.PLAIN_MESSAGE);
-
                         });
 
                     } else if (FileManager.getLocationItems(tempLocation).isEmpty()) {
