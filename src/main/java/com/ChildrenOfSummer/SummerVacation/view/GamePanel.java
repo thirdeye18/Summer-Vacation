@@ -149,7 +149,7 @@ public class GamePanel extends JFrame {
     private void setAllPanels() {
         titleNamePanel = createJPanel(100,100,600,150,Color.black, true);
         newGameButtonPanel = createJPanel(300,400,200,150,new Color(0,0,0,0),true);
-        askForNamePanel = createJPanel(100,100,600,120,Color.black,true);
+        askForNamePanel = createJPanel(100,100,600,150,Color.black,true);
         playerPageFooterPanel = createJPanel(500,480,40,50,new Color(0,0,0,0),true);
         introScreenEnterGameButtonPanel = createJPanel(600,420,160,50,new Color(0,0,0,0),true);
         mainTextPanel = createJPanel(20,60,740,350,Color.black,true);
@@ -174,28 +174,28 @@ public class GamePanel extends JFrame {
     }
 
     private void setAllButtons() {
-        newGameButton = createJButton("New Game",100,50,false,Color.white,Color.black);
-        quitGameButton = createJButton("Quit Game",100,50,false,Color.white,Color.black);
-        playerPageEnterGameButton = createJButton("ENTER GAME",150,40,false, Color.white,Color.black);
-        introScreenNextButton = createJButton("NEXT",150,40,false,Color.white,Color.black);
-        userInputEnterButton = createJButton("ENTER",150,60,false,Color.white,Color.black);
-        myCurrentTaskButton = createJButton("Current Task?",120,30,false,Color.white,Color.black);
-        mapButton = createJButton("MAP",80,30,false,Color.white,Color.black);
-        helpButton = createJButton("HELP",80,30,false,Color.white,Color.black);
-        useButton = createJButton("use item",100,20,false,Color.white,Color.black);
-        dropButton = createJButton("drop item",100,20,false,Color.white,Color.black);
-        exploreAirportButton = createJButton("GO TO AIRPORT",180,30,false,Color.white,Color.black);
-        explorePlayerHouseButton = createJButton("GO TO Player's House",180,40,false,Color.white,Color.black);
-        exploreHayFieldButton = createJButton("GO TO Hay Field",180,40,false,Color.white,Color.black);
-        arriveSpecialSceneNextButton = createJButton("NEXT",100,30,false,Color.white,Color.black);
-        taskScreenNextButton = createJButton("Go Player's House",180,40,false,Color.white,Color.black);
-        goTOHayFieldNextButton = createJButton("Go Hay Field",180,40,false,Color.white,Color.black);
-        hayfieldNextButton = createJButton("GO hay field",180,40,false,Color.white,Color.black);
-        findSaraButton = createJButton("Look for Sara",180,40,false,Color.white,Color.black);
-        findSuppliesButton = createJButton("Go Find Supplies",180,40,false,Color.white,Color.black);
-        exploreOldHouseSouthButton = createJButton("Explore Old house South",180,40,false,Color.white,Color.black);
-        exploreRiverButton = createJButton("Explore River",180,40,false,Color.white,Color.black);
-        goToIslandButton = createJButton("Go To Island",180,40,false,Color.white,Color.black);
+        newGameButton = createJButton("New Game",150,50,false,Color.white,Color.black, true, false); // this one works
+        quitGameButton = createJButton("Quit Game",150,50,false,Color.white,Color.black,true, false ); // didn't work
+        playerPageEnterGameButton = createJButton("ENTER GAME",150,40,false, Color.white,Color.black, true, false);
+        introScreenNextButton = createJButton("NEXT",150,40,false,Color.white,Color.black, true, false);
+        userInputEnterButton = createJButton("ENTER",150,60,false,Color.white,Color.black, true, false);
+        myCurrentTaskButton = createJButton("Current Task?",200,30,false,Color.white,Color.black, true, false);
+        mapButton = createJButton("MAP",80,30,false,Color.white,Color.black, true, false);
+        helpButton = createJButton("HELP",80,30,false,Color.white,Color.black, true, false);
+        useButton = createJButton("use item",100,20,false,Color.white,Color.black, true, false);
+        dropButton = createJButton("drop item",100,20,false,Color.white,Color.black, true, false);
+        exploreAirportButton = createJButton("GO TO AIRPORT",180,30,false,Color.white,Color.black, true, false);
+        explorePlayerHouseButton = createJButton("GO TO Player's House",180,40,false,Color.white,Color.black, true, false);
+        exploreHayFieldButton = createJButton("GO TO Hay Field",180,40,false,Color.white,Color.black, true, false);
+        arriveSpecialSceneNextButton = createJButton("NEXT",100,30,false,Color.white,Color.black, true, false);
+        taskScreenNextButton = createJButton("Go Player's House",180,40,false,Color.white,Color.black, true, false);
+        goTOHayFieldNextButton = createJButton("Go Hay Field",180,40,false,Color.white,Color.black, true, false);
+        hayfieldNextButton = createJButton("GO hay field",180,40,false,Color.white,Color.black, true, false);
+        findSaraButton = createJButton("Look for Sara",180,40,false,Color.white,Color.black, true, false);
+        findSuppliesButton = createJButton("Go Find Supplies",180,40,false,Color.white,Color.black, true, false);
+        exploreOldHouseSouthButton = createJButton("Explore Old house South",180,40,false,Color.white,Color.black, true, false);
+        exploreRiverButton = createJButton("Explore River",180,40,false,Color.white,Color.black, true, false);
+        goToIslandButton = createJButton("Go To Island",180,40,false,Color.white,Color.black, true, false);
         musicButton = new JToggleButton();
     }
     public void createGameScreen() {
@@ -692,12 +692,14 @@ public class GamePanel extends JFrame {
 
 
 
-    private JButton createJButton(String title, int width, int height, boolean focusable, Color foreground, Color background) {
+    private JButton createJButton(String title, int width, int height, boolean focusable, Color foreground, Color background, boolean setOpaque, boolean setBorderPainted) {
         JButton product = new JButton(title);
         product.setPreferredSize(new Dimension(width, height));
         product.setFocusable(focusable);
         product.setForeground(foreground);
         product.setBackground(background);
+        product.setOpaque(setOpaque);
+        product.setBorderPainted(setBorderPainted);
         return product;
     }
 
