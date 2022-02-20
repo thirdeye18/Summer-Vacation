@@ -45,6 +45,7 @@ public class Input {
 
 
         gamePanel.newGameButton.addActionListener(e -> {
+
             gamePanel.titleBackground.setVisible(false);
             gamePanel.playerNameScreen();
             player1.setPlayerInventory(empty);
@@ -239,6 +240,7 @@ public class Input {
             gamePanel.directionButtonPanel.setVisible(true);
             gamePanel.inventoryPanel.setVisible(true);
             gamePanel.goToHayFieldNextButtonPanel.setVisible(false);
+
         });
 
         gamePanel.exploreHayFieldButton.addActionListener(e->{
@@ -253,8 +255,12 @@ public class Input {
 
                 }
         );
-        gamePanel.hayfieldNextButton.addActionListener(e->
-                gamePanel.taskThrowRockWithEnoughInventory()
+        gamePanel.hayfieldNextButton.addActionListener(e-> {
+
+            gamePanel.taskThrowRockWithEnoughInventory();
+            gamePanel.hayfieldNextButtonPanel.setVisible(false);
+          //  gamePanel.exploreHayFieldButtonPanel.setVisible(true);
+                }
         );
 
         gamePanel.findSaraButton.addActionListener(e->{
@@ -323,7 +329,7 @@ public class Input {
                         }
 
                         Object[] innerOrCenter = {"hug the inner bank", "center the raft"};
-                        int reply2 = JOptionPane.showOptionDialog(gamePanel, "The river curves left\nYou need to choose to hug the inner bank of center the raft in the river.",
+                        int reply2 = JOptionPane.showOptionDialog(gamePanel, "The river curves left\nYou need to choose to hug the inner bank or center the raft in the river.",
                                 "", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, innerOrCenter, innerOrCenter[0]);
                         if (reply2 == JOptionPane.YES_OPTION){
                             JOptionPane.showMessageDialog(gamePanel,"A rock in the shallow inner bank scrapes your raft! ","",JOptionPane.PLAIN_MESSAGE);

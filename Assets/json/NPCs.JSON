@@ -45,7 +45,10 @@
       "dialogue": {
         "1": "Howdy Y'all!",
         "2": "Angus Queen is always Open!",
-        "3": "Want a burger?"
+        "3": "Want a burger?",
+        "4": "Howdy Y'all!",
+        "5": "Angus Queen is always Open!",
+        "6": "Want a burger?"
       }
     }
   ],
@@ -123,7 +126,10 @@
       "dialogue": {
         "1": "Here to play with Kory?",
         "2": "There's snacks in the kitchen if you get hungry kids!",
-        "3": "Did Kory ever show you his video tape from the last play he was in?"
+        "3": "Did Kory ever show you his video tape from the last play he was in?",
+        "4": "Here to play with Kory?",
+        "5": "There's snacks in the kitchen if you get hungry kids!",
+        "6": "Did Kory ever show you his video tape from the last play he was in?"
       }
     }
   ],
@@ -147,7 +153,10 @@
       "dialogue": {
         "1": "I saw Sara was looking for you and ask if we have any rope in the house that she can borrow.",
         "2": "I saw Sara was looking for you and ask if we have any rope in the house that she can borrow.",
-        "3": "I saw Sara was looking for you and ask if we have any rope in the house that she can borrow."
+        "3": "I saw Sara was looking for you and ask if we have any rope in the house that she can borrow.",
+        "4": "I saw Sara was looking for you and ask if we have any rope in the house that she can borrow.",
+        "5": "I saw Sara was looking for you and ask if we have any rope in the house that she can borrow.",
+        "6": "I saw Sara was looking for you and ask if we have any rope in the house that she can borrow."
       }
     }
   ],
@@ -170,8 +179,11 @@
     {
       "dialogue": {
         "1": "Are you looking for Sara? She said that she was going to warehouse to look for something. Can you please tell her to return home on time?",
-        "2": "Are you looking for Sara? She said that she was going to warehouse to look for something. Can you please tell her to return home on time?"
-
+        "2": "Are you looking for Sara? She said that she was going to warehouse to look for something. Can you please tell her to return home on time?",
+        "3": "Are you looking for Sara? She said that she was going to warehouse to look for something. Can you please tell her to return home on time?",
+        "4": "Are you looking for Sara? She said that she was going to warehouse to look for something. Can you please tell her to return home on time?",
+        "5": "Are you looking for Sara? She said that she was going to warehouse to look for something. Can you please tell her to return home on time?",
+        "6": "Are you looking for Sara? She said that she was going to warehouse to look for something. Can you please tell her to return home on time?"
       }
     }
   ],
@@ -195,7 +207,11 @@
     {
       "dialogue": {
         "1": "Farmer Augustus is creepy huh? Do you really think Farmer Augustus is a Russian? Aren't they the bad guys?",
-        "2": "Farmer Augustus is creepy huh? Do you really think Farmer Augustus is a Russian? Aren't they the bad guys?"
+        "2": "Farmer Augustus is creepy huh? Do you really think Farmer Augustus is a Russian? Aren't they the bad guys?",
+        "3": "Farmer Augustus is creepy huh? Do you really think Farmer Augustus is a Russian? Aren't they the bad guys?",
+        "4": "Farmer Augustus is creepy huh? Do you really think Farmer Augustus is a Russian? Aren't they the bad guys?",
+        "5": "Farmer Augustus is creepy huh? Do you really think Farmer Augustus is a Russian? Aren't they the bad guys?",
+        "6": "Farmer Augustus is creepy huh? Do you really think Farmer Augustus is a Russian? Aren't they the bad guys?"
       }
     },
     {

@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class GamePanel extends JFrame {
 
     public JTextField userName = new JTextField("", 30);
-    public JTextField userInput = new JTextField(10);
+    public JTextField userInput = new JTextField(20);
     private JTextArea textArea = new JTextArea(20, 20);
     private JTextArea askUserName = new JTextArea();
     public JTextArea seeItem = new JTextArea();
@@ -113,8 +113,8 @@ public class GamePanel extends JFrame {
 
         ImageIcon background=new ImageIcon("Assets/img/bg.jpeg");
         Image img=background.getImage();
-        Image temp=img.getScaledInstance(800,600,Image.SCALE_SMOOTH);
-        background=new ImageIcon(temp);
+//        Image temp=img.getScaledInstance(800,600,Image.SCALE_SMOOTH);
+        background=new ImageIcon(img);
         titleBackground = new JLabel(background);
         titleBackground.setLayout(null);
         titleBackground.setBounds(0,0,800,600);
@@ -135,7 +135,7 @@ public class GamePanel extends JFrame {
 
     // default frame settings
     private void setFrameConfigs() {
-        setSize(800, 600);
+        setSize(800,600);
         setResizable(false);        // enable the resize of the frame
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
@@ -156,7 +156,7 @@ public class GamePanel extends JFrame {
         mainTextPanel = createJPanel(20,60,740,350,Color.black,true);
         locationImgPanel = createJPanel(20,30,540,300,Color.black,true);
         mainLocationDescPanel = createJPanel(20,330,540,140,Color.black,true);
-        userInputPanel = createJPanel(20,480,300,60,Color.black,true);
+        userInputPanel = createJPanel(20,480,300,80,Color.black,true);
         headerContentPanel = createJPanel(0,0,800,30, new Color(0,0,0,0),true);
         directionButtonPanel = createJPanel(600,290,144,144,Color.black,true);
         inventoryPanel = createJPanel(620,50,120,200,Color.black,true);
@@ -179,7 +179,7 @@ public class GamePanel extends JFrame {
         quitGameButton = createJButton("Quit Game",150,50,false,Color.white,Color.black,true, false ); // didn't work
         playerPageEnterGameButton = createJButton("ENTER GAME",150,40,false, Color.white,Color.black, true, false);
         introScreenNextButton = createJButton("NEXT",150,40,false,Color.white,Color.black, true, false);
-        userInputEnterButton = createJButton("ENTER",150,60,false,Color.white,Color.black, true, false);
+        userInputEnterButton = createJButton("ENTER",300,40,false,Color.white,Color.black, true, false);
         myCurrentTaskButton = createJButton("Current Task?",200,30,false,Color.white,Color.black, true, false);
         mapButton = createJButton("MAP",80,30,false,Color.white,Color.black, true, false);
         helpButton = createJButton("HELP",80,30,false,Color.white,Color.black, true, false);
@@ -187,11 +187,11 @@ public class GamePanel extends JFrame {
         dropButton = createJButton("drop item",100,20,false,Color.white,Color.black, true, false);
         exploreAirportButton = createJButton("GO TO AIRPORT",180,30,false,Color.white,Color.black, true, false);
         explorePlayerHouseButton = createJButton("GO TO Player's House",180,40,false,Color.white,Color.black, true, false);
-        exploreHayFieldButton = createJButton("GO TO Hay Field",180,40,false,Color.white,Color.black, true, false);
+        exploreHayFieldButton = createJButton("Explore Field",180,40,false,Color.white,Color.black, true, false);
         arriveSpecialSceneNextButton = createJButton("NEXT",100,30,false,Color.white,Color.black, true, false);
         taskScreenNextButton = createJButton("Go Player's House",180,40,false,Color.white,Color.black, true, false);
         goTOHayFieldNextButton = createJButton("Go Hay Field",180,40,false,Color.white,Color.black, true, false);
-        hayfieldNextButton = createJButton("GO hay field",180,40,false,Color.white,Color.black, true, false);
+        hayfieldNextButton = createJButton("Hay Field task",180,40,false,Color.white,Color.black, true, false);
         findSaraButton = createJButton("Look for Sara",180,40,false,Color.white,Color.black, true, false);
         findSuppliesButton = createJButton("Go Find Supplies",180,40,false,Color.white,Color.black, true, false);
         exploreOldHouseSouthButton = createJButton("Explore Old house South",180,40,false,Color.white,Color.black, true, false);
@@ -205,6 +205,7 @@ public class GamePanel extends JFrame {
         askForNamePanel.setVisible(false);
         playerPageFooterPanel.setVisible(false);
         introScreenEnterGameButtonPanel.setVisible(false);
+
     }
 
     public void playerNameScreen() {
@@ -245,8 +246,7 @@ public class GamePanel extends JFrame {
         newGameButtonPanel.setVisible(false);
         askForNamePanel.setVisible(false);
         playerPageEnterGameButton.setVisible(false);
-//        textField.setEditable(false);
-//        mainTextPanel.add(textField);
+
         con.add(mainTextPanel);
         JLabel taskIntro = new JLabel();
 
@@ -255,12 +255,7 @@ public class GamePanel extends JFrame {
         ImageIcon currentLocationImg = new ImageIcon("Assets/story/introduction.jpeg");
         taskIntro.setIcon(currentLocationImg);
         taskIntro.setBounds(20,60,740,350);
-//        textField.setLineWrap(true);
-//        textField.setWrapStyleWord(true);
-//        textField.setForeground(Color.white);
-//        textField.setBackground(new Color(0,0,0,0));
-//        textField.setFont(new Font("Serif",Font.PLAIN, 24));
-//        textField.setHighlighter(null);
+
         introScreenEnterGameButtonPanel.add(introScreenNextButton);
         introScreenNextButton.addActionListener(e -> zoneView());
     }
@@ -368,7 +363,7 @@ public class GamePanel extends JFrame {
         mainLocationDescPanel.add(seeItem);
         mainLocationDescPanel.add(seePeople);
         // UserInput panel, includes: text-What would you like to do? & textfield which takes user input & a ENTER button
-        userInputPanel.setLayout(new GridLayout(3,1));
+        //userInputPanel.setLayout(new GridLayout(3,1));
         // "What would you like to do?"
         askUserInput = new JTextArea("What would you like to do?");
         askUserInput.setFont(new Font("Times New Roman",Font.ITALIC,15));
@@ -376,13 +371,18 @@ public class GamePanel extends JFrame {
         askUserInput.setEditable(false);
         askUserInput.setBackground(Color.black);
         askUserInput.setForeground(Color.white);
+        askUserInput.setBounds(20,480,300,10);
         con.add(userInputPanel);
 
         //user input textfield
         userInput.setBackground(Color.white);
         userInput.setForeground(Color.black);
+        userInput.setBounds(20,500,300,10);
         userInput.setBorder(new LineBorder(Color.white,2));
         userInputEnterButton.setFont(new Font("Times New Roman", Font.BOLD,20));
+        userInputEnterButton.setVerticalAlignment(SwingConstants.NORTH);
+        userInputEnterButton.setHorizontalAlignment(SwingConstants.CENTER);
+
 
         // add all three components to userInputPanel
         userInputPanel.add(askUserInput);
@@ -449,6 +449,7 @@ public class GamePanel extends JFrame {
 
 
         inventoryTextField.setText("**Your inventory**");
+        inventoryTextField.setBounds(620,50,120,20);
         inventoryTextField.setEditable(false);
         inventoryTextField.setBackground(Color.black);
         inventoryTextField.setForeground(Color.white);
@@ -462,6 +463,8 @@ public class GamePanel extends JFrame {
         inventoryList.setForeground(Color.white);
 
         inventoryList.setFixedCellWidth(80);
+        inventoryList.setFixedCellHeight(20);
+//        inventoryList.setBounds(620,70,120,180);
 
         JScrollPane pane = new JScrollPane(inventoryList);
 
@@ -569,6 +572,8 @@ public class GamePanel extends JFrame {
             directionButtonPanel.setVisible(false);
             inventoryPanel.setVisible(false);
             locationImgPanel.setVisible(false);
+            hayfieldNextButtonPanel.setVisible(false);
+            exploreHayFieldButtonPanel.setVisible(false);
             // String text =FileManager.txtFileToString("scene-one.txt");
 
             int reply1 = JOptionPane.showConfirmDialog(this, "You can throw a rock to escape. Do you want to?", "", JOptionPane.YES_NO_OPTION);
@@ -582,8 +587,9 @@ public class GamePanel extends JFrame {
                 JOptionPane.showMessageDialog(this,"You've escaped from the farmer.","",JOptionPane.PLAIN_MESSAGE);
                 taskScreen("scene-three-end");
                 FileManager.sceneWriter(true, "sceneThreePassed");
-                hayfieldNextButtonPanel.setVisible(false);
-//            locationImgPanel.setVisible(false);
+
+
+
                 con.add(findSaraButtonPanel);
                 findSaraButtonPanel.add(findSaraButton);
             }
