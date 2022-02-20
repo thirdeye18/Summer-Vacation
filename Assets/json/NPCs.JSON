@@ -25,33 +25,7 @@
       }
     }
   ],
-  "Beth": [
-    {
-      "first_name": "Beth",
-      "last_name": "Maisel"
-    },
-    {
-      "locations": {
-        "Monday": "Janie Maisel's House",
-        "Tuesday": "Beth's Treats",
-        "Wednesday": "Beth's Treats",
-        "Thursday": "Beth's Treats",
-        "Friday": "Beth's Treats",
-        "Saturday": "Beth's Treats",
-        "Sunday": "Beth's Treats"
-      }
-    },
-    {
-      "dialogue": {
-        "1": "Hello Dearies!",
-        "2": "Sweet treats are good to eat!",
-        "3": "How can I help you?",
-        "4": "Janie is my grand-daughter.",
-        "5": "Would you like some tea?",
-        "6": "I come to Janie's house to visit every monday."
-      }
-    }
-  ],
+
   "Al": [
     {
       "first_name": "Al"
@@ -153,100 +127,7 @@
       }
     }
   ],
-  "Kristy": [
-    {
-      "first_name": "Kristy",
-      "last_name": "Booker"
-    },
-    {
-      "locations": {
-        "Monday": "Dewey's House",
-        "Tuesday": "Dewey's House",
-        "Wednesday": "Dewey's House",
-        "Thursday": "Dewey's House",
-        "Friday": "Dewey's House",
-        "Saturday": "Dewey's House",
-        "Sunday": "Dewey's House"
-      }
-    },
-    {
-      "dialogue": {
-        "1": "Dewey! Your friends are here!",
-        "2": "If you want to sleep over I'll need to talk to your mom.",
-        "3": "Would you kids like to watch a movie? I'm going to the video store."
-      }
-    }
-  ],
-  "Peter": [
-    {
-      "first_name": "Peter",
-      "last_name": "Booker"
-    },
-    {
-      "locations": {
-        "Monday": "Dewey's House",
-        "Tuesday": "Dewey's House",
-        "Wednesday": "Dewey's House",
-        "Thursday": "Dewey's House",
-        "Friday": "Dewey's House",
-        "Saturday": "Dewey's House",
-        "Sunday": "Dewey's House"
-      }
-    },
-    {
-      "dialogue": {
-        "1": "Keep the noise down kids, I have to work.",
-        "2": "Shouldn't you be outside?",
-        "3": "My wife said I should do lunges to stay in shape. That would be a big step forward."
-      }
-    }
-  ],
-  "Mom": [
-    {
-      "first_name": "Patty"
-    },
-    {
-      "locations": {
-        "Monday": "Player's House",
-        "Tuesday": "Player's House",
-        "Wednesday": "Player's House",
-        "Thursday": "Player's House",
-        "Friday": "Player's House",
-        "Saturday": "Player's House",
-        "Sunday": "Player's House"
-      }
-    },
-    {
-      "dialogue": {
-        "1": "Have fun today! Be nice to your brother!",
-        "2": "Remember not to go past the interstate, and stay out of trouble! Be back when the streetlights come on!",
-        "3": "If you need anything I'll be home all day!"
-      }
-    }
-  ],
-  "Dad": [
-    {
-      "first_name": "Chad"
-    },
-    {
-      "locations": {
-        "Monday": "Player's House",
-        "Tuesday": "Player's House",
-        "Wednesday": "Player's House",
-        "Thursday": "Player's House",
-        "Friday": "Player's House",
-        "Saturday": "Player's House",
-        "Sunday": "Player's House"
-      }
-    },
-    {
-      "dialogue": {
-        "1": "Don't have too much fun today!",
-        "2": "Hey, don't forget to clean your room before you go play!",
-        "3": "I thought the dryer was shrinking my clothes. Turns out it was the refrigerator all along. heh heh heh..."
-      }
-    }
-  ],
+
   "Neville": [
     {
       "first_name": "Neville"
@@ -265,8 +146,8 @@
     {
       "dialogue": {
         "1": "I saw Sara was looking for you and ask if we have any rope in the house that she can borrow.",
-        "2": "Don't touch my toys without asking or I'll tell mom.",
-        "3": "Did you eat all the chips? MOM! THEY ATE ALL THE CHIPS AGAIN!"
+        "2": "I saw Sara was looking for you and ask if we have any rope in the house that she can borrow.",
+        "3": "I saw Sara was looking for you and ask if we have any rope in the house that she can borrow."
       }
     }
   ],
@@ -294,55 +175,7 @@
       }
     }
   ],
-  "Godfrey": [
-    {
-      "first_name": "Godfrey",
-      "last_name": "Lincoln-Noble"
-    },
-    {
-      "locations": {
-        "Monday": "Off Map",
-        "Tuesday": "Off Map",
-        "Wednesday": "Sara's House",
-        "Thursday": "Off Map",
-        "Friday": "Sara's House",
-        "Saturday": "Off Map",
-        "Sunday": "Off Map"
-      }
-    },
-    {
-      "dialogue": {
-        "1": "Looking for Sara? I think she's in her room.",
-        "2": "Wesley and Andrew are a riot!",
-        "3": "Have you heard about the chocolate record player? It sounds pretty sweet."
-      }
-    }
-  ],
-  "The Twins": [
-    {
-      "first_name": "Andrew",
-      "second_name": "Wesley",
-      "last_name": "Lincoln-Noble"
-    },
-    {
-      "locations": {
-        "Monday": "Sara's House",
-        "Tuesday": "Sara's House",
-        "Wednesday": "Sara's House",
-        "Thursday": "Sara's House",
-        "Friday": "Sara's House",
-        "Saturday": "Sara's House",
-        "Sunday": "Sara's House"
-      }
-    },
-    {
-      "dialogue": {
-        "1": "WE'RE TWINS",
-        "2": "Can you tell us apart?",
-        "3": "Sometimes even we get confused about which one we are."
-      }
-    }
-  ],
+
   "Dewey": [
     {
       "first_name": "Dewey",
@@ -362,7 +195,7 @@
     {
       "dialogue": {
         "1": "Farmer Augustus is creepy huh? Do you really think Farmer Augustus is a Russian? Aren't they the bad guys?",
-        "2": "Let's go to your house. I need to talk to you about something important"
+        "2": "Farmer Augustus is creepy huh? Do you really think Farmer Augustus is a Russian? Aren't they the bad guys?"
       }
     },
     {

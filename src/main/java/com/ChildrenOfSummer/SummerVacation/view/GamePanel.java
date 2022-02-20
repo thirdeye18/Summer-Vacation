@@ -7,6 +7,7 @@ import com.ChildrenOfSummer.SummerVacation.Util.SoundFX;
 import org.json.simple.JSONArray;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -378,8 +379,9 @@ public class GamePanel extends JFrame {
         con.add(userInputPanel);
 
         //user input textfield
-        userInput.setBackground(Color.black);
-        userInput.setForeground(Color.white);
+        userInput.setBackground(Color.white);
+        userInput.setForeground(Color.black);
+        userInput.setBorder(new LineBorder(Color.white,2));
         userInputEnterButton.setFont(new Font("Times New Roman", Font.BOLD,20));
 
         // add all three components to userInputPanel
@@ -522,7 +524,7 @@ public class GamePanel extends JFrame {
         inventoryPanel.setVisible(false);
         // String text =FileManager.txtFileToString("scene-one.txt");
 
-        int reply1 = JOptionPane.showConfirmDialog(null, "You noticed that your rope and planks could be combined!\n" +
+        int reply1 = JOptionPane.showConfirmDialog(this, "You noticed that your rope and planks could be combined!\n" +
                 "You can create a ladder to get out!\n" +
                 "Do you wish to combine the items to get out?", "", JOptionPane.YES_NO_OPTION);
         if (reply1 == JOptionPane.YES_OPTION){
@@ -541,7 +543,7 @@ public class GamePanel extends JFrame {
             player1.setPlayerInventory(playerList);
             FileManager.savePlayerItems(playerList);
             FileManager.sceneWriter(true, "sceneOnePassed");
-            JOptionPane.showMessageDialog(null,"You've finished the first scene. You have gotten out of the airport!","",JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog(this,"You've finished the first scene. You have gotten out of the airport!","",JOptionPane.PLAIN_MESSAGE);
 
             taskScreen("scene-one-end");
 
@@ -551,7 +553,7 @@ public class GamePanel extends JFrame {
 
         }
         else{
-            JOptionPane.showMessageDialog(null,"you lost the game","",JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog(this,"you lost the game","",JOptionPane.PLAIN_MESSAGE);
             System.exit(0);
         }
 
@@ -569,11 +571,15 @@ public class GamePanel extends JFrame {
             locationImgPanel.setVisible(false);
             // String text =FileManager.txtFileToString("scene-one.txt");
 
-            int reply1 = JOptionPane.showConfirmDialog(null, "You can throw a rock to escape. Do you want to?", "", JOptionPane.YES_NO_OPTION);
+            int reply1 = JOptionPane.showConfirmDialog(this, "You can throw a rock to escape. Do you want to?", "", JOptionPane.YES_NO_OPTION);
             if (reply1 == JOptionPane.YES_OPTION){
+                player1.getPlayerInventory();
                 FileManager.getPlayerItems().remove("rock");
+
                 inventoryListModel.removeElement("rock");
-                JOptionPane.showMessageDialog(null,"You've escaped from the farmer.","",JOptionPane.PLAIN_MESSAGE);
+                player1.setPlayerInventory(FileManager.getPlayerItems());
+                FileManager.savePlayerItems(FileManager.getPlayerItems());
+                JOptionPane.showMessageDialog(this,"You've escaped from the farmer.","",JOptionPane.PLAIN_MESSAGE);
                 taskScreen("scene-three-end");
                 FileManager.sceneWriter(true, "sceneThreePassed");
                 hayfieldNextButtonPanel.setVisible(false);
@@ -582,7 +588,7 @@ public class GamePanel extends JFrame {
                 findSaraButtonPanel.add(findSaraButton);
             }
             else{
-                JOptionPane.showMessageDialog(null,"You got caught! Game Over.","",JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(this,"You got caught! Game Over.","",JOptionPane.PLAIN_MESSAGE);
             }
 
 
@@ -590,7 +596,7 @@ public class GamePanel extends JFrame {
             con.add(largeTextAreaPanel);
         }
         else{
-            JOptionPane.showMessageDialog(null,"You should explore the map to find something to throw at the farmer to distract him. \nA rock, maybe?", "", JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog(this,"You should explore the map to find something to throw at the farmer to distract him. \nA rock, maybe?", "", JOptionPane.PLAIN_MESSAGE);
             mainTextPanel.setVisible(false);
             mainLocationDescPanel.setVisible(false);
             taskScreenNextButtonPanel.setVisible(false);
@@ -603,81 +609,9 @@ public class GamePanel extends JFrame {
             goToIslandButtonPanel.setVisible(false);
         }
     }
-    public static void taskPaddleRiverWithEnoughInventory() {
-        if (player1.getPlayerInventory().contains("paddle")&&player1.getPlayerInventory().contains("raft") &&player1.getPlayerInventory().contains("shovel")){
-            mainLocationDescPanel.setVisible(false);
-            userInputPanel.setVisible(false);
-            directionButtonPanel.setVisible(false);
-            inventoryPanel.setVisible(false);
-            clearZoneViewPanel();
-            exploreOldHouseSouthButtonPanel.setVisible(false);
-            taskScreen("scene-five");
-            con.add(exploreRiverButtonPanel);
-            exploreRiverButtonPanel.setVisible(true);
-            goToIslandButtonPanel.add(goToIslandButton);
-
-            con.add(goToIslandButtonPanel);
-            goToIslandButtonPanel.add(goToIslandButton);
-            findSuppliesButtonPanel.setVisible(false);
-
-
-            Object[] paddleOptions = { "paddle left", "paddle right" };
-            int reply1 = JOptionPane.showOptionDialog(null, "Rapids rush up to meet you in the middle of the river!\nWhich way will you paddle to avoid them?",
-                    "", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, paddleOptions, paddleOptions[0]);
-            if (reply1 == JOptionPane.YES_OPTION){
-                JOptionPane.showMessageDialog(null,"You paddle left. A tree branch in the river snags your raft! It takes some damage.","",JOptionPane.PLAIN_MESSAGE);
-            }
-            else{
-                JOptionPane.showMessageDialog(null,"You paddle right. A massive boulder stops your progress... \nAfter dislodging your raft you are free.","",JOptionPane.PLAIN_MESSAGE);
-            }
-
-            Object[] innerOrCenter = {"hug the inner bank", "center the raft"};
-            int reply2 = JOptionPane.showOptionDialog(null, "The river curves left\nYou need to choose to hug the inner bank of center the raft in the river.",
-                    "", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, innerOrCenter, innerOrCenter[0]);
-            if (reply2 == JOptionPane.YES_OPTION){
-                JOptionPane.showMessageDialog(null,"A rock in the shallow inner bank scrapes your raft! ","",JOptionPane.PLAIN_MESSAGE);
-            }
-            else{
-                JOptionPane.showMessageDialog(null,"The raft hits no obstacles as you glide around the bend.","",JOptionPane.PLAIN_MESSAGE);
-            }
-
-            Object[] duckOrPaddle = { "duck under branches", "use paddle on branches" };
-            int reply3 = JOptionPane.showOptionDialog(null, "Ahead, thorny branches almost cover the water.\nThey will snag you unless you find a way to avoid them!",
-                    "", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, duckOrPaddle, duckOrPaddle[0]);
-            if (reply3 == JOptionPane.YES_OPTION){
-                JOptionPane.showMessageDialog(null,"The branches puncture holes in your raft!","",JOptionPane.PLAIN_MESSAGE);
-                clearZoneViewPanel();
-                taskScreen("win-text");
-                FileManager.sceneWriter(true, "sceneFivePassed");
-                JOptionPane.showMessageDialog(null,"You won the game!", "", JOptionPane.PLAIN_MESSAGE);
-                exploreRiverButtonPanel.setVisible(false);
-            }
-            else{
-                JOptionPane.showMessageDialog(null,"You push the thorny branches out of the way of your raft.","",JOptionPane.PLAIN_MESSAGE);
-                clearZoneViewPanel();
-                taskScreen("win-text");
-                FileManager.sceneWriter(true, "sceneFivePassed");
-                JOptionPane.showMessageDialog(null,"You won the game!", "", JOptionPane.PLAIN_MESSAGE);
-                exploreRiverButtonPanel.setVisible(false);
-                System.exit(0);
-            }
-
-        }
-        else{
-
-            JOptionPane.showMessageDialog(null,"You don't have enough items to go to island, please make sure you got paddle, shovel, food, and raft in your inventory and come back\n", "", JOptionPane.PLAIN_MESSAGE);
-            mainTextPanel.setVisible(false);
-            taskScreenNextButtonPanel.setVisible(false);
-            largeTextAreaPanel.setVisible(false);
-            locationImgPanel.setVisible(true);
-            mainLocationDescPanel.setVisible(true);
-            userInputPanel.setVisible(true);
-            directionButtonPanel.setVisible(true);
-            inventoryPanel.setVisible(true);
-            goToIslandButtonPanel.setVisible(false);
-        }
-
-    }
+//    public static void taskPaddleRiverWithEnoughInventory() {
+//
+//    }
 
 
     public static void clearZoneViewPanel() {
