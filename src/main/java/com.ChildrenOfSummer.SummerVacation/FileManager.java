@@ -232,7 +232,7 @@ public class FileManager {
     }
 
     public static String getNPCsDialog(String NPCname, int digNum) {
-        String NPCdia = "There was no one to talk to\n...\n......";
+        String NPCdia = "Invalid command, please type talk + [NPC name]";
         String digKey = Integer.toString(digNum);
 
         JSONObject npcJSON = grabJSONData(npcsJsonPath);
