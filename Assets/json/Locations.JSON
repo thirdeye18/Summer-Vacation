@@ -14,7 +14,7 @@
         }
       },
       {
-        "description": "The woods stretch on in front of you.\n To the north, you hear the splashing of a river. \nTo the east, you see more woods. \nTo the south, you see the the end of the woods and the Corn Fields of the Old Man's farm. \nTo the west, the woods become impassable. \nYou don't think you could go further west than this!"
+        "description": "The woods stretch on in front of you.\n To the north, you hear the splashing of a river. \nTo the east, you see more woods. \nTo the south, you see the the end of the woods and the Corn Fields. \nTo the west, the woods become impassable. \nYou don't think you could go further west than this!"
       }
     ],
     "Woods East": [
@@ -48,7 +48,7 @@
         }
       },
       {
-        "description": "You on the bank of a mighty river! \nTo the north, you see the river continuing on but it is too fast to cross here. \nTo the east, you think you could follow the river to the edge of the forest and Kory's house. \nTo the south, the woods stretch on. \nTo the west, The river becomes more shallow and you can make out what looks like an island."
+        "description": "You on the bank of a mighty river! \nTo the north, you see the river continuing on but it is too fast to cross here. \nTo the east, you think you could follow the river to the edge of the forest. \nTo the south, the woods stretch on. \nTo the west, river becomes more shallow and you can see what looks like an island."
       }
     ],
     "Island": [
@@ -84,7 +84,7 @@
         }
       },
       {
-        "description": "You are at the school. It's a bit creepy being here during the summer and seeing it completely empty.\n To the north, you see Dead Presidents.\n To the east, you see Beth's Treats.\n To the south is the interstate! You can't go there!\n To the west is Bill's Produce."
+        "description": "You are at the school. It's a bit creepy being here seeing it completely empty.\n To the north, you see Dead Presidents.\n To the east, you see Beth's Treats.\n To the south is the interstate! You can't go there!\n To the west is Bill's Produce."
       }
     ],
     "Dead Presidents": [
@@ -101,7 +101,7 @@
         }
       },
       {
-        "description_open": "You're in Dead Presidents! You can see tons of affordable novelty items lining the shelves.\n To the north is your house!\n To the east is Angus Queen.\n to the south you see the School.\n To the west is Fast Journey, the gas station.",
+        "description_open": "You're in Dead Presidents! You can see tons of novelty items lining the shelves.\n To the north is your house!\n To the east is Angus Queen.\n to the south you see the School.\n To the west is Fast Journey, the gas station.",
         "description_closed": "Dead Presidents is closed today.\n To the north is your house!\n To the east is Angus Queen.\n To the south you see the School.\n To the west is Fast Journey, the gas station."
       }
     ],
@@ -119,7 +119,7 @@
         }
       },
       {
-        "description_open": "You're in Fast Journey! There's snacks and candy available. Fred looks at you suspiciously.\n To the north is Fred's House.\n To the east is Dead Presidents, the dollar store.\n To the south is Bill's Produce.\n To the west are the Hay Fields of the Old Man's farm.",
+        "description_open": "You're in Fast Journey! There's snacks available. Fred looks at you suspiciously.\n To the north is Fred's House.\n To the east is Dead Presidents, the dollar store.\n To the south is Bill's Produce.\n To the west are the Hay Fields of the Old Man's farm.",
         "description_closed": "There's a sign on the door: FAST JOURNEY IS CLOSED ON TUESDAY -FRED.\n To the north is Fred's House.\n To the east is Dead Presidents, the dollar store.\n To the south is Bill's Produce.\n To the west are the Hay Fields of the Old Man's farm."
       }
     ],
@@ -155,7 +155,7 @@
         }
       },
       {
-        "description_open": "You're in Beth's treats! There's candies, baked goods, and ice-cream! Beth looks at you fondly.\n To the north is Angus Queen, the burger joint.\n To the east is the southern abandoned house.\n To the south is the interstate! You can't go there!\n To the west is the school.",
+        "description_open": "You're in Beth's treats! There's candies, baked goods, and ice-cream!\n To the north is Angus Queen, the burger joint.\n To the east is the southern abandoned house.\n To the south is the interstate! You can't go there!\n To the west is the school.",
         "description_closed": "There's a sign on the door that say: OUT FOR TEA -BETH.\n To the north is Angus Queen, the burger joint.\n To the east is the southern abandoned house.\n To the south is the interstate! You can't go there!\n To the west is the school."
       }
     ],
@@ -192,7 +192,7 @@
         }
       },
       {
-        "description": "The Warehouse is massive, and mostly empty. In the dim light it's hard to see where you are going. \nTo the north is the Waste Pile from the new construction. \nTo the east is the edge of town! Your mom won't let you go further. \nTo the south is the old airport, Paine Field. \nTo the west is the northern-most abandoned old house."
+        "description": "It is massive and empty. In the dim light it's hard to see where you are going. \nTo the north is the Waste Pile from the new construction. \nTo the east is the edge of town! Your mom won't let you go further. \nTo the south is the old airport, Paine Field. \nTo the west is the northern-most abandoned old house."
       }
     ],
     "Paine Field": [
@@ -226,7 +226,7 @@
         }
       },
       {
-        "description": "This house has seen better days! Graffiti covers the walls and the sinks are all smashed. \nTo the north is one of the under construction houses from the southern part of the suburbs. \nTo the east is the abandoned warehouse. \nTo the south is another old house. Looking slightly better than this one. \nTo the west is Angus Queen."
+        "description": "This house has seen better days! Graffiti covers the walls and the sinks are smashed. \nTo the north is one of the under construction houses. \nTo the east is the abandoned warehouse. \nTo the south is another old house. Looking slightly better than this one. \nTo the west is Angus Queen."
       }
     ],
     "Old House South": [
@@ -402,7 +402,7 @@
         }
       },
       {
-        "description": "This new house borders the old suburbs and the abandoned part of town. It's a little creepy. \nTo the north is another half built house. \nTo the east is the waste pile.  \nTo the south is an old abandoned house. \n To the west is Miss Janie's house."
+        "description": "This new house borders is a little creepy. \nTo the north is another half built house. \nTo the east is the waste pile.  \nTo the south is an old abandoned house. \n To the west is Miss Janie's house."
       }
     ],
     "New House Northeast": [
