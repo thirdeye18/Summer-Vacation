@@ -313,11 +313,11 @@ public class Input {
 
                 //npc dialogue
                 String dialogue = FileManager.getNPCsDialog((String) NPCname.get(0),1);
-                System.out.println(dialogue);
+
 
                 String a = TextToSpeech.talkNpc(dialogue);
 
-                System.out.println(a);}
+                }
             else{
                 String a = TextToSpeech.talkNpc("There was no one to talk to");
             }
@@ -367,8 +367,6 @@ public class Input {
                     ArrayList<String> npcNames = (ArrayList<String>) NPCname;
                     //display available items for current location
                     if (!FileManager.getLocationItems(tempLocation).isEmpty()) {
-                        System.out.println(FileManager.getLocationItems(tempLocation));
-                        System.out.println(gamePanel.inventoryList);
                         String seeItems = "You see the following items lying around: ";
                         String result = String.join(",", FileManager.getLocationItems(tempLocation));
                         String itemText = seeItems + "\n" + result;
@@ -380,7 +378,7 @@ public class Input {
                             userInput = gamePanel.userInput.getText();
                             String verb = TextParser.getVerb(userInput);
                             ArrayList<String> nouns = TextParser.getNouns(userInput);
-                            gamePanel.userInput.setText("");
+                            gamePanel.userInput.setText(null);
                             switch (verb) {
                                 case "inventory":
                                     JOptionPane.showMessageDialog(gamePanel, "Your inventory has: " + playerList, "", JOptionPane.PLAIN_MESSAGE);
@@ -404,8 +402,6 @@ public class Input {
                                     break;
                                 case "talk":
                                     JOptionPane.showMessageDialog(gamePanel, player1.talk(nouns.get(0)), "", JOptionPane.PLAIN_MESSAGE);
-                                    String a = TextToSpeech.talkNpc(player1.talk(nouns.get(0)));
-                                    System.out.println(a);
                                     break;
                                 case "go":
                                     goDirection(nouns.get(0));
@@ -420,8 +416,6 @@ public class Input {
                                     JOptionPane.showMessageDialog(gamePanel, "I didn't understand that command. for help click help button on the top or type help.", "", JOptionPane.PLAIN_MESSAGE);
                                     break;
                             }
-
-
                         });
 
                     } else if (FileManager.getLocationItems(tempLocation).isEmpty()) {
@@ -499,9 +493,9 @@ public class Input {
     public static boolean sceneOneAction() {
         boolean sceneOnePass = FileManager.sceneReader("sceneOnePassed");
         ArrayList<String> playerList = FileManager.getPlayerItems();
-        System.out.println("You noticed that your rope and planks could be combined!\n " +
-                "You can create a ladder to get out!\n " +
-                "Do you wish to combine the items to get out?");
+        //System.out.println("You noticed that your rope and planks could be combined!\n " +
+//                "You can create a ladder to get out!\n " +
+//                "Do you wish to combine the items to get out?");
         String scan = scanner.nextLine().strip();
         if (scan.equals("yes")) {
             sceneOnePass = true;
@@ -514,12 +508,12 @@ public class Input {
             FileManager.getAssetFile("scene-one-end.txt");
             FileManager.sceneWriter(true, "sceneOnePassed");
         } else if (scan.equals("no")){
-            System.out.println("Game Over. Press enter to continue...");
+            //System.out.println("Game Over. Press enter to continue...");
             scanner.nextLine();
             startMenu();
         }
         else{
-            System.out.println("Input not valid, enter yes or no");
+            //System.out.println("Input not valid, enter yes or no");
             sceneOneAction();
         }
         return sceneOnePass;
@@ -529,14 +523,14 @@ public class Input {
         ArrayList<String> playerList = FileManager.getPlayerItems();
         if (player1.getPlayerLocation().equals("Paine Field") && !sceneOnePass) {
             FileManager.getAssetFile("scene-one.txt");
-            System.out.println("Press Enter to continue...");
+            //System.out.println("Press Enter to continue...");
             scanner.nextLine();
             if (playerList.contains("rope") && playerList.contains("planks")) {
                 sceneOnePass = sceneOneAction();
             } else {
-                System.out.println();
-                System.out.println("With no items to help you, you and your friends are caught by security! You're grounded!");
-                System.out.println("Game Over. Press Enter to continue...");
+                //System.out.println();
+                //System.out.println("With no items to help you, you and your friends are caught by security! You're grounded!");
+                //System.out.println("Game Over. Press Enter to continue...");
                 scanner.nextLine();
                 GameEngine.execute();
             }
@@ -548,30 +542,30 @@ public class Input {
         boolean sceneThreePass = FileManager.sceneReader("sceneThreePassed");
 
         ArrayList<String> playerList = FileManager.getPlayerItems();
-        System.out.println(player1.getPlayerLocation());
+        //System.out.println(player1.getPlayerLocation());
 
         if (player1.getPlayerLocation().equals("Hay Field") && !sceneThreePass) {
             if (playerList.contains("rock")) {
-                System.out.println("You can throw a rock to escape. Do you want to?");
+                //System.out.println("You can throw a rock to escape. Do you want to?");
                 String scan = scanner.nextLine().strip().toLowerCase();
                 if (scan.equals("yes")) {
-                    System.out.println("You've escaped from the farmer.");
+                    //System.out.println("You've escaped from the farmer.");
                     FileManager.getAssetFile("scene-three-end.txt");
                     sceneThreePass = true;
                     FileManager.sceneWriter(true, "SceneThreePass");
                 } else if (scan.equals("no")){
-                    System.out.println("You got caught! Game Over. Press enter to continue");
+                    //System.out.println("You got caught! Game Over. Press enter to continue");
                     scanner.nextLine();
                     startMenu();
                 }
                 else{
-                    System.out.println("Input not valid, enter yes or no");
+                    //System.out.println("Input not valid, enter yes or no");
                 }
             } else {
-                System.out.println("You reached into your inventory to find something to throw at the farmer" +
-                        "but there's nothing there! You've been caught!");
-                System.out.println("Game Over. You should explore the map to find something" +
-                        "to throw at the farmer to distract him. A rock, maybe? Press enter to continue");
+                //System.out.println("You reached into your inventory to find something to throw at the farmer" +
+                        //"but there's nothing there! You've been caught!");
+                //System.out.println("Game Over. You should explore the map to find something" +
+                        //"to throw at the farmer to distract him. A rock, maybe? Press enter to continue");
                 scanner.nextLine();
                 startMenu();
             }
@@ -586,78 +580,78 @@ public class Input {
     static boolean sceneFive(){
         boolean sceneFivePass = FileManager.sceneReader("sceneFivePassed");
         ArrayList<String> playerList = FileManager.getPlayerItems();
-        System.out.println(player1.getPlayerLocation());
+        //System.out.println(player1.getPlayerLocation());
         if (playerList.contains("raft")&& playerList.contains("paddle") && playerList.contains("shovel") && !sceneFivePass) {
             FileManager.getAssetFile("scene-five.txt");
-            System.out.println("Press Enter to continue...");
+            //System.out.println("Press Enter to continue...");
             scanner.nextLine();
             boolean rapidsComplete = false;
             int raftHP = 5;
             while (raftHP > 0 && !rapidsComplete) {
-                System.out.println("Rapids rush up to meet you in the middle of the river!\n Which way will you paddle to avoid them?");
-                System.out.print("type 'paddle left' or 'paddle right': ");
+                //System.out.println("Rapids rush up to meet you in the middle of the river!\n Which way will you paddle to avoid them?");
+                //System.out.print("type 'paddle left' or 'paddle right': ");
                 userInput = scanner.nextLine().strip().toLowerCase();
                 boolean complete = false;
                 while (!complete) {
                     switch (userInput) {
                         case "paddle left":
-                            System.out.println("You paddle left. A tree branch in the river snags your raft! It takes some damage.");
+                           // System.out.println("You paddle left. A tree branch in the river snags your raft! It takes some damage.");
                             raftHP--;
                             complete = true;
                             break;
                         case "paddle right":
-                            System.out.println("You paddle right. A massive boulder stops your progress... \n After dislodging your raft you are free.");
+                            //System.out.println("You paddle right. A massive boulder stops your progress... \n After dislodging your raft you are free.");
                             complete = true;
                             break;
                         default:
-                            System.out.println("You can't do that right now! Type 'paddle right' or 'paddle left'");
+                            //System.out.println("You can't do that right now! Type 'paddle right' or 'paddle left'");
                             userInput = scanner.nextLine().strip().toLowerCase();
                     }
                 }
-                System.out.println("The river curves left\n You need to choose to hug the inner bank of center the raft in the river.");
-                System.out.print("type 'hug the inner bank' or 'center the raft': ");
+                //System.out.println("The river curves left\n You need to choose to hug the inner bank of center the raft in the river.");
+                //System.out.print("type 'hug the inner bank' or 'center the raft': ");
                 userInput = scanner.nextLine().strip().toLowerCase();
                 complete = false;
                 while (!complete) {
                     switch (userInput) {
                         case "hug the inner bank":
-                            System.out.println("A rock in the shallow inner bank scrapes your raft! ");
+                            //System.out.println("A rock in the shallow inner bank scrapes your raft! ");
                             raftHP-=2;
                             complete = true;
                             break;
                         case "center the raft":
-                            System.out.println("The raft hits no obstacles as you glide around the bend.");
+                            //System.out.println("The raft hits no obstacles as you glide around the bend.");
                             complete = true;
                             break;
                         default:
-                            System.out.println("You can't do that right now! Type 'hug the inner bank' or 'center the raft'");
+                            //System.out.println("You can't do that right now! Type 'hug the inner bank' or 'center the raft'");
                             userInput = scanner.nextLine().strip().toLowerCase();
                     }
                 }
-                System.out.println("Ahead, thorny branches almost cover the water.\n They will snag you unless you find a way to avoid them!");
+                //System.out.println("Ahead, thorny branches almost cover the water.\n They will snag you unless you find a way to avoid them!");
                 System.out.print("type 'duck under branches' or 'use paddle on branches': ");
                 userInput = scanner.nextLine().strip().toLowerCase();
                 complete = false;
                 while (!complete) {
                     switch (userInput) {
                         case "duck under branches":
-                            System.out.println("The branches puncture holes in your raft!");
+                            //System.out.println("The branches puncture holes in your raft!");
                             raftHP-=3;
                             complete = true;
                             break;
                         case "use paddle on branches":
-                            System.out.println("You push the thorny branches out of the way of your raft.");
+                            //System.out.println("You push the thorny branches out of the way of your raft.");
                             rapidsComplete = true;
                             complete = true;
                             break;
                         default:
-                            System.out.println("You can't do that right now! Type 'duck under branches' or 'use paddle on branches'");
+                            //System.out.println("You can't do that right now! Type 'duck under branches' or 'use paddle on branches'");
                             userInput = scanner.nextLine().strip().toLowerCase();
                     }
                 }
             }
             if(0 >= raftHP) {
-                System.out.println("The raft punctures dumping you and Sara into the water!\nYou didn't reach the island.\n Game Over! Press enter to continue...");
+                //System.out.println("The raft punctures dumping you and Sara into the water!\nYou didn't reach the island.\n Game Over! Press enter to continue...");
                 scanner.nextLine();
                 startMenu();
             }
