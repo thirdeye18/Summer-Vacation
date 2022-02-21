@@ -90,7 +90,7 @@ public class Player {
         String tempLocation = FileManager.getNewLocation(playerZone, playerLocation, direction);
 
         if (tempLocation.equals("Off Map")){
-            System.out.println("You can't go that way!");
+            //System.out.println("You can't go that way!");
         }else { //success on move
 
             playerLocation = tempLocation;
@@ -128,7 +128,7 @@ public class Player {
                 switch (npcNames.size()){
 
                     case 1:
-                        System.out.println("You see "+name+".");
+                        //System.out.println("You see "+name+".");
                     break;
                 }
             }

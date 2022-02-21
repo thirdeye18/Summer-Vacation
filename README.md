@@ -1,5 +1,5 @@
 # Summer-Vacation
-Java text based mystery-adventure game
+Java Swing based mystery-adventure game
 
 
 ## About
@@ -12,14 +12,14 @@ Game written in Java using the JSON.Simple library for data manipulation.
 #### Interaction 
 GUI implemented for navigation and general game functions.
 Commands through the text box
-* talk
-  * interact with NPCs and friends
+* right click to talk and interact with NPCs and friends
 * get
   * pick-up items items  
 * drop
   * remove items  
 * go
-  * travel through the town and explore to find items and friends! 
+  * travel through the town and explore to find items and friends!
+* Use navigation and other UI buttons for movement and help
    
 
 ## Contributors

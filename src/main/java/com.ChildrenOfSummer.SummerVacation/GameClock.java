@@ -16,7 +16,7 @@ class GameClock {
         c.setTime(date);
         c.add(Calendar.DATE, 1);
         date = c.getTime();
-        System.out.println(date);
+        //System.out.println(date);
         daysCounter++;
     }
 
@@ -26,7 +26,7 @@ class GameClock {
         c.setTime(date);
         c.add(Calendar.HOUR_OF_DAY, 3);
         date = c.getTime();
-        System.out.println(date);
+        //System.out.println(date);
         THREEHOURCOUNTER++;
     }
 
@@ -39,14 +39,14 @@ class GameClock {
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.HOUR_OF_DAY, 7);
         calendar.add(Calendar.DATE, 1);
-        System.out.println(calendar.getTime());
+        //System.out.println(calendar.getTime());
     }
 
     void today() {
         Date date = new Date();
         Calendar c = Calendar.getInstance();
         c.setTime(date);
-        System.out.println(date);
+        //System.out.println(date);
     }
 
     void timeTravel() {
